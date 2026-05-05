@@ -264,3 +264,49 @@ NEO Watch sarà una web app server-driven per l’esplorazione degli asteroidi v
 La scelta di Delphi e HTMX permette di realizzare una soluzione diversa dallo stack consigliato, mantenendo comunque tutti i requisiti principali della challenge: backend proxy, caching, gestione dei range superiori a 7 giorni, filtri, grafici, dettaglio asteroide, gestione errori e deploy online.
 
 L’obiettivo finale è ottenere un progetto completo, funzionante e pubblicato online, con una struttura chiara e un README in grado di raccontare le scelte tecniche effettuate.
+
+
+## 11.Lo _stack_
+
+## L'API NASA
+
+Userai la NeoWs API (Near Earth Object Web Service). Documentazione ufficiale: [**api.nasa.gov**](https://api.nasa.gov/)
+
+**Rate limit DEMO_KEY:** 30 richieste/ora, 50 richieste/giorno. È un limite severo, ma è il punto. Uno dei requisiti di questa challenge è gestirlo con intelligenza lato backend.Ti consigliamo di registrarti per una chiave personale gratuita su [**api.nasa.gov**](https://api.nasa.gov/) (la registrazione è rapida): avrai 1.000 richieste/ora. Ma anche con la tua chiave personale i limiti esistono e il tuo backend deve rispettarli.
+
+
+## Cosa deve _fare_
+
+**01.** **Proxy backend con caching**
+
+Il frontend non chiama mai direttamente la NASA. Chiama i tuoi endpoint FastAPI. Il backend fa da intermediario, salva le risposte in cache (usa quello che vuoi: FastAPI cache framework, Redis, anche file-based), e serve i dati già parsati. Se lo stesso range di date viene richiesto due volte, NASA non viene chiamata la seconda volta.
+
+
+**02. Lista asteroidi con filtri**
+
+Mostra nome, distanza minima in km, diametro stimato (min/max), velocità relativa, e se è classificato "potenzialmente pericoloso" (campo is_potentially_hazardous_asteroid). L'utente deve poter filtrare per pericolosi/non pericolosi e ordinare per distanza o dimensione.
+
+
+**03.** **Range di date arbitrario**
+
+L'API NASA accetta massimo 7 giorni per chiamata. Il tuo backend deve gestire range più lunghi automaticamente: spezza la richiesta in chunk da 7 giorni, esegui le chiamate in sequenza, aggrega i risultati. Il frontend fa una sola richiesta, il backend fa il lavoro sporco.
+
+
+**04.** **Grafici con Recharts**
+
+Almeno due visualizzazioni: distanza di avvicinamento nel tempo (scatter o line chart), e distribuzione delle dimensioni (histogram o bar chart). I dati grezzi in JSON sono informativi, i grafici sono comprensibili.
+
+
+**05.** **Scheda dettaglio asteroide**
+
+Cliccando su un asteroide, mostra una scheda con tutti i dati disponibili: close approach data storici, link alla pagina NASA JPL, orbital data. Questo richiede una seconda chiamata all'endpoint /neo/{id}. Anche questa deve passare per il tuo backend con caching.
+
+
+**06.** **UX robusta: loading, errori, edge case**
+
+Skeleton loader mentre arrivano i dati. Messaggi di errore chiari (rate limit raggiunto, range troppo lungo, data non valida). Gestione del caso "zero asteroidi trovati". Una buona UX non è solo bella, è robusta.
+
+
+**07.** **Deploy completo e funzionante**
+
+Backend su un hosting reale (Railway, Render, Fly.io). Frontend su Vercel o GitHub Pages. Le variabili d'ambiente (API key NASA) non vanno nel codice, nei secrets del servizio di deploy. Il progetto _non esiste_ se non è online.
