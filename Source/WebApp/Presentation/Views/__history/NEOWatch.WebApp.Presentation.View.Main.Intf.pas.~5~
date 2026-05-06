@@ -1,0 +1,27 @@
+unit NEOWatch.WebApp.Presentation.View.Main.Intf;
+
+interface
+
+uses
+  System.Generics.Collections,
+  NEOWatch.WebApp.Presentation.Model.DTO.WSAsteroidCard,
+  NEOWatch.WebApp.Presentation.Model.DTO.WSAsteroidDetails;
+
+type
+  IViewMain = interface(IInvokable)
+    ['{2122E1A6-5758-4814-A4F1-02E7D39FE02D}']
+    function Render(
+        const AsteroidCardVar: string;
+        const AsteroidCard: TObjectList<TWSAsteroidCardDTO>;
+        const AsteroidDetailVar: string;
+        const AsteroidDetail: TObjectList<TWSAsteroidDetailDTO>;
+        const AsteroidFiltersVar: string;
+        const AsteroidFilters: TObjectList<TWSAsteroidFiltersDTO>;
+        const OrderModificationVar: string;
+        const OrderModification: TObjectList<TWSOrderModificationDTO>
+    ): string;
+  end;
+
+implementation
+
+end.

@@ -1,0 +1,62 @@
+unit NEOWatch.WebApp.Presentation.Model.DTO.WSAsteroidSummary;
+
+interface
+
+type
+  TAsteroidSummaryDTOModel = class
+  private
+    FTotalCount: Integer;
+    FDangerousCount: Integer;
+    FSafeCount: Integer;
+
+    FTotalCountText: string;
+    FDangerousCountText: string;
+    FSafeCountText: string;
+
+    FHasResults: Boolean;
+
+    FCacheStatusText: string;
+    FCacheBadgeClass: string;
+    FCacheDescription: string;
+
+    FSummaryMessage: string;
+    FSummaryTrendClass: string;
+
+    function GetTotalCount: Integer;
+    function GetDangerousCount: Integer;
+    function GetSafeCount: Integer;
+
+    function GetTotalCountText: string;
+    function GetDangerousCountText: string;
+    function GetSafeCountText: string;
+
+    function GetHasResults: Boolean;
+
+    function GetCacheStatusText: string;
+    function GetCacheBadgeClass: string;
+    function GetCacheDescription: string;
+
+    function GetSummaryMessage: string;
+    function GetSummaryTrendClass: string;
+  published
+    property TotalCount: Integer read FTotalCount write FTotalCount;
+    property DangerousCount: Integer read FDangerousCount write FDangerousCount;
+    property SafeCount: Integer read FSafeCount write FSafeCount;
+
+    property TotalCountText: string read FTotalCountText write FTotalCountText;
+    property DangerousCountText: string read FDangerousCountText write FDangerousCountText;
+    property SafeCountText: string read FSafeCountText write FSafeCountText;
+
+    property HasResults: Boolean read FHasResults write FHasResults;
+
+    property CacheStatusText: string read FCacheStatusText write FCacheStatusText;
+    property CacheBadgeClass: string read FCacheBadgeClass write FCacheBadgeClass;
+    property CacheDescription: string read FCacheDescription write FCacheDescription;
+
+    property SummaryMessage: string read FSummaryMessage write FSummaryMessage;
+    property SummaryTrendClass: string read FSummaryTrendClass write FSummaryTrendClass;
+  end;
+
+implementation
+
+end.

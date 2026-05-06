@@ -1,0 +1,31 @@
+unit NEOWatch.WebApp.Presentation.View.Monitoring.Sempare;
+
+interface
+
+uses
+  Spring.Logging,
+  Fido.Utilities,
+  NEOWatch.WebApp.Presentation.View.Monitoring.Intf,
+  NEOWatch.WebApp.Presentation.Model.DTO.WSMonitoring;
+
+type
+
+  TViewMonitoringSempare = class(TInterfacedObject, IViewMonitoring)
+  private
+    const
+      TemplateFileNameMonitoring: array[0..2] of string = ('Partials', 'Monitoring', 'Monitoring.html');
+  private
+    FLogger: ILogger;
+    procedure HandleTemplateError(const AMessage: string);
+  public
+    function Render(const Monitoring: TWSMonitoringDTO): string;
+  end;
+
+implementation
+
+function TViewMonitoringSempare.Render(const Monitoring: TWSMonitoringDTO): string;
+begin
+  // TODO -cMM: TViewMonitoringSempare.Render default body inserted
+end;
+
+end.

@@ -1,0 +1,462 @@
+unit NEOWatch.WebApp.Presentation.Model.DTO.WSAsteroidDetails;
+
+interface
+
+uses
+  System.Generics.Collections,
+  NEOWatch.WebApp.Presentation.Model.DTO.WSCloseApproach;
+
+type
+  TAsteroidDetailDTOModel = class
+  private
+    FId: string;
+    FName: string;
+
+    FMinDistanceKm: Extended;
+    FEstimatedDiameterMinMeters: Extended;
+    FEstimatedDiameterMaxMeters: Extended;
+    FRelativeVelocityKmH: Extended;
+    FCloseApproachDate: TDateTime;
+
+    FMinDistanceKmText: string;
+    FDiameterText: string;
+    FRelativeVelocityText: string;
+    FCloseApproachDateText: string;
+
+    FIsPotentiallyHazardous: Boolean;
+    FHazardousLabel: string;
+    FHazardousCssClass: string;
+    FAsteroidCardCssClass: string;
+
+    FNasaJplUrl: string;
+
+    FAbsoluteMagnitude: Extended;
+    FAbsoluteMagnitudeText: string;
+
+    FOrbitClassText: string;
+    FOrbitId: string;
+    FOrbitDeterminationDateText: string;
+    FFirstObservationDateText: string;
+    FLastObservationDateText: string;
+    FDataArcInDaysText: string;
+    FObservationsUsedText: string;
+
+    FCloseApproaches: TObjectList<TCloseApproachDTOModel>;
+
+    FHasCloseApproaches: Boolean;
+    FHasOrbitalData: Boolean;
+
+    function GetId: string;
+    function GetName: string;
+
+    function GetMinDistanceKm: Extended;
+    function GetEstimatedDiameterMinMeters: Extended;
+    function GetEstimatedDiameterMaxMeters: Extended;
+    function GetRelativeVelocityKmH: Extended;
+    function GetCloseApproachDate: TDateTime;
+
+    function GetMinDistanceKmText: string;
+    function GetDiameterText: string;
+    function GetRelativeVelocityText: string;
+    function GetCloseApproachDateText: string;
+
+    function GetIsPotentiallyHazardous: Boolean;
+    function GetHazardousLabel: string;
+    function GetHazardousCssClass: string;
+    function GetAsteroidCardCssClass: string;
+
+    function GetNasaJplUrl: string;
+
+    function GetAbsoluteMagnitude: Extended;
+    function GetAbsoluteMagnitudeText: string;
+
+    function GetOrbitClassText: string;
+    function GetOrbitId: string;
+    function GetOrbitDeterminationDateText: string;
+    function GetFirstObservationDateText: string;
+    function GetLastObservationDateText: string;
+    function GetDataArcInDaysText: string;
+    function GetObservationsUsedText: string;
+
+    function GetCloseApproaches: TObjectList<TCloseApproachDTOModel>;
+
+    function GetHasCloseApproaches: Boolean;
+    function GetHasOrbitalData: Boolean;
+
+    procedure SetId(const Value: string);
+    procedure SetName(const Value: string);
+
+    procedure SetMinDistanceKm(const Value: Extended);
+    procedure SetEstimatedDiameterMinMeters(const Value: Extended);
+    procedure SetEstimatedDiameterMaxMeters(const Value: Extended);
+    procedure SetRelativeVelocityKmH(const Value: Extended);
+    procedure SetCloseApproachDate(const Value: TDateTime);
+
+    procedure SetMinDistanceKmText(const Value: string);
+    procedure SetDiameterText(const Value: string);
+    procedure SetRelativeVelocityText(const Value: string);
+    procedure SetCloseApproachDateText(const Value: string);
+
+    procedure SetIsPotentiallyHazardous(const Value: Boolean);
+    procedure SetHazardousLabel(const Value: string);
+    procedure SetHazardousCssClass(const Value: string);
+    procedure SetAsteroidCardCssClass(const Value: string);
+
+    procedure SetNasaJplUrl(const Value: string);
+
+    procedure SetAbsoluteMagnitude(const Value: Extended);
+    procedure SetAbsoluteMagnitudeText(const Value: string);
+
+    procedure SetOrbitClassText(const Value: string);
+    procedure SetOrbitId(const Value: string);
+    procedure SetOrbitDeterminationDateText(const Value: string);
+    procedure SetFirstObservationDateText(const Value: string);
+    procedure SetLastObservationDateText(const Value: string);
+    procedure SetDataArcInDaysText(const Value: string);
+    procedure SetObservationsUsedText(const Value: string);
+
+    procedure SetCloseApproaches(const Value: TObjectList<TCloseApproachDTOModel>);
+
+    procedure SetHasCloseApproaches(const Value: Boolean);
+    procedure SetHasOrbitalData(const Value: Boolean);
+
+  published
+    property Id: string read GetId write FId;
+    property Name: string read GetName write FName;
+
+    property MinDistanceKm: Extended read GetMinDistanceKm write FMinDistanceKm;
+    property EstimatedDiameterMinMeters: Extended read GetEstimatedDiameterMinMeters write FEstimatedDiameterMinMeters;
+    property EstimatedDiameterMaxMeters: Extended read GetEstimatedDiameterMaxMeters write FEstimatedDiameterMaxMeters;
+    property RelativeVelocityKmH: Extended read GetRelativeVelocityKmH write FRelativeVelocityKmH;
+    property CloseApproachDate: TDateTime read GetCloseApproachDate write FCloseApproachDate;
+
+    property MinDistanceKmText: string read FMinDistanceKmText write FMinDistanceKmText;
+    property DiameterText: string read FDiameterText write FDiameterText;
+    property RelativeVelocityText: string read FRelativeVelocityText write FRelativeVelocityText;
+    property CloseApproachDateText: string read FCloseApproachDateText write FCloseApproachDateText;
+
+    property IsPotentiallyHazardous: Boolean read FIsPotentiallyHazardous write FIsPotentiallyHazardous;
+    property HazardousLabel: string read FHazardousLabel write FHazardousLabel;
+    property HazardousCssClass: string read FHazardousCssClass write FHazardousCssClass;
+    property AsteroidCardCssClass: string read FAsteroidCardCssClass write FAsteroidCardCssClass;
+
+    property NasaJplUrl: string read FNasaJplUrl write FNasaJplUrl;
+
+    property AbsoluteMagnitude: Extended read FAbsoluteMagnitude write FAbsoluteMagnitude;
+    property AbsoluteMagnitudeText: string read FAbsoluteMagnitudeText write FAbsoluteMagnitudeText;
+
+    property OrbitClassText: string read FOrbitClassText write FOrbitClassText;
+    property OrbitId: string read FOrbitId write FOrbitId;
+    property OrbitDeterminationDateText: string read FOrbitDeterminationDateText write FOrbitDeterminationDateText;
+    property FirstObservationDateText: string read FFirstObservationDateText write FFirstObservationDateText;
+    property LastObservationDateText: string read FLastObservationDateText write FLastObservationDateText;
+    property DataArcInDaysText: string read FDataArcInDaysText write FDataArcInDaysText;
+    property ObservationsUsedText: string read FObservationsUsedText write FObservationsUsedText;
+
+    property CloseApproaches: TObjectList<TCloseApproachDTOModel> read FCloseApproaches write FCloseApproaches;
+
+    property HasCloseApproaches: Boolean read FHasCloseApproaches write FHasCloseApproaches;
+    property HasOrbitalData: Boolean read FHasOrbitalData write FHasOrbitalData;
+
+  public
+    constructor Create;
+    destructor Destroy; override;
+  end;
+
+implementation
+
+{ TAsteroidDetailDTOModel }
+
+constructor TAsteroidDetailDTOModel.Create;
+begin
+  inherited;
+  FCloseApproaches := TObjectList<TCloseApproachDTOModel>.Create;
+end;
+
+destructor TAsteroidDetailDTOModel.Destroy;
+begin
+  FCloseApproaches.Free;
+  inherited;
+end;
+
+function TAsteroidDetailDTOModel.GetAbsoluteMagnitude: Extended;
+begin
+
+end;
+
+function TAsteroidDetailDTOModel.GetAbsoluteMagnitudeText: string;
+begin
+
+end;
+
+function TAsteroidDetailDTOModel.GetAsteroidCardCssClass: string;
+begin
+
+end;
+
+function TAsteroidDetailDTOModel.GetCloseApproachDate: TDateTime;
+begin
+
+end;
+
+function TAsteroidDetailDTOModel.GetCloseApproachDateText: string;
+begin
+
+end;
+
+function TAsteroidDetailDTOModel.GetCloseApproaches: TObjectList<TCloseApproachDTOModel>;
+begin
+
+end;
+
+function TAsteroidDetailDTOModel.GetDataArcInDaysText: string;
+begin
+
+end;
+
+function TAsteroidDetailDTOModel.GetDiameterText: string;
+begin
+
+end;
+
+function TAsteroidDetailDTOModel.GetEstimatedDiameterMaxMeters: Extended;
+begin
+
+end;
+
+function TAsteroidDetailDTOModel.GetEstimatedDiameterMinMeters: Extended;
+begin
+
+end;
+
+function TAsteroidDetailDTOModel.GetFirstObservationDateText: string;
+begin
+
+end;
+
+function TAsteroidDetailDTOModel.GetHasCloseApproaches: Boolean;
+begin
+
+end;
+
+function TAsteroidDetailDTOModel.GetHasOrbitalData: Boolean;
+begin
+
+end;
+
+function TAsteroidDetailDTOModel.GetHazardousCssClass: string;
+begin
+
+end;
+
+function TAsteroidDetailDTOModel.GetHazardousLabel: string;
+begin
+
+end;
+
+function TAsteroidDetailDTOModel.GetId: string;
+begin
+
+end;
+
+function TAsteroidDetailDTOModel.GetIsPotentiallyHazardous: Boolean;
+begin
+
+end;
+
+function TAsteroidDetailDTOModel.GetLastObservationDateText: string;
+begin
+
+end;
+
+function TAsteroidDetailDTOModel.GetMinDistanceKm: Extended;
+begin
+
+end;
+
+function TAsteroidDetailDTOModel.GetMinDistanceKmText: string;
+begin
+
+end;
+
+function TAsteroidDetailDTOModel.GetName: string;
+begin
+
+end;
+
+function TAsteroidDetailDTOModel.GetNasaJplUrl: string;
+begin
+
+end;
+
+function TAsteroidDetailDTOModel.GetObservationsUsedText: string;
+begin
+
+end;
+
+function TAsteroidDetailDTOModel.GetOrbitClassText: string;
+begin
+
+end;
+
+function TAsteroidDetailDTOModel.GetOrbitDeterminationDateText: string;
+begin
+
+end;
+
+function TAsteroidDetailDTOModel.GetOrbitId: string;
+begin
+
+end;
+
+function TAsteroidDetailDTOModel.GetRelativeVelocityKmH: Extended;
+begin
+
+end;
+
+function TAsteroidDetailDTOModel.GetRelativeVelocityText: string;
+begin
+
+end;
+
+procedure TAsteroidDetailDTOModel.SetAbsoluteMagnitude(const Value: Extended);
+begin
+
+end;
+
+procedure TAsteroidDetailDTOModel.SetAbsoluteMagnitudeText(const Value: string);
+begin
+
+end;
+
+procedure TAsteroidDetailDTOModel.SetAsteroidCardCssClass(const Value: string);
+begin
+
+end;
+
+procedure TAsteroidDetailDTOModel.SetCloseApproachDate(const Value: TDateTime);
+begin
+
+end;
+
+procedure TAsteroidDetailDTOModel.SetCloseApproachDateText(const Value: string);
+begin
+
+end;
+
+procedure TAsteroidDetailDTOModel.SetCloseApproaches(const Value: TObjectList<TCloseApproachDTOModel>);
+begin
+
+end;
+
+procedure TAsteroidDetailDTOModel.SetDataArcInDaysText(const Value: string);
+begin
+
+end;
+
+procedure TAsteroidDetailDTOModel.SetDiameterText(const Value: string);
+begin
+
+end;
+
+procedure TAsteroidDetailDTOModel.SetEstimatedDiameterMaxMeters(const Value: Extended);
+begin
+
+end;
+
+procedure TAsteroidDetailDTOModel.SetEstimatedDiameterMinMeters(const Value: Extended);
+begin
+
+end;
+
+procedure TAsteroidDetailDTOModel.SetFirstObservationDateText(const Value: string);
+begin
+
+end;
+
+procedure TAsteroidDetailDTOModel.SetHasCloseApproaches(const Value: Boolean);
+begin
+
+end;
+
+procedure TAsteroidDetailDTOModel.SetHasOrbitalData(const Value: Boolean);
+begin
+
+end;
+
+procedure TAsteroidDetailDTOModel.SetHazardousCssClass(const Value: string);
+begin
+
+end;
+
+procedure TAsteroidDetailDTOModel.SetHazardousLabel(const Value: string);
+begin
+
+end;
+
+procedure TAsteroidDetailDTOModel.SetId(const Value: string);
+begin
+
+end;
+
+procedure TAsteroidDetailDTOModel.SetIsPotentiallyHazardous(const Value: Boolean);
+begin
+
+end;
+
+procedure TAsteroidDetailDTOModel.SetLastObservationDateText(const Value: string);
+begin
+
+end;
+
+procedure TAsteroidDetailDTOModel.SetMinDistanceKm(const Value: Extended);
+begin
+
+end;
+
+procedure TAsteroidDetailDTOModel.SetMinDistanceKmText(const Value: string);
+begin
+
+end;
+
+procedure TAsteroidDetailDTOModel.SetName(const Value: string);
+begin
+
+end;
+
+procedure TAsteroidDetailDTOModel.SetNasaJplUrl(const Value: string);
+begin
+
+end;
+
+procedure TAsteroidDetailDTOModel.SetObservationsUsedText(const Value: string);
+begin
+
+end;
+
+procedure TAsteroidDetailDTOModel.SetOrbitClassText(const Value: string);
+begin
+
+end;
+
+procedure TAsteroidDetailDTOModel.SetOrbitDeterminationDateText(const Value: string);
+begin
+
+end;
+
+procedure TAsteroidDetailDTOModel.SetOrbitId(const Value: string);
+begin
+
+end;
+
+procedure TAsteroidDetailDTOModel.SetRelativeVelocityKmH(const Value: Extended);
+begin
+
+end;
+
+procedure TAsteroidDetailDTOModel.SetRelativeVelocityText(const Value: string);
+begin
+
+end;
+
+end.

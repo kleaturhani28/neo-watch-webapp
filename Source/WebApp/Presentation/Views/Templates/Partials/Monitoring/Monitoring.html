@@ -1,0 +1,43 @@
+<div id="monitoringContainer" data-view="monitoring" x-data x-init="
+  document.querySelectorAll('#asteroidFilters input, #asteroidFilters select').forEach(el => {
+    el.classList.remove('pe-none','opacity-50');
+    el.removeAttribute('tabindex');
+    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.readOnly = false;
+  });
+">
+
+  <div class="hero-grid">
+
+    <!-- FILTERS + SUMMARY -->
+    <aside class="glass-card filters-card">
+
+      @Import Partials/Monitoring/AsteroidFilters
+
+      <hr class="border-secondary opacity-25 my-4">
+
+      @Import Partials/Monitoring/AsteroidSummary
+
+    </aside>
+
+    <!-- SPACE SCENE -->
+    @Import Partials/Monitoring/SpaceScene
+
+    <!-- ACTIVE THREAT + RADAR -->
+    <aside class="right-stack">
+
+      @Import Partials/Monitoring/ActiveThreat
+
+    </aside>
+
+  </div>
+
+  <!-- RESULTS + DETAIL -->
+  <div class="content-grid">
+
+    @Import Partials/Monitoring/AsteroidList
+
+    @Import Partials/Monitoring/AsteroidDetail
+
+  </div>
+
+</div>

@@ -1,0 +1,55 @@
+<article class="asteroid-card @(Asteroid.IsPotentiallyHazardous ? "dangerous" : "")">
+
+  <div class="asteroid-icon">
+    <i class="fa-solid fa-meteor"></i>
+  </div>
+
+  <div>
+    <div class="asteroid-title">
+      <h4>@Asteroid.Name</h4>
+
+      @if (Asteroid.IsPotentiallyHazardous) {
+        <span class="risk-badge risk-danger">
+          <i class="fa-solid fa-circle"></i>
+          Dangerous
+        </span>
+      } @else {
+        <span class="risk-badge risk-safe">
+          <i class="fa-solid fa-circle"></i>
+          Safe
+        </span>
+      }
+    </div>
+
+    <div class="asteroid-meta">
+      <span>
+        <i class="fa-solid fa-ruler-horizontal me-1"></i>
+        @Asteroid.MinDistanceKmText
+      </span>
+
+      <span>
+        <i class="fa-solid fa-expand me-1"></i>
+        @Asteroid.DiameterText
+      </span>
+
+      <span>
+        <i class="fa-solid fa-gauge-high me-1"></i>
+        @Asteroid.RelativeVelocityText
+      </span>
+
+      <span>
+        <i class="fa-regular fa-calendar me-1"></i>
+        @Asteroid.CloseApproachDateText
+      </span>
+    </div>
+  </div>
+
+  <button class="btn btn-sm btn-nasa"
+          type="button"
+          hx-get="/asteroids/@Asteroid.Id"
+          hx-target="#asteroid-detail"
+          hx-swap="innerHTML">
+    Details
+  </button>
+
+</article>

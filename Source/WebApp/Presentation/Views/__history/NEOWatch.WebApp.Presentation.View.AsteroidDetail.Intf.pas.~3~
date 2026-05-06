@@ -1,0 +1,13 @@
+unit NEOWatch.WebApp.Presentation.View.AsteroidDetail.Intf;
+
+interface
+
+type
+
+  IViewAsteroidDetail = interface(IInvokable)
+    ['{F3D8CBEF-1BCC-4BCF-B55C-3823E96E082A}']
+  end;
+
+implementation
+
+end.

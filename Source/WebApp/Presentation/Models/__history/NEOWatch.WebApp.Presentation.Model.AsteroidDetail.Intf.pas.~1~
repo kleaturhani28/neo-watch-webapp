@@ -1,0 +1,7 @@
+unit NEOWatch.WebApp.Presentation.Model.AsteroidDetail.Intf;
+
+interface
+
+implementation
+
+end.

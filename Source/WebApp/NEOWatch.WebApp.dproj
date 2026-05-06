@@ -98,15 +98,9 @@
         <DCCReference Include="Presentation\Models\NEOWatch.WebApp.Presentation.Model.Asteroids.pas"/>
         <DCCReference Include="Presentation\Models\NEOWatch.WebApp.Presentation.Model.Dashboard.Intf.pas"/>
         <DCCReference Include="Presentation\Models\NEOWatch.WebApp.Presentation.Model.Dashboard.pas"/>
-        <DCCReference Include="Presentation\Models\DTOs\NEOWatch.WebApp.Presentation.Model.DTO.WSAsteroids.pas"/>
-        <DCCReference Include="Presentation\Models\DTOs\NEOWatch.WebApp.Presentation.Model.DTO.WSDashboard.pas"/>
-        <DCCReference Include="Presentation\Views\NEOWatch.WebApp.Presentation.View.Main.Intf.pas"/>
-        <DCCReference Include="Presentation\Views\NEOWatch.WebApp.Presentation.View.Main.WebStencils.pas"/>
-        <DCCReference Include="Presentation\Views\NEOWatch.WebApp.Presentation.View.Asteroids.Intf.pas"/>
-        <DCCReference Include="Presentation\Views\NEOWatch.WebApp.Presentation.View.Asteroids.WebStencils.pas"/>
+        <DCCReference Include="Presentation\Models\DTOs\NEOWatch.WebApp.Presentation.Model.DTO.WSMonitoring.pas"/>
+        <DCCReference Include="Presentation\Models\DTOs\NEOWatch.WebApp.Presentation.Model.DTO.WSAsteroidFilters.pas"/>
         <DCCReference Include="Presentation\Controllers\NEOWatch.WebApp.Presentation.Controller.Dashboard.pas"/>
-        <DCCReference Include="Presentation\Views\NEOWatch.WebApp.Presentation.View.Dashboard.Intf.pas"/>
-        <DCCReference Include="Presentation\Views\NEOWatch.WebApp.Presentation.View.Dashboard.WebStencils.pas"/>
         <DCCReference Include="Domain\Entities\NEOWatch.WebApp.Domain.Entity.Dashboard.Intf.pas"/>
         <DCCReference Include="Domain\Entities\NEOWatch.WebApp.Domain.Entity.Dashboard.pas"/>
         <DCCReference Include="Domain\NEOWatch.WebApp.Domain.AsteroidRepository.Intf.pas"/>
@@ -115,6 +109,18 @@
         <DCCReference Include="Persistence\Gateways\NEOWatch.WebApp.Persistence.Gateway.Dashboard.Intf.pas"/>
         <DCCReference Include="Persistence\Repositories\NEOWatch.WebApp.Persistence.Repository.Dashboard.pas"/>
         <DCCReference Include="Persistence\Repositories\NEOWatch.WebApp.Persistence.Repository.Asteroids.pas"/>
+        <DCCReference Include="Presentation\Models\DTOs\NEOWatch.WebApp.Presentation.Model.DTO.WSAsteroidSummary.pas"/>
+        <DCCReference Include="Presentation\Models\DTOs\NEOWatch.WebApp.Presentation.Model.DTO.WSAsteroidCard.pas"/>
+        <DCCReference Include="Presentation\Models\DTOs\NEOWatch.WebApp.Presentation.Model.DTO.WSAsteroidDetails.pas"/>
+        <DCCReference Include="Presentation\Models\DTOs\NEOWatch.WebApp.Presentation.Model.DTO.WSCloseApproach.pas"/>
+        <DCCReference Include="Presentation\Models\DTOs\NEOWatch.WebApp.Presentation.Model.DTO.WSDashboard.pas"/>
+        <DCCReference Include="Presentation\Views\NEOWatch.WebApp.Presentation.View.Main.Intf.pas"/>
+        <DCCReference Include="Presentation\Views\NEOWatch.WebApp.Presentation.View.Main.Sempare.pas"/>
+        <DCCReference Include="Presentation\Views\NEOWatch.WebApp.Presentation.View.AsteroidDetail.Intf.pas"/>
+        <DCCReference Include="Presentation\Views\NEOWatch.WebApp.Presentation.View.AsteroidDetail.Sempare.pas"/>
+        <DCCReference Include="Presentation\Views\NEOWatch.WebApp.Presentation.View.Monitoring.Intf.pas"/>
+        <DCCReference Include="Presentation\Views\NEOWatch.WebApp.Presentation.View.Monitoring.Sempare.pas"/>
+        <DCCReference Include="Presentation\Models\NEOWatch.WebApp.Presentation.Model.AsteroidDetail.Intf.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

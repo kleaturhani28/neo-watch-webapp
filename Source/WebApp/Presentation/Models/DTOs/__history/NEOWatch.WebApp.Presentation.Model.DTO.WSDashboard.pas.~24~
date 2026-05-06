@@ -1,0 +1,170 @@
+unit NEOWatch.WebApp.Presentation.Model.DTO.WSDashboard;
+
+interface
+
+type
+
+  TDashboardDTOModel = class
+  private
+    FTitle: string;
+    FSubtitle: string;
+
+    FStatusText: string;
+    FStatusCssClass: string;
+
+    FCacheStatusText: string;
+    FCacheStatusCssClass: string;
+
+    FActiveTab: string;
+
+    FApiInfoTitle: string;
+    FApiInfoDescription: string;
+
+    FSettingsTitle: string;
+
+  public
+    function GetTitle: string;
+    function GetSubtitle: string;
+    function GetStatusText: string;
+    function GetStatusCssClass: string;
+    function GetCacheStatusText: string;
+    function GetCacheStatusCssClass: string;
+    function GetActiveTab: string;
+    function GetApiInfoTitle: string;
+    function GetApiInfoDescription: string;
+    function GetSettingsTitle: string;
+
+    procedure SetTitle(const Value: string);
+    procedure SetSubtitle(const Value: string);
+    procedure SetStatusText(const Value: string);
+    procedure SetStatusCssClass(const Value: string);
+    procedure SetCacheStatusText(const Value: string);
+    procedure SetCacheStatusCssClass(const Value: string);
+    procedure SetActiveTab(const Value: string);
+    procedure SetApiInfoTitle(const Value: string);
+    procedure SetApiInfoDescription(const Value: string);
+    procedure SetSettingsTitle(const Value: string);
+
+  published
+    property Title: string read GetTitle write SetTitle;
+    property Subtitle: string read GetSubtitle write SetSubtitle;
+
+    property StatusText: string read GetStatusText write SetStatusText;
+    property StatusCssClass: string read GetStatusCssClass write SetStatusCssClass;
+
+    property CacheStatusText: string read GetCacheStatusText write SetCacheStatusText;
+    property CacheStatusCssClass: string read GetCacheStatusCssClass write SetCacheStatusCssClass;
+
+    property ActiveTab: string read GetActiveTab write SetActiveTab;
+
+    property ApiInfoTitle: string read GetApiInfoTitle write SetApiInfoTitle;
+    property ApiInfoDescription: string read GetApiInfoDescription write SetApiInfoDescription;
+
+    property SettingsTitle: string read GetSettingsTitle write SetSettingsTitle;
+  end;
+
+implementation
+
+{ TDashboardDTOModel }
+
+function TDashboardDTOModel.GetActiveTab: string;
+begin
+  result := FActiveTab;
+end;
+
+function TDashboardDTOModel.GetApiInfoDescription: string;
+begin
+  result := FApiInfoDescription;
+end;
+
+function TDashboardDTOModel.GetApiInfoTitle: string;
+begin
+  result := FApiInfoTitle;
+end;
+
+function TDashboardDTOModel.GetCacheStatusCssClass: string;
+begin
+  result := FCacheStatusCssClass;
+end;
+
+function TDashboardDTOModel.GetCacheStatusText: string;
+begin
+  result := FCacheStatusText;
+end;
+
+function TDashboardDTOModel.GetSettingsTitle: string;
+begin
+  result := FSettingsTitle;
+end;
+
+function TDashboardDTOModel.GetStatusCssClass: string;
+begin
+  result := FStatusCssClass;
+end;
+
+function TDashboardDTOModel.GetStatusText: string;
+begin
+  result := FStatusText;
+end;
+
+function TDashboardDTOModel.GetSubtitle: string;
+begin
+  result := FSubtitle;
+end;
+
+function TDashboardDTOModel.GetTitle: string;
+begin
+  result := FTitle;
+end;
+
+procedure TDashboardDTOModel.SetActiveTab(const Value: string);
+begin
+  FActiveTab := Value;
+end;
+
+procedure TDashboardDTOModel.SetApiInfoDescription(const Value: string);
+begin
+
+end;
+
+procedure TDashboardDTOModel.SetApiInfoTitle(const Value: string);
+begin
+
+end;
+
+procedure TDashboardDTOModel.SetCacheStatusCssClass(const Value: string);
+begin
+
+end;
+
+procedure TDashboardDTOModel.SetCacheStatusText(const Value: string);
+begin
+
+end;
+
+procedure TDashboardDTOModel.SetSettingsTitle(const Value: string);
+begin
+
+end;
+
+procedure TDashboardDTOModel.SetStatusCssClass(const Value: string);
+begin
+
+end;
+
+procedure TDashboardDTOModel.SetStatusText(const Value: string);
+begin
+
+end;
+
+procedure TDashboardDTOModel.SetSubtitle(const Value: string);
+begin
+
+end;
+
+procedure TDashboardDTOModel.SetTitle(const Value: string);
+begin
+
+end;
+
+end.

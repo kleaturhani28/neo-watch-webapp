@@ -1,0 +1,74 @@
+unit NEOWatch.WebApp.Presentation.Model.DTO.WSAsteroidFilters;
+
+interface
+
+type
+  TAsteroidFiltersDTOModel = class
+  private
+    FStartDate: string;
+    FEndDate: string;
+    FHazardous: string;
+    FSortBy: string;
+    FSortDirection: string;
+
+    FIsAllSelected: Boolean;
+    FIsDangerousSelected: Boolean;
+    FIsSafeSelected: Boolean;
+
+    FIsSortByDistanceSelected: Boolean;
+    FIsSortBySizeSelected: Boolean;
+
+    FIsSortAscSelected: Boolean;
+    FIsSortDescSelected: Boolean;
+
+    function GetStartDate: string;
+    function GetEndDate: string;
+    function GetHazardous: string;
+    function GetSortBy: string;
+    function GetSortDirection: string;
+    function GetIsAllSelected: Boolean;
+    function GetIsDangerousSelected: Boolean;
+    function GetIsSafeSelected: Boolean;
+    function GetIsSortByDistanceSelected: Boolean;
+    function GetIsSortBySizeSelected: Boolean;
+    function GetIsSortAscSelected: Boolean;
+    function GetIsSortDescSelected: Boolean;
+
+    procedure SetStartDate(const Value: string);
+    procedure SetEndDate(const Value: string);
+    procedure SetHazardous(const Value: string);
+    procedure SetSortBy(const Value: string);
+    procedure SetSortDirection(const Value: string);
+
+    procedure SetIsAllSelected(const Value: Boolean);
+    procedure SetIsDangerousSelected(const Value: Boolean);
+    procedure SetIsSafeSelected(const Value: Boolean);
+
+    procedure SetIsSortByDistanceSelected(const Value: Boolean);
+    procedure SetIsSortBySizeSelected(const Value: Boolean);
+
+    procedure SetIsSortAscSelected(const Value: Boolean);
+    procedure SetIsSortDescSelected(const Value: Boolean);
+
+  published
+    property StartDate: string read FStartDate write FStartDate;
+    property EndDate: string read FEndDate write FEndDate;
+
+    property Hazardous: string read FHazardous write FHazardous;
+    property SortBy: string read FSortBy write FSortBy;
+    property SortDirection: string read FSortDirection write FSortDirection;
+
+    property IsAllSelected: Boolean read FIsAllSelected write FIsAllSelected;
+    property IsDangerousSelected: Boolean read FIsDangerousSelected write FIsDangerousSelected;
+    property IsSafeSelected: Boolean read FIsSafeSelected write FIsSafeSelected;
+
+    property IsSortByDistanceSelected: Boolean read FIsSortByDistanceSelected write FIsSortByDistanceSelected;
+    property IsSortBySizeSelected: Boolean read FIsSortBySizeSelected write FIsSortBySizeSelected;
+
+    property IsSortAscSelected: Boolean read FIsSortAscSelected write FIsSortAscSelected;
+    property IsSortDescSelected: Boolean read FIsSortDescSelected write FIsSortDescSelected;
+  end;
+
+implementation
+
+end.

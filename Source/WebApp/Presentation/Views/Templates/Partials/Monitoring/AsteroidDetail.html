@@ -1,0 +1,117 @@
+<aside class="glass-card detail-card">
+
+  <div class="section-title">
+    <div>
+      <h2>Dettaglio asteroide</h2>
+      <small>Close approach, NASA JPL link e orbital data</small>
+    </div>
+
+    <i class="fa-solid fa-circle-info text-info"></i>
+  </div>
+
+  <div id="asteroid-detail" class="detail-empty">
+
+    @if (selectedasteroid.Value != null) {
+
+      <div class="detail-panel w-100 text-start">
+        <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+          <div>
+            <h4 class="mb-1">@selectedasteroid.Value.Name</h4>
+            <div class="text-secondary small">ID: @selectedasteroid.Value.Id</div>
+          </div>
+
+          @if (selectedasteroid.Value.IsPotentiallyHazardous) {
+            <span class="risk-badge risk-danger">
+              <i class="fa-solid fa-circle"></i>
+              Dangerous
+            </span>
+          } @else {
+            <span class="risk-badge risk-safe">
+              <i class="fa-solid fa-circle"></i>
+              Safe
+            </span>
+          }
+        </div>
+
+        <div class="detail-kv mb-3">
+          <div>
+            <span>Distanza minima</span>
+            <strong>@selectedasteroid.Value.MinDistanceKmText</strong>
+          </div>
+
+          <div>
+            <span>Diametro stimato</span>
+            <strong>@selectedasteroid.Value.DiameterText</strong>
+          </div>
+
+          <div>
+            <span>Velocità relativa</span>
+            <strong>@selectedasteroid.Value.RelativeVelocityText</strong>
+          </div>
+
+          <div>
+            <span>Close approach</span>
+            <strong>@selectedasteroid.Value.CloseApproachDateText</strong>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <h6>Orbital data</h6>
+
+          <div class="detail-kv">
+            <div>
+              <span>Orbit class</span>
+              <strong>@selectedasteroid.Value.OrbitClassText</strong>
+            </div>
+
+            <div>
+              <span>Magnitude</span>
+              <strong>@selectedasteroid.Value.AbsoluteMagnitudeText</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <h6>Close approach data storici</h6>
+
+          @if (selectedasteroid.Value.CloseApproaches.Count > 0) {
+            <ul class="small text-secondary mb-0">
+              @ForEach (var Approach in selectedasteroid.Value.CloseApproaches) {
+                <li>
+                  @Approach.CloseApproachDateText —
+                  @Approach.MissDistanceKmText —
+                  @Approach.RelativeVelocityText
+                </li>
+              }
+            </ul>
+          } @else {
+            <p class="small text-secondary mb-0">
+              Nessun close approach storico disponibile.
+            </p>
+          }
+        </div>
+
+        <a class="btn btn-sm btn-ghost w-100"
+           href="@selectedasteroid.Value.NasaJplUrl"
+           target="_blank">
+          <i class="fa-solid fa-arrow-up-right-from-square me-1"></i>
+          NASA JPL page
+        </a>
+      </div>
+
+    } @else {
+
+      <div>
+        <i class="fa-solid fa-hand-pointer fa-2x mb-3 text-info"></i>
+        <h4>Nessun asteroide selezionato</h4>
+        <p class="mb-0">
+          Clicca su <strong>Details</strong> in una card per caricare close approach storici,
+          NASA JPL link e orbital data.
+        </p>
+      </div>
+
+    }
+
+  </div>
+
+</aside>

@@ -1,0 +1,68 @@
+unit NEOWatch.WebApp.Presentation.Controller.Main;
+
+interface
+
+uses
+  System.SysUtils,
+  Horse.Commons,
+  Horse,
+  Spring,
+  NEOWatch.WebApp.Presentation.View.Main.Intf,
+  NEOWatch.WebApp.Presentation.Model.DTO.WSMonitoring,
+  NEOWatch.WebApp.Presentation.Model.Dashboard.Intf,
+  NEOWatch.WebApp.Presentation.Model.Asteroids.Intf,
+  NEOWatch.WebApp.Presentation.Model.DTO.WSDashboard,
+  System.Generics.Collections;
+
+type
+
+  EMainControllerException = class(Exception);
+
+  IMainController = interface(IInvokable)
+    ['{2DF04BAE-4C50-4D35-90A4-E115FBD43A35}']
+    procedure RegisterRoutes;
+  end;
+
+  TMainController = class(TInterfacedObject, IMainController)
+  private
+    FViewFactory: Func<IViewMain>;
+    FDashboardModalModelFactory: Func<IModelDashboard>;
+    FMonitoringModalModelFactory: Func<IModelMonitoring>;
+    EmptyList: TObjectList<TWSDashboardDTO>;
+    EmptyListMonitoring: TObjectList<TWSMonitoringDTO>;
+    procedure Dashboard(Req: THorseRequest; Res: THorseResponse; Next: TProc);
+  public
+    procedure RegisterRoutes;
+
+    constructor Create(
+        const ViewFactory: Func<IViewMain>;
+        const DashboardModelFactory: Func<IModelDashboard>;
+        const MonitoringModelFactory: Func<IModelMonitoring>
+    );
+
+  end;
+
+implementation
+
+procedure TMainController.Dashboard(Req: THorseRequest; Res: THorseResponse; Next: TProc);
+var
+  View: IViewMain;
+  DashboardModalModel: IModelDashboard;
+  MonitoringModalModel: IModelMonitoring;
+begin
+  View := FViewFactory();
+  DashboardModalModel := FDashboardModalModelFactory();
+  MonitoringModalModel := FMonitoringModalModelFactory();
+
+  EmptyList := TObjectList<TWSDashboardDTO>.Create;
+  EmptyListMonitoring := TObjectList<TWSMonitoringDTO>.Create;
+
+  Res.Send(View.Render(EmptyList, EmptyListMonitoring));
+end;
+
+procedure TMainController.RegisterRoutes;
+begin
+  THorse.Route('/').Get(Dashboard);
+end;
+
+end.

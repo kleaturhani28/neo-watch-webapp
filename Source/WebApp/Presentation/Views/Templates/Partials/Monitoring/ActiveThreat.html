@@ -1,0 +1,84 @@
+<section class="glass-card active-threat-card" id="activeThreatPanel">
+
+  <div class="section-title">
+    <div>
+      <h3>Active threat</h3>
+      <small>Asteroide selezionato</small>
+    </div>
+
+    @if (selectedasteroid.Value != null && selectedasteroid.Value.IsPotentiallyHazardous) {
+      <span class="risk-badge risk-danger" id="activeRisk">
+        <i class="fa-solid fa-circle"></i>
+        Dangerous
+      </span>
+    } @else {
+      <span class="risk-badge risk-safe" id="activeRisk">
+        <i class="fa-solid fa-circle"></i>
+        Safe
+      </span>
+    }
+  </div>
+
+  <div class="threat-visual"></div>
+
+  <div class="neo-table mb-3">
+    <div class="neo-row">
+      <span>Object</span>
+
+      @if (selectedasteroid.Value != null) {
+        <span id="activeObject">@selectedasteroid.Value.Name</span>
+      } @else {
+        <span id="activeObject">--</span>
+      }
+    </div>
+
+    <div class="neo-row">
+      <span>Distance</span>
+
+      @if (selectedasteroid.Value != null) {
+        <span id="activeDistance">@selectedasteroid.Value.MinDistanceKmText</span>
+      } @else {
+        <span id="activeDistance">-- km</span>
+      }
+    </div>
+
+    <div class="neo-row">
+      <span>Velocity</span>
+
+      @if (selectedasteroid.Value != null) {
+        <span id="activeVelocity">@selectedasteroid.Value.RelativeVelocityText</span>
+      } @else {
+        <span id="activeVelocity">-- km/h</span>
+      }
+    </div>
+  </div>
+
+  @if (selectedasteroid.Value != null) {
+    <button class="btn btn-nasa w-100"
+            hx-get="/asteroids/@selectedasteroid.Value.Id"
+            hx-target="#asteroid-detail"
+            hx-swap="innerHTML">
+      See more details
+    </button>
+  } @else {
+    <button class="btn btn-nasa w-100" disabled>
+      See more details
+    </button>
+  }
+
+</section>
+
+<section class="glass-card radar-card">
+
+  <div class="section-title">
+    <div>
+      <h3>Impact radar</h3>
+      <small>Near Earth Object radar</small>
+    </div>
+
+    <i class="fa-solid fa-bullseye text-danger"></i>
+  </div>
+
+  <div class="radar" id="radarMock"></div>
+
+</section>

@@ -1,0 +1,76 @@
+unit NEOWatch.WebApp.Presentation.View.Main.WebStencils;
+
+interface
+
+uses
+  Sempare.Template,
+  Sempare.Template.Context,
+  IOUtils,
+  System.SysUtils,
+  System.Generics.Collections,
+  Spring.Logging,
+  Spring.Collections,
+  Fido.Utilities,
+  Fido.Mappers,
+  NEOWatch.WebApp.Presentation.View.Main.Intf,
+  NEOWatch.WebApp.Presentation.Model.DTO.WSAsteroidCard,
+  NEOWatch.WebApp.Presentation.Model.DTO.WSAsteroidDetails,
+  NEOWatch.WebApp.Presentation.Model.DTO.WSAsteroidFilters,
+  NEOWatch.WebApp.Presentation.Model.DTO.WSAsteroidSummary,
+  NEOWatch.WebApp.Presentation.Model.DTO.WSCloseApproach,
+  NEOWatch.WebApp.Presentation.Model.DTO.WSDashboard,
+  NEOWatch.WebApp.Presentation.Model.DTO.WSMonitoring;
+
+type
+
+  TViewMainWebStencils = class(TInterfacedObject, IViewMain)
+  private
+    const
+      TemplateFileName = 'Dashboard.html';
+  private
+    FLogger: ILogger;
+    procedure HandleTemplateError(const AMessage: string);
+  public
+    constructor Create(const Logger: ILogger);
+    function Render(const Dashboard: TWSDashboardDTO; const Monitoring: TWSMonitoringDTO): string;
+  end;
+
+implementation
+
+constructor TViewMainWebStencils.Create(const Logger: ILogger);
+begin
+  inherited Create;
+  FLogger := Utilities.CheckNotNullAndSet(Logger, 'Logger');
+end;
+
+procedure TViewMainWebStencils.HandleTemplateError(const AMessage: string);
+begin
+  FLogger.Error('Error parsing Sempare template "%s": %s', [TemplateFileName, AMessage]);
+end;
+
+function TViewMainWebStencils.Render(const Dashboard: TWSDashboardDTO; const Monitoring: TWSMonitoringDTO): string;
+var
+  LTemplate: ITemplate;
+  LContext: ITemplateContext;
+begin
+
+  Result := '';
+
+  try
+    Context := Sempare.Template.Template.Context;
+
+    Context.Variables['dashboard'] := Dashboard;
+    Context.Variables['monitoring'] := Monitoring;
+
+    Template := TTemplateRegistry.Instance.GetTemplate(TemplateFileName);
+
+    Result := Template.(Context);
+  except
+    on E: Exception do begin
+      HandleTemplateError(E.Message);
+      raise;
+    end;
+  end;
+end;
+
+end.

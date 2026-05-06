@@ -1,0 +1,145 @@
+unit NEOWatch.WebApp.Presentation.Model.DTO.WSMonitoring;
+
+interface
+
+uses
+  NEOWatch.WebApp.Presentation.Model.DTO.WSAsteroidFilters,
+  System.Generics.Collections,
+  NEOWatch.WebApp.Presentation.Model.DTO.WSAsteroidSummary,
+  NEOWatch.WebApp.Presentation.Model.DTO.WSAsteroidCard,
+  NEOWatch.WebApp.Presentation.Model.DTO.WSAsteroidDetails;
+
+type
+  TMonitoringDTOModel = class
+  private
+    FFilters: TAsteroidFiltersDTOModel;
+    FSummary: TAsteroidSummaryDTOModel;
+    FAsteroids: TObjectList<TAsteroidCardDTOModel>;
+    FSelectedAsteroid: TAsteroidDetailDTOModel;
+    FHasSelectedAsteroid: Boolean;
+    FErrorMessage: string;
+    FHasError: Boolean;
+
+    function GetFilters: TAsteroidFiltersDTOModel;
+    function GetSummary: TAsteroidSummaryDTOModel;
+    function GetAsteroids: TObjectList<TAsteroidCardDTOModel>;
+    function GetSelectedAsteroid: TAsteroidDetailDTOModel;
+    function GetHasSelectedAsteroid: Boolean;
+    function GetErrorMessage: string;
+    function GetHasError: Boolean;
+
+    procedure SetFilters(const Value: TAsteroidFiltersDTOModel);
+    procedure SetSummary(const Value: TAsteroidSummaryDTOModel);
+    procedure SetAsteroids(const Value: TObjectList<TAsteroidCardDTOModel>);
+    procedure SetSelectedAsteroid(const Value: TAsteroidDetailDTOModel);
+    procedure SetHasSelectedAsteroid(const Value: Boolean);
+    procedure SetErrorMessage(const Value: string);
+    procedure SetHasError(const Value: Boolean);
+
+  published
+    property Filters: TAsteroidFiltersDTOModel read GetFilters write SetFilters;
+    property Summary: TAsteroidSummaryDTOModel read GetSummary write SetSummary;
+    property Asteroids: TObjectList<TAsteroidCardDTOModel> read GetAsteroids write SetAsteroids;
+    property SelectedAsteroid: TAsteroidDetailDTOModel read GetSelectedAsteroid write SetSelectedAsteroid;
+    property HasSelectedAsteroid: Boolean read GetHasSelectedAsteroid write SetHasSelectedAsteroid;
+    property ErrorMessage: string read GetErrorMessage write SetErrorMessage;
+    property HasError: Boolean read GetHasError write SetHasError;
+
+  public
+    constructor Create;
+    destructor Destroy; override;
+  end;
+
+implementation
+
+{ TMonitoringDTOModel }
+
+constructor TMonitoringDTOModel.Create;
+begin
+  inherited;
+  FAsteroids := TObjectList<TAsteroidCardDTOModel>.Create;
+  FFilters := TAsteroidFiltersDTOModel.Create;
+  FSummary := TAsteroidSummaryDTOModel.Create;
+  FSelectedAsteroid := TAsteroidDetailDTOModel.Create;
+end;
+
+destructor TMonitoringDTOModel.Destroy;
+begin
+  FAsteroids.Free;
+  FFilters.Free;
+  FSummary.Free;
+  FSelectedAsteroid.Free;
+  inherited
+end;
+
+function TMonitoringDTOModel.GetAsteroids: TObjectList<TAsteroidCardDTOModel>;
+begin
+  result := FAsteroids;
+end;
+
+function TMonitoringDTOModel.GetErrorMessage: string;
+begin
+  result := FErrorMessage;
+end;
+
+function TMonitoringDTOModel.GetFilters: TAsteroidFiltersDTOModel;
+begin
+  result := FFilters;
+end;
+
+function TMonitoringDTOModel.GetHasError: Boolean;
+begin
+  result := FHasError;
+end;
+
+function TMonitoringDTOModel.GetHasSelectedAsteroid: Boolean;
+begin
+  result := FHasSelectedAsteroid;
+end;
+
+function TMonitoringDTOModel.GetSelectedAsteroid: TAsteroidDetailDTOModel;
+begin
+  result := FSelectedAsteroid;
+end;
+
+function TMonitoringDTOModel.GetSummary: TAsteroidSummaryDTOModel;
+begin
+  result := FSummary;
+end;
+
+procedure TMonitoringDTOModel.SetAsteroids(const Value: TObjectList<TAsteroidCardDTOModel>);
+begin
+  FAsteroids := Value;
+end;
+
+procedure TMonitoringDTOModel.SetErrorMessage(const Value: string);
+begin
+  FErrorMessage := Value;
+end;
+
+procedure TMonitoringDTOModel.SetFilters(const Value: TAsteroidFiltersDTOModel);
+begin
+  FFilters := Value;
+end;
+
+procedure TMonitoringDTOModel.SetHasError(const Value: Boolean);
+begin
+  F := Value;
+end;
+
+procedure TMonitoringDTOModel.SetHasSelectedAsteroid(const Value: Boolean);
+begin
+  F := Value;
+end;
+
+procedure TMonitoringDTOModel.SetSelectedAsteroid(const Value: TAsteroidDetailDTOModel);
+begin
+  F := Value;
+end;
+
+procedure TMonitoringDTOModel.SetSummary(const Value: TAsteroidSummaryDTOModel);
+begin
+  F := Value;
+end;
+
+end.
