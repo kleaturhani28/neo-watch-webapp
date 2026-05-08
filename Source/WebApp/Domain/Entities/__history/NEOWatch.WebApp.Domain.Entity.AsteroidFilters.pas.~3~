@@ -1,0 +1,77 @@
+unit NEOWatch.WebApp.Domain.Entity.AsteroidFilters;
+
+interface
+
+uses
+  NEOWatch.WebApp.Domain.Entity.AsteroidFilters.Intf;
+
+type
+
+  TAsteroidFilters = class(TInterfacedObject, IAsteroidFilters)
+
+  public
+    function EndDate: string;
+    function Hazardous: string;
+    procedure SetEndDate(const Value: string);
+    procedure SetHazardous(const Value: string);
+    procedure SetSortBy(const Value: string);
+    procedure SetSortDirection(const Value: string);
+    procedure SetStartDate(const Value: string);
+    function SortBy: string;
+    function SortDirection: string;
+    function StartDate: string;
+  end;
+
+implementation
+
+function TAsteroidFilters.EndDate: string;
+begin
+  // TODO -cMM: TAsteroidFilters.EndDate default body inserted
+end;
+
+function TAsteroidFilters.Hazardous: string;
+begin
+  // TODO -cMM: TAsteroidFilters.Hazardous default body inserted
+end;
+
+procedure TAsteroidFilters.SetEndDate(const Value: string);
+begin
+  // TODO -cMM: TAsteroidFilters.SetEndDate default body inserted
+end;
+
+procedure TAsteroidFilters.SetHazardous(const Value: string);
+begin
+  // TODO -cMM: TAsteroidFilters.SetHazardous default body inserted
+end;
+
+procedure TAsteroidFilters.SetSortBy(const Value: string);
+begin
+  // TODO -cMM: TAsteroidFilters.SetSortBy default body inserted
+end;
+
+procedure TAsteroidFilters.SetSortDirection(const Value: string);
+begin
+  // TODO -cMM: TAsteroidFilters.SetSortDirection default body inserted
+end;
+
+procedure TAsteroidFilters.SetStartDate(const Value: string);
+begin
+  // TODO -cMM: TAsteroidFilters.SetStartDate default body inserted
+end;
+
+function TAsteroidFilters.SortBy: string;
+begin
+  // TODO -cMM: TAsteroidFilters.SortBy default body inserted
+end;
+
+function TAsteroidFilters.SortDirection: string;
+begin
+  // TODO -cMM: TAsteroidFilters.SortDirection default body inserted
+end;
+
+function TAsteroidFilters.StartDate: string;
+begin
+  // TODO -cMM: TAsteroidFilters.StartDate default body inserted
+end;
+
+end.

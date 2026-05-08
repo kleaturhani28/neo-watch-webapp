@@ -1,0 +1,12 @@
+unit NEOWatch.WebApp.Presentation.Model.AsteroidDetail;
+
+interface
+
+type
+  TModelAsteroidDetail = class(TInterfacedObject, IModelAsteroidDetail)
+
+  end;
+
+implementation
+
+end.

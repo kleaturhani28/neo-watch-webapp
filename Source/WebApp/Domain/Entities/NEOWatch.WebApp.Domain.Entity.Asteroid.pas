@@ -9,82 +9,128 @@ type
 
   TAsteroid = class(TInterfacedObject, IAsteroid)
   private
-    FEstimatedDiameterMaxKm: extended;
-    FEstimatedDiameterMinKm: extended;
-    FIsPotentiallyHazardousAsteroid: Boolean;
-    FMinDistanceKm: extended;
+    FCloseApproachDate: TDateTime;
+    FEstimatedDiameterMaxMeters: Extended;
+    FEstimatedDiameterMinMeters: Extended;
+    FId: string;
+    FIsPotentiallyHazardous: Boolean;
+    FMinDistanceKm: Extended;
     FName: string;
-    FRelativeVelocityKmPerHour: extended;
+    FNasaJplUrl: string;
+    FRelativeVelocityKmH: Extended;
 
   public
-    function EstimatedDiameterMaxKm: extended;
-    function EstimatedDiameterMinKm: extended;
-    function IsPotentiallyHazardousAsteroid: Boolean;
-    function MinDistanceKm: extended;
+    function CloseApproachDate: TDateTime;
+    function EstimatedDiameterMaxMeters: Extended;
+    function EstimatedDiameterMinMeters: Extended;
+    function Id: string;
+    function IsPotentiallyHazardous: Boolean;
+    function MinDistanceKm: Extended;
     function Name: string;
-    function RelativeVelocityKmPerHour: extended;
+    function NasaJplUrl: string;
+    function RelativeVelocityKmH: Extended;
 
-    procedure SetEstimatedDiameterMaxKm(const Value: extended);
-    procedure SetEstimatedDiameterMinKm(const Value: extended);
+    procedure SetCloseApproachDate(const Value: TDateTime);
+    procedure SetEstimatedDiameterMaxMeters(const Value: extended);
+    procedure SetEstimatedDiameterMinMeters(const Value: extended);
+    procedure SetId(const Value: string);
+    procedure SetIsPotentiallyHazardous(const Value: Boolean);
     procedure SetMinDistanceKm(const Value: extended);
     procedure SetName(const Value: string);
-    procedure SetIsPotentiallyHazardousAsteroid(const Value: Boolean);
+    procedure SetNasaJplUrl(const Value: string);
+    procedure SetRelativeVelocityKmH(const Value: Extended);
+
   end;
 implementation
 
-function TAsteroid.EstimatedDiameterMaxKm: extended;
+function TAsteroid.CloseApproachDate: TDateTime;
 begin
-  result := FEstimatedDiameterMaxKm;
+  // TODO -cMM: TAsteroid.CloseApproachDate default body inserted
 end;
 
-function TAsteroid.EstimatedDiameterMinKm: extended;
+function TAsteroid.EstimatedDiameterMaxMeters: Extended;
 begin
-  result := FEstimatedDiameterMinKm;
+  // TODO -cMM: TAsteroid.EstimatedDiameterMaxMeters default body inserted
 end;
 
-procedure TAsteroid.SetIsPotentiallyHazardousAsteroid(const Value: Boolean);
+function TAsteroid.EstimatedDiameterMinMeters: Extended;
 begin
-  FIsPotentiallyHazardousAsteroid := Value;
+  // TODO -cMM: TAsteroid.EstimatedDiameterMinMeters default body inserted
 end;
 
-function TAsteroid.IsPotentiallyHazardousAsteroid: Boolean;
+function TAsteroid.Id: string;
 begin
-  result := FIsPotentiallyHazardousAsteroid;
+  // TODO -cMM: TAsteroid.Id default body inserted
 end;
 
-function TAsteroid.MinDistanceKm: extended;
+function TAsteroid.IsPotentiallyHazardous: Boolean;
 begin
-  result := FMinDistanceKm;
+  // TODO -cMM: TAsteroid.IsPotentiallyHazardous default body inserted
+end;
+
+function TAsteroid.MinDistanceKm: Extended;
+begin
+  // TODO -cMM: TAsteroid.MinDistanceKm default body inserted
 end;
 
 function TAsteroid.Name: string;
 begin
-  result := FName;
+  // TODO -cMM: TAsteroid.Name default body inserted
 end;
 
-function TAsteroid.RelativeVelocityKmPerHour: extended;
+function TAsteroid.NasaJplUrl: string;
 begin
-  result := FRelativeVelocityKmPerHour;
+  // TODO -cMM: TAsteroid.NasaJplUrl default body inserted
 end;
 
-procedure TAsteroid.SetEstimatedDiameterMaxKm(const Value: extended);
+function TAsteroid.RelativeVelocityKmH: Extended;
 begin
-  FEstimatedDiameterMaxKm := Value;
+  // TODO -cMM: TAsteroid.RelativeVelocityKmH default body inserted
 end;
 
-procedure TAsteroid.SetEstimatedDiameterMinKm(const Value: extended);
+procedure TAsteroid.SetCloseApproachDate(const Value: TDateTime);
 begin
-  FEstimatedDiameterMinKm := Value;
+  // TODO -cMM: TAsteroid.SetCloseApproachDate default body inserted
+end;
+
+procedure TAsteroid.SetEstimatedDiameterMaxMeters(const Value: extended);
+begin
+  // TODO -cMM: TAsteroid.SetEstimatedDiameterMaxMeters default body inserted
+end;
+
+procedure TAsteroid.SetEstimatedDiameterMinMeters(const Value: extended);
+begin
+  // TODO -cMM: TAsteroid.SetEstimatedDiameterMinMeters default body inserted
+end;
+
+procedure TAsteroid.SetId(const Value: string);
+begin
+  // TODO -cMM: TAsteroid.SetId default body inserted
+end;
+
+procedure TAsteroid.SetIsPotentiallyHazardous(const Value: Boolean);
+begin
+  // TODO -cMM: TAsteroid.SetIsPotentiallyHazardous default body inserted
 end;
 
 procedure TAsteroid.SetMinDistanceKm(const Value: extended);
 begin
-  FMinDistanceKm := Value;
+  // TODO -cMM: TAsteroid.SetMinDistanceKm default body inserted
 end;
 
 procedure TAsteroid.SetName(const Value: string);
 begin
-  FName := Value;
+  // TODO -cMM: TAsteroid.SetName default body inserted
+end;
+
+procedure TAsteroid.SetNasaJplUrl(const Value: string);
+begin
+  // TODO -cMM: TAsteroid.SetNasaJplUrl default body inserted
+end;
+
+procedure TAsteroid.SetRelativeVelocityKmH(const Value: Extended);
+begin
+  // TODO -cMM: TAsteroid.SetRelativeVelocityKmH default body inserted
 end;
 
 end.

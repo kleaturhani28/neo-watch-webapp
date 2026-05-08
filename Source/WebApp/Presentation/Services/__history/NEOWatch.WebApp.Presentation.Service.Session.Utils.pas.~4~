@@ -1,0 +1,57 @@
+unit NEOWatch.WebApp.Presentation.Service.Session.Utils;
+
+interface
+
+uses
+  Horse,
+  Spring.Container,
+  NEOWatch.WebApp.Presentation.Service.DTO.SessionInfo,
+  NEOWatch.WebApp.Presentation.Service.Session.Intf;
+
+type
+  Utils = record
+    type
+      Session = record
+        class function SimpleSession(const Container: TContainer): THorseCallback; static;
+      end;
+  end;
+
+implementation
+
+{ Utils.Session }
+
+class function Utils.Session.SimpleSession(const Container: TContainer): THorseCallback;
+begin
+  result :=
+      procedure(Req: THorseRequest; Res: THorseResponse; Next: TNextProc)
+      var
+        Info: TSessionInfoDTO;
+        SessionService: ISessionService;
+      begin
+        SessionService := Container.Resolve<ISessionService>;
+
+        Info := SessionService.GetBySessionId(Req.Cookie['sessionid']);
+        try
+          if not Info.IsValid then begin
+            UserRepository := Container.Resolve<IUserRepository>;
+            User := UserRepository.GetByUserDefault;
+            Info.UserName := User.Name;
+
+            SessionService.Save(
+                Info,
+                procedure(const SessionId: string)
+                begin
+                  Res.AddHeader('Set-Cookie', 'sessionid=' + SessionId + '; HttpOnly; Path=/');
+                end
+            );
+          end;
+          Req.Session(Info);
+
+          Next();
+        finally
+          Info.Free;
+        end;
+      end;
+end;
+
+end.

@@ -1,0 +1,7 @@
+unit NEOWatch.WebApp.Domain.Entity.AsteroidFilters.Intf;
+
+interface
+
+implementation
+
+end.

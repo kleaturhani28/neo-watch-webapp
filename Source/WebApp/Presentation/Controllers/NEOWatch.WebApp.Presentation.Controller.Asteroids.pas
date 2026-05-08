@@ -10,8 +10,7 @@ uses
   Fido.Utilities,
   NEOWatch.WebApp.Presentation.View.Monitoring.Intf,
   NEOWatch.WebApp.Presentation.View.AsteroidDetail.Intf,
-  NEOWatch.WebApp.Presentation.Model.Asteroids.Intf,
-  NEOWatch.WebApp.Presentation.Model.AsteroidDetail.Intf,
+  NEOWatch.WebApp.Presentation.Model.Monitoring.Intf,
   NEOWatch.WebApp.Presentation.Model.DTO.WSMonitoring,
   NEOWatch.WebApp.Presentation.Model.DTO.WSAsteroidDetails;
 
@@ -30,7 +29,7 @@ type
     FAsteroidDetailViewFactory: Func<IViewAsteroidDetail>;
 
     FMonitoringModelFactory: Func<IModelMonitoring>;
-    FAsteroidDetailModelFactory: Func<IModelAsteroidDetail>;
+    // FAsteroidDetailModelFactory: Func<IModelAsteroidDetail>;
 
     procedure GetAsteroids(Req: THorseRequest; Res: THorseResponse; Next: TProc);
 
@@ -40,8 +39,9 @@ type
     constructor Create(
         const MonitoringViewFactory: Func<IViewMonitoring>;
         const AsteroidDetailViewFactory: Func<IViewAsteroidDetail>;
-        const MonitoringModelFactory: Func<IModelMonitoring>;
-        const AsteroidDetailModelFactory: Func<IModelAsteroidDetail>
+        const MonitoringModelFactory:
+            Func<IModelMonitoring>
+                //  const AsteroidDetailModelFactory: Func<IModelAsteroidDetail>
     );
 
     procedure RegisterRoutes;
@@ -55,8 +55,9 @@ implementation
 constructor TAsteroidsController.Create(
     const MonitoringViewFactory: Func<IViewMonitoring>;
     const AsteroidDetailViewFactory: Func<IViewAsteroidDetail>;
-    const MonitoringModelFactory: Func<IModelMonitoring>;
-    const AsteroidDetailModelFactory: Func<IModelAsteroidDetail>
+    const MonitoringModelFactory:
+        Func<IModelMonitoring>
+            //  const AsteroidDetailModelFactory: Func<IModelAsteroidDetail>
 );
 begin
   inherited Create;
@@ -70,20 +71,20 @@ begin
   FMonitoringModelFactory :=
       Utilities.CheckNotNullAndSet<Func<IModelMonitoring>>(MonitoringModelFactory, 'MonitoringModelFactory');
 
-  FAsteroidDetailModelFactory :=
-      Utilities
-          .CheckNotNullAndSet<Func<IModelAsteroidDetail>>(AsteroidDetailModelFactory, 'AsteroidDetailModelFactory');
+  //  FAsteroidDetailModelFactory :=
+  //      Utilities
+  //          .CheckNotNullAndSet<Func<IModelAsteroidDetail>>(AsteroidDetailModelFactory, 'AsteroidDetailModelFactory');
 end;
 
 procedure TAsteroidsController.GetAsteroidDetail(Req: THorseRequest; Res: THorseResponse; Next: TProc);
 var
   View: IViewAsteroidDetail;
-  Model: IModelAsteroidDetail;
+  //  Model: IModelAsteroidDetail;
   AsteroidDetailDTO: TWSAsteroidDetailDTO;
   AsteroidId: string;
 begin
   View := FAsteroidDetailViewFactory();
-  Model := FAsteroidDetailModelFactory();
+  //  Model := FAsteroidDetailModelFactory();
 
   AsteroidDetailDTO := nil;
   AsteroidId := Req.Params['id'];

@@ -18,7 +18,6 @@ uses
   NEOWatch.WebApp.Presentation.Model.DTO.WSAsteroidFilters,
   NEOWatch.WebApp.Presentation.Model.DTO.WSAsteroidSummary,
   NEOWatch.WebApp.Presentation.Model.DTO.WSCloseApproach,
-  NEOWatch.WebApp.Presentation.Model.DTO.WSDashboard,
   NEOWatch.WebApp.Presentation.Model.DTO.WSMonitoring;
 
 type
@@ -26,13 +25,13 @@ type
   TViewMainSempare = class(TInterfacedObject, IViewMain)
   private
     const
-      TemplateFileName = 'Dashboard.html';
+      TemplateFileName: array[0..1] of string = ('Partials', 'Dashboard.html');
   private
     FLogger: ILogger;
     procedure HandleTemplateError(const AMessage: string);
   public
     constructor Create(const Logger: ILogger);
-    function Render(const Dashboard: TWSDashboardDTO; const Monitoring: TWSMonitoringDTO): string;
+    function Render(const Monitoring: TWSMonitoringDTO): string;
   end;
 
 implementation
@@ -45,10 +44,10 @@ end;
 
 procedure TViewMainSempare.HandleTemplateError(const AMessage: string);
 begin
-  FLogger.Error('Error parsing Sempare template "%s": %s', [TemplateFileName, AMessage]);
+  FLogger.Error('Error parsing Sempare template "%s": %s', [TPath.Combine(TemplateFileName), AMessage]);
 end;
 
-function TViewMainSempare.Render(const Dashboard: TWSDashboardDTO; const Monitoring: TWSMonitoringDTO): string;
+function TViewMainSempare.Render(const Monitoring: TWSMonitoringDTO): string;
 var
   LTemplate: ITemplate;
   LContext: ITemplateContext;
@@ -59,10 +58,9 @@ begin
   try
     LContext := Sempare.Template.Template.Context;
 
-    LContext.Variables['dashboard'] := Dashboard;
     LContext.Variables['monitoring'] := Monitoring;
 
-    LTemplate := TTemplateRegistry.Instance.GetTemplate(TemplateFileName);
+    LTemplate := TTemplateRegistry.Instance.GetTemplate(TPath.Combine(TemplateFileName));
 
     Result := Sempare.Template.Template.Eval(LContext, LTemplate);
   except

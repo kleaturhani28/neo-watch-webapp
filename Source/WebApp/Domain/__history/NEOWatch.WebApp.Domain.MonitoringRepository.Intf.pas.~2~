@@ -1,0 +1,7 @@
+unit NEOWatch.WebApp.Domain.MonitoringRepository.Intf;
+
+interface
+
+implementation
+
+end.

@@ -1,0 +1,7 @@
+unit NEOWatch.WebApp.Domain.Entity.Monitoring;
+
+interface
+
+implementation
+
+end.

@@ -10,9 +10,7 @@ uses
   Spring,
   NEOWatch.WebApp.Presentation.View.Main.Intf,
   NEOWatch.WebApp.Presentation.Model.DTO.WSMonitoring,
-  NEOWatch.WebApp.Presentation.Model.Dashboard.Intf,
-  NEOWatch.WebApp.Presentation.Model.Asteroids.Intf,
-  NEOWatch.WebApp.Presentation.Model.DTO.WSDashboard,
+  NEOWatch.WebApp.Presentation.Model.Monitoring.Intf,
   System.Generics.Collections;
 
 type
@@ -27,18 +25,13 @@ type
   TMainController = class(TInterfacedObject, IMainController)
   private
     FViewFactory: Func<IViewMain>;
-    FDashboardModalModelFactory: Func<IModelDashboard>;
     FMonitoringModalModelFactory: Func<IModelMonitoring>;
 
     procedure Dashboard(Req: THorseRequest; Res: THorseResponse; Next: TProc);
   public
     procedure RegisterRoutes;
 
-    constructor Create(
-        const ViewFactory: Func<IViewMain>;
-        const DashboardModelFactory: Func<IModelDashboard>;
-        const MonitoringModelFactory: Func<IModelMonitoring>
-    );
+    constructor Create(const ViewFactory: Func<IViewMain>; const MonitoringModelFactory: Func<IModelMonitoring>);
 
   end;
 
@@ -46,15 +39,12 @@ implementation
 
 constructor TMainController.Create(
     const ViewFactory: Func<IViewMain>;
-    const DashboardModelFactory: Func<IModelDashboard>;
     const MonitoringModelFactory: Func<IModelMonitoring>
 );
 begin
   inherited Create;
 
   FViewFactory := Utilities.CheckNotNullAndSet<Func<IViewMain>>(ViewFactory, 'ViewFactory');
-  FDashboardModalModelFactory :=
-      Utilities.CheckNotNullAndSet<Func<IModelDashboard>>(DashboardModelFactory, 'DashboardModelFactory');
   FMonitoringModalModelFactory :=
       Utilities.CheckNotNullAndSet<Func<IModelMonitoring>>(MonitoringModelFactory, 'MonitoringModelFactory');
 end;
@@ -62,19 +52,15 @@ end;
 procedure TMainController.Dashboard(Req: THorseRequest; Res: THorseResponse; Next: TProc);
 var
   View: IViewMain;
-  DashboardModalModel: IModelDashboard;
   MonitoringModalModel: IModelMonitoring;
 begin
   View := FViewFactory();
-  DashboardModalModel := FDashboardModalModelFactory();
   MonitoringModalModel := FMonitoringModalModelFactory();
 
- // Res.Send(View.Render(DashboardModalModel, MonitoringModalModel));
+  Res.Send(View.Render(MonitoringModalModel.GetDefaultList));
 end;
-
 procedure TMainController.RegisterRoutes;
 begin
   THorse.Route('/').Get(Dashboard);
 end;
-
 end.

@@ -1,0 +1,133 @@
+unit NEOWatch.WebApp.Domain.Entity.Asteroid;
+
+interface
+
+uses
+  NEOWatch.WebApp.Domain.Entity.Asteroid.Intf;
+
+type
+
+  TAsteroid = class(TInterfacedObject, IAsteroid)
+  private
+    FEstimatedDiameterMaxKm: extended;
+    FEstimatedDiameterMinKm: extended;
+    FIsPotentiallyHazardousAsteroid: Boolean;
+    FMinDistanceKm: extended;
+    FName: string;
+    FRelativeVelocityKmPerHour: extended;
+
+  public
+    function CloseApproachDate: TDateTime;
+    function EstimatedDiameterMaxMeters: Extended;
+    function EstimatedDiameterMinMeters: Extended;
+    function Id: string;
+    function IsPotentiallyHazardous: Boolean;
+    function MinDistanceKm: Extended;
+    function Name: string;
+    function NasaJplUrl: string;
+    function RelativeVelocityKmH: Extended;
+
+    procedure SetCloseApproachDate(const Value: TDateTime);
+    procedure SetEstimatedDiameterMaxMeters(const Value: extended);
+    procedure SetEstimatedDiameterMinMeters(const Value: extended);
+    procedure SetId(const Value: string);
+    procedure SetIsPotentiallyHazardous(const Value: Boolean);
+    procedure SetMinDistanceKm(const Value: extended);
+    procedure SetName(const Value: string);
+    procedure SetNasaJplUrl(const Value: string);
+    procedure SetRelativeVelocityKmH(const Value: Extended);
+
+  end;
+implementation
+
+function TAsteroid.CloseApproachDate: TDateTime;
+begin
+  // TODO -cMM: TAsteroid.CloseApproachDate default body inserted
+end;
+
+function TAsteroid.EstimatedDiameterMaxMeters: Extended;
+begin
+  // TODO -cMM: TAsteroid.EstimatedDiameterMaxMeters default body inserted
+end;
+
+function TAsteroid.EstimatedDiameterMinMeters: Extended;
+begin
+  // TODO -cMM: TAsteroid.EstimatedDiameterMinMeters default body inserted
+end;
+
+function TAsteroid.Id: string;
+begin
+  // TODO -cMM: TAsteroid.Id default body inserted
+end;
+
+function TAsteroid.IsPotentiallyHazardous: Boolean;
+begin
+  // TODO -cMM: TAsteroid.IsPotentiallyHazardous default body inserted
+end;
+
+function TAsteroid.MinDistanceKm: Extended;
+begin
+  // TODO -cMM: TAsteroid.MinDistanceKm default body inserted
+end;
+
+function TAsteroid.Name: string;
+begin
+  // TODO -cMM: TAsteroid.Name default body inserted
+end;
+
+function TAsteroid.NasaJplUrl: string;
+begin
+  // TODO -cMM: TAsteroid.NasaJplUrl default body inserted
+end;
+
+function TAsteroid.RelativeVelocityKmH: Extended;
+begin
+  // TODO -cMM: TAsteroid.RelativeVelocityKmH default body inserted
+end;
+
+procedure TAsteroid.SetCloseApproachDate(const Value: TDateTime);
+begin
+  // TODO -cMM: TAsteroid.SetCloseApproachDate default body inserted
+end;
+
+procedure TAsteroid.SetEstimatedDiameterMaxMeters(const Value: extended);
+begin
+  // TODO -cMM: TAsteroid.SetEstimatedDiameterMaxMeters default body inserted
+end;
+
+procedure TAsteroid.SetEstimatedDiameterMinMeters(const Value: extended);
+begin
+  // TODO -cMM: TAsteroid.SetEstimatedDiameterMinMeters default body inserted
+end;
+
+procedure TAsteroid.SetId(const Value: string);
+begin
+  // TODO -cMM: TAsteroid.SetId default body inserted
+end;
+
+procedure TAsteroid.SetIsPotentiallyHazardous(const Value: Boolean);
+begin
+  // TODO -cMM: TAsteroid.SetIsPotentiallyHazardous default body inserted
+end;
+
+procedure TAsteroid.SetMinDistanceKm(const Value: extended);
+begin
+  // TODO -cMM: TAsteroid.SetMinDistanceKm default body inserted
+end;
+
+procedure TAsteroid.SetName(const Value: string);
+begin
+  // TODO -cMM: TAsteroid.SetName default body inserted
+end;
+
+procedure TAsteroid.SetNasaJplUrl(const Value: string);
+begin
+  // TODO -cMM: TAsteroid.SetNasaJplUrl default body inserted
+end;
+
+procedure TAsteroid.SetRelativeVelocityKmH(const Value: Extended);
+begin
+  // TODO -cMM: TAsteroid.SetRelativeVelocityKmH default body inserted
+end;
+
+end.

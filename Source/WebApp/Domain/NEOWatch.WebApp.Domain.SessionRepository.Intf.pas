@@ -1,0 +1,21 @@
+unit NEOWatch.WebApp.Domain.SessionRepository.Intf;
+
+interface
+
+uses
+  NEOWatch.WebApp.Domain.Entity.Session.Intf,
+  SysUtils;
+
+type
+  ESessionRepositoryException = class(Exception);
+
+  ISessionRepository = interface(IInvokable)
+    ['{911830CB-3AC9-4C3B-BFA7-263ACF022DBC}']
+    function New: ISession;
+    function Save(const Value: ISession): ISession;
+    function GetBySessionId(const Id: string): ISession;
+  end;
+
+implementation
+
+end.
