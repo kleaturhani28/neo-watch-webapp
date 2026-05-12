@@ -1,0 +1,106 @@
+unit NEOWatch.WebApp.Persistence.Gateway.NasaApi.Intf;
+
+interface
+
+uses
+  Fido.Api.Client.VirtualApi.Intf,
+  Fido.Api.Client.VirtualApi.Attributes,
+  Fido.Api.Client.VirtualApi.Call,
+  Fido.Api.Client.VirtualApi.Configuration.Intf,
+  Fido.Api.Client.VirtualApi.Configuration,
+  Fido.Http.Types,
+  Classes,
+  Spring,
+  Spring.Collections,
+  System.SysUtils;
+
+type
+  // Feed
+
+  IGetFeedNasaNeoWsApiConfiguration = interface(IClientVirtualApiConfiguration)
+    ['{146300CD-0B73-4338-9616-73A9E2BD8066}']
+  end;
+
+  TGetFeedNasaNeoWsApiConfiguration = class(TActiveVirtualApiConfiguration, IGetFeedNasaNeoWsApiConfiguration)
+  private
+    FApiKey: string;
+    FBaseUrl: string;
+  public
+    constructor Create(const BaseUrl: string; const ApiKey: string);
+
+    procedure CallBegins(const Call: TClientVirtualApiCall); override;
+  end;
+
+  IGetFeedNasaNeoWsCommandApi = interface(IClientVirtualApi)
+    ['{C72EEACA-8F1F-4801-941A-2B1A284A2543}']
+
+    [Endpoint(rmGET, '/neo/rest/v1/feed')]
+    [QueryParam('start_date')]
+    [QueryParam('end_date')]
+    function Execute(const StartDate: string; const EndDate: string): string;
+  end;
+
+  // Asteroid By Id
+
+  IGetAsteroidByIdNasaNeoWsApiConfiguration = interface(IClientVirtualApiConfiguration)
+    ['{C29BEAFA-0D43-49D8-8D98-C4CFE889D0B4}']
+  end;
+
+  TGetAsteroidByIdNasaNeoWsApiConfiguration =
+      class(TActiveVirtualApiConfiguration, IGetAsteroidByIdNasaNeoWsApiConfiguration)
+  private
+    FApiKey: string;
+    FBaseUrl: string;
+  public
+    constructor Create(const BaseUrl: string; const ApiKey: string);
+
+    procedure CallBegins(const Call: TClientVirtualApiCall); override;
+  end;
+
+  IGetAsteroidByIdNasaNeoWsCommandApi = interface(IClientVirtualApi)
+    ['{183777C9-C11B-44FE-8702-0A6DE991D34F}']
+
+    [Endpoint(rmGET, '/neo/rest/v1/neo/{id}')]
+    [PathParam('id')]
+    function Execute(const Id: string): string;
+  end;
+
+implementation
+
+{ TGetAsteroidByIdNasaNeoWsApiConfiguration }
+
+procedure TGetAsteroidByIdNasaNeoWsApiConfiguration.CallBegins(const Call: TClientVirtualApiCall);
+begin
+  inherited;
+  Call.SetParameter(pkQuery, 'api_key', FApiKey);
+end;
+
+constructor TGetAsteroidByIdNasaNeoWsApiConfiguration.Create(const BaseUrl, ApiKey: string);
+begin
+  inherited Create(BaseUrl, True, True);
+
+  if ApiKey.Trim.IsEmpty then
+    raise Exception.Create('NASA API key is required.');
+
+  FApiKey := ApiKey;
+end;
+
+{ TGetFeedNasaNeoWsApiConfiguration }
+
+procedure TGetFeedNasaNeoWsApiConfiguration.CallBegins(const Call: TClientVirtualApiCall);
+begin
+  inherited;
+  Call.SetParameter(pkQuery, 'api_key', FApiKey);
+end;
+
+constructor TGetFeedNasaNeoWsApiConfiguration.Create(const BaseUrl, ApiKey: string);
+begin
+  inherited Create(BaseUrl, True, True);
+
+  if ApiKey.Trim.IsEmpty then
+    raise Exception.Create('NASA API key is required.');
+
+  FApiKey := ApiKey;
+end;
+
+end.

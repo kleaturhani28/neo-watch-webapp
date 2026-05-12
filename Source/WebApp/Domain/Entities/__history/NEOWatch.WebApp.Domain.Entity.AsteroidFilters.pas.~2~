@@ -1,0 +1,13 @@
+unit NEOWatch.WebApp.Domain.Entity.AsteroidFilters;
+
+interface
+
+type
+
+  TAsteroidFilters = class(TInterfacedObject, IAsteroidFilters)
+
+  end;
+
+implementation
+
+end.

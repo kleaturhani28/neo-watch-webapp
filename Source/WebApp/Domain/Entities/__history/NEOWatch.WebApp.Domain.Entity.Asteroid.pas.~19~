@@ -1,0 +1,90 @@
+unit NEOWatch.WebApp.Domain.Entity.Asteroid;
+
+interface
+
+uses
+  NEOWatch.WebApp.Domain.Entity.Asteroid.Intf;
+
+type
+
+  TAsteroid = class(TInterfacedObject, IAsteroid)
+  private
+    FEstimatedDiameterMaxKm: extended;
+    FEstimatedDiameterMinKm: extended;
+    FIsPotentiallyHazardousAsteroid: Boolean;
+    FMinDistanceKm: extended;
+    FName: string;
+    FRelativeVelocityKmPerHour: extended;
+
+  public
+    function EstimatedDiameterMaxKm: extended;
+    function EstimatedDiameterMinKm: extended;
+    function IsPotentiallyHazardousAsteroid: Boolean;
+    function MinDistanceKm: extended;
+    function Name: string;
+    function RelativeVelocityKmPerHour: extended;
+
+    procedure SetEstimatedDiameterMaxKm(const Value: extended);
+    procedure SetEstimatedDiameterMinKm(const Value: extended);
+    procedure SetMinDistanceKm(const Value: extended);
+    procedure SetName(const Value: string);
+    procedure SetIsPotentiallyHazardousAsteroid(const Value: Boolean);
+  end;
+implementation
+
+function TAsteroid.EstimatedDiameterMaxKm: extended;
+begin
+  result := FEstimatedDiameterMaxKm;
+end;
+
+function TAsteroid.EstimatedDiameterMinKm: extended;
+begin
+  result := FEstimatedDiameterMinKm;
+end;
+
+procedure TAsteroid.SetIsPotentiallyHazardousAsteroid(const Value: Boolean);
+begin
+  FIsPotentiallyHazardousAsteroid := Value;
+end;
+
+function TAsteroid.IsPotentiallyHazardousAsteroid: Boolean;
+begin
+  result := FIsPotentiallyHazardousAsteroid;
+end;
+
+function TAsteroid.MinDistanceKm: extended;
+begin
+  result := FMinDistanceKm;
+end;
+
+function TAsteroid.Name: string;
+begin
+  result := FName;
+end;
+
+function TAsteroid.RelativeVelocityKmPerHour: extended;
+begin
+  result := FRelativeVelocityKmPerHour;
+end;
+
+procedure TAsteroid.SetEstimatedDiameterMaxKm(const Value: extended);
+begin
+  FEstimatedDiameterMaxKm := Value;
+end;
+
+procedure TAsteroid.SetEstimatedDiameterMinKm(const Value: extended);
+begin
+  // TODO -cMM: TAsteroid.SetEstimatedDiameterMinKm default body inserted
+end;
+
+procedure TAsteroid.SetMinDistanceKm(const Value: extended);
+begin
+  // TODO -cMM: TAsteroid.SetMinDistanceKm default body inserted
+end;
+
+procedure TAsteroid.SetName(const Value: string);
+begin
+  // TODO -cMM: TAsteroid.SetName default body inserted
+end;
+
+end.

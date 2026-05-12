@@ -1,0 +1,40 @@
+unit SynchroPlan.WebApp.Constants;
+
+interface
+
+type
+  Constants = record
+  public
+    type
+      Api = record
+      public
+        const
+          ApiPrefix = '/api';
+      end;
+
+      Commandline = record
+      public
+        const
+          ConfigOption = 'config';
+          ConfigOptionShort = 'c';
+
+          LogFile = 'log';
+          LogFileShort = 'log';
+
+          HelpCommand = 'help';
+          HelpCommandAlias = 'h';
+
+          VariableOption = 'variable';
+          VariableOptionShort = 'var';
+
+          InstallOption = 'install';
+          InstallOptionShort = 'install';
+
+          UnInstallOption = 'uninstall';
+          UnInstallOptionShort = 'uninstall';
+      end;
+  end;
+
+implementation
+
+end.

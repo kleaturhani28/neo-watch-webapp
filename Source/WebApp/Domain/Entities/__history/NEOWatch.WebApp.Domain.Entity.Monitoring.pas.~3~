@@ -1,0 +1,15 @@
+unit NEOWatch.WebApp.Domain.Entity.Monitoring;
+
+interface
+
+uses
+  NEOWatch.WebApp.Domain.Entity.Monitoring.Intf;
+
+type
+  TMonitoring = class(TInterfacedObject, IMonitoring)
+
+  end;
+
+implementation
+
+end.

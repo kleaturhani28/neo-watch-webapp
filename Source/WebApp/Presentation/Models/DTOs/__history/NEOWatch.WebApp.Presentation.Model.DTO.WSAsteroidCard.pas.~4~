@@ -1,0 +1,74 @@
+unit NEOWatch.WebApp.Presentation.Model.DTO.WSAsteroidCard;
+
+interface
+
+type
+  TAsteroidCardDTOModel = class
+  private
+    FId: string;
+    FName: string;
+
+    FMinDistanceKm: Extended;
+    FEstimatedDiameterMinMeters: Extended;
+    FEstimatedDiameterMaxMeters: Extended;
+    FRelativeVelocityKmH: Extended;
+    FCloseApproachDate: TDateTime;
+
+    FMinDistanceKmText: string;
+    FDiameterText: string;
+    FRelativeVelocityText: string;
+    FCloseApproachDateText: string;
+
+    FIsPotentiallyHazardous: Boolean;
+    FHazardousLabel: string;
+    FHazardousCssClass: string;
+    FAsteroidCardCssClass: string;
+
+    FNasaJplUrl: string;
+
+    function Id: string;
+    FName: string;
+
+    FMinDistanceKm: Extended;
+    FEstimatedDiameterMinMeters: Extended;
+    FEstimatedDiameterMaxMeters: Extended;
+    FRelativeVelocityKmH: Extended;
+    FCloseApproachDate: TDateTime;
+
+    FMinDistanceKmText: string;
+    FDiameterText: string;
+    FRelativeVelocityText: string;
+    FCloseApproachDateText: string;
+
+    FIsPotentiallyHazardous: Boolean;
+    FHazardousLabel: string;
+    FHazardousCssClass: string;
+    FAsteroidCardCssClass: string;
+
+    FNasaJplUrl: string;
+  published
+    property Id: string read FId write FId;
+    property Name: string read FName write FName;
+
+    property MinDistanceKm: Extended read FMinDistanceKm write FMinDistanceKm;
+    property EstimatedDiameterMinMeters: Extended read FEstimatedDiameterMinMeters write FEstimatedDiameterMinMeters;
+    property EstimatedDiameterMaxMeters: Extended read FEstimatedDiameterMaxMeters write FEstimatedDiameterMaxMeters;
+    property RelativeVelocityKmH: Extended read FRelativeVelocityKmH write FRelativeVelocityKmH;
+    property CloseApproachDate: TDateTime read FCloseApproachDate write FCloseApproachDate;
+
+    property MinDistanceKmText: string read FMinDistanceKmText write FMinDistanceKmText;
+    property DiameterText: string read FDiameterText write FDiameterText;
+    property RelativeVelocityText: string read FRelativeVelocityText write FRelativeVelocityText;
+    property CloseApproachDateText: string read FCloseApproachDateText write FCloseApproachDateText;
+
+    property IsPotentiallyHazardous: Boolean read FIsPotentiallyHazardous write FIsPotentiallyHazardous;
+    property HazardousLabel: string read FHazardousLabel write FHazardousLabel;
+    property HazardousCssClass: string read FHazardousCssClass write FHazardousCssClass;
+    property AsteroidCardCssClass: string read FAsteroidCardCssClass write FAsteroidCardCssClass;
+
+    property NasaJplUrl: string read FNasaJplUrl write FNasaJplUrl;
+  end;
+
+implementation
+
+end.

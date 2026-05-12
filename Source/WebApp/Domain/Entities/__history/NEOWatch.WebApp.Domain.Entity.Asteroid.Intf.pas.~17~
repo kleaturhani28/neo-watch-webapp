@@ -1,0 +1,45 @@
+unit NEOWatch.WebApp.Domain.Entity.Asteroid.Intf;
+
+interface
+
+type
+
+  IAsteroid = interface(IInvokable)
+    ['{59F9B86F-7B04-4107-B0CF-27EFADB8DB3D}']
+    function Id: string;
+    function Name: string;
+    function NasaJplUrl: string;
+
+    function AbsoluteMagnitude: Double;
+
+    function DiameterMinKm: Double;
+    function DiameterMaxKm: Double;
+    function DiameterAverageKm: Double;
+
+    function IsPotentiallyHazardous: Boolean;
+    function IsSentryObject: Boolean;
+
+    function CloseApproachDate: TDateTime;
+    function MinDistanceKm: Double;
+    function RelativeVelocityKmH: Double;
+
+    procedure SetId(const Value: string);
+    procedure SetName(const Value: string);
+    procedure SetNasaJplUrl(const Value: string);
+
+    procedure SetAbsoluteMagnitude(const Value: Double);
+
+    procedure SetDiameterMinKm(const Value: Double);
+    procedure SetDiameterMaxKm(const Value: Double);
+
+    procedure SetIsPotentiallyHazardous(const Value: Boolean);
+    procedure SetIsSentryObject(const Value: Boolean);
+
+    procedure SetCloseApproachDate(const Value: TDateTime);
+    procedure SetMinDistanceKm(const Value: Double);
+    procedure SetRelativeVelocityKmH(const Value: Double);
+  end;
+
+implementation
+
+end.

@@ -1,0 +1,142 @@
+unit NEOWatch.WebApp.Presentation.Model.DTO.SMonitoring;
+
+interface
+
+uses
+  NEOWatch.WebApp.Presentation.Model.DTO.SAsteroidFilters,
+  System.Generics.Collections,
+  NEOWatch.WebApp.Presentation.Model.DTO.SAsteroidSummary,
+  NEOWatch.WebApp.Presentation.Model.DTO.SAsteroidCard,
+  NEOWatch.WebApp.Presentation.Model.DTO.SAsteroidDetails;
+
+type
+  TSMonitoringDTO = class
+  private
+    FAsteroids: TObjectList<TSAsteroidCardDTO>;
+    FSelectedAsteroid: TSAsteroidCardDTO;
+
+    FFilters: TSAsteroidFiltersDTO;
+    FSummary: TSAsteroidSummaryDTO;
+
+    FHasError: Boolean;
+    FErrorMessage: string;
+
+    function GetAsteroids: TObjectList<TSAsteroidCardDTO>;
+    function GetSelectedAsteroid: TSAsteroidCardDTO;
+    function GetFilters: TSAsteroidFiltersDTO;
+    function GetSummary: TSAsteroidSummaryDTO;
+    function GetHasError: Boolean;
+    function GetErrorMessage: string;
+
+    procedure SetSelectedAsteroid(const Value: TSAsteroidCardDTO);
+    procedure SetHasError(const Value: Boolean);
+    procedure SetErrorMessage(const Value: string);
+
+  published
+    property Asteroids: TObjectList<TSAsteroidCardDTO> read GetAsteroids;
+    property SelectedAsteroid: TSAsteroidCardDTO read GetSelectedAsteroid write SetSelectedAsteroid;
+
+    property Filters: TSAsteroidFiltersDTO read GetFilters;
+    property Summary: TSAsteroidSummaryDTO read GetSummary;
+
+    property HasError: Boolean read GetHasError write SetHasError;
+    property ErrorMessage: string read GetErrorMessage write SetErrorMessage;
+
+  public
+    constructor Create;
+    destructor Destroy; override;
+  end;
+
+implementation
+
+{ TSMonitoringDTO }
+
+constructor TSMonitoringDTO.Create;
+begin
+  inherited;
+  FAsteroids := TObjectList<TSAsteroidCardDTO>.Create;
+  FFilters := TSAsteroidFiltersDTO.Create;
+  FSummary := TSAsteroidSummaryDTO.Create;
+  FSelectedAsteroid := TSAsteroidDetailDTO.Create;
+end;
+
+destructor TSMonitoringDTO.Destroy;
+begin
+  FAsteroids.Free;
+  FFilters.Free;
+  FSummary.Free;
+  FSelectedAsteroid.Free;
+  inherited
+end;
+
+function TSMonitoringDTO.GetAsteroids: TObjectList<TSAsteroidCardDTO>;
+begin
+  result := FAsteroids;
+end;
+
+function TSMonitoringDTO.GetErrorMessage: string;
+begin
+  result := FErrorMessage;
+end;
+
+function TSMonitoringDTO.GetFilters: TSAsteroidFiltersDTO;
+begin
+  result := FFilters;
+end;
+
+function TSMonitoringDTO.GetHasError: Boolean;
+begin
+  result := FHasError;
+end;
+
+function TSMonitoringDTO.GetHasSelectedAsteroid: Boolean;
+begin
+  result := FHasSelectedAsteroid;
+end;
+
+function TSMonitoringDTO.GetSelectedAsteroid: TSAsteroidDetailDTO;
+begin
+  result := FSelectedAsteroid;
+end;
+
+function TSMonitoringDTO.GetSummary: TSAsteroidSummaryDTO;
+begin
+  result := FSummary;
+end;
+
+procedure TSMonitoringDTO.SetAsteroids(const Value: TObjectList<TSAsteroidCardDTO>);
+begin
+  FAsteroids := Value;
+end;
+
+procedure TSMonitoringDTO.SetErrorMessage(const Value: string);
+begin
+  FErrorMessage := Value;
+end;
+
+procedure TSMonitoringDTO.SetFilters(const Value: TSAsteroidFiltersDTO);
+begin
+  FFilters := Value;
+end;
+
+procedure TSMonitoringDTO.SetHasError(const Value: Boolean);
+begin
+  FHasError := Value;
+end;
+
+procedure TSMonitoringDTO.SetHasSelectedAsteroid(const Value: Boolean);
+begin
+  FHasSelectedAsteroid := Value;
+end;
+
+procedure TSMonitoringDTO.SetSelectedAsteroid(const Value: TSAsteroidDetailDTO);
+begin
+  FSelectedAsteroid := Value;
+end;
+
+procedure TSMonitoringDTO.SetSummary(const Value: TSAsteroidSummaryDTO);
+begin
+  FSummary := Value;
+end;
+
+end.

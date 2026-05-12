@@ -1,0 +1,14 @@
+unit NEOWatch.WebApp.Domain.MonitoringRepository.Intf;
+
+interface
+
+type
+
+  IMonitoringRepository = interface(IInvokable)
+    ['{1230DD63-4261-4DA7-B2A4-A557E2F0FB53}']
+
+  end;
+
+implementation
+
+end.

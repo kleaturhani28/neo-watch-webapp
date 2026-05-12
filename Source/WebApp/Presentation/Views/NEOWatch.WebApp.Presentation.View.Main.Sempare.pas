@@ -1,0 +1,70 @@
+unit NEOWatch.WebApp.Presentation.View.Main.Sempare;
+
+interface
+
+uses
+  System.SysUtils,
+  System.IOUtils,
+  Spring.Logging,
+  Fido.Utilities,
+  Sempare.Template,
+  Sempare.Template.Context,
+  NEOWatch.WebApp.Presentation.View.Main.Intf,
+  NEOWatch.WebApp.Presentation.Model.DTO.SMonitoring;
+
+type
+
+  TViewMainSempare = class(TInterfacedObject, IViewMain)
+  private
+    const
+      TemplateFileName: array[0..1] of string = ('Partials', 'Dashboard.ejs');
+  private
+    FLogger: ILogger;
+    procedure HandleTemplateError(const AMessage: string);
+  public
+    constructor Create(const Logger: ILogger);
+    function Render(const Monitoring: TSMonitoringDTO): string;
+  end;
+
+implementation
+
+constructor TViewMainSempare.Create(const Logger: ILogger);
+begin
+  inherited Create;
+  FLogger := Utilities.CheckNotNullAndSet(Logger, 'Logger');
+end;
+
+procedure TViewMainSempare.HandleTemplateError(const AMessage: string);
+begin
+  FLogger.Error('Error parsing Sempare template "%s": %s', [TPath.Combine(TemplateFileName), AMessage]);
+end;
+
+function TViewMainSempare.Render(const Monitoring: TSMonitoringDTO): string;
+var
+  LTemplate: ITemplate;
+  LContext: ITemplateContext;
+begin
+
+  Result := '';
+
+  try
+    LContext := Sempare.Template.Template.Context();
+
+    LContext.Variables['monitoring'] := Monitoring;
+    LContext.Variables['filters'] := Monitoring.Filters;
+    LContext.Variables['summary'] := Monitoring.Summary;
+    LContext.Variables['asteroids'] := Monitoring.Asteroids;
+    LContext.Variables['selectedasteroid'] := Monitoring.SelectedAsteroid;
+
+    LTemplate := TTemplateRegistry.Instance.GetTemplate(TPath.Combine(TemplateFileName));
+
+    Result := Sempare.Template.Template.Eval(LContext, LTemplate);
+  except
+    on E: Exception do begin
+      HandleTemplateError(E.Message);
+      raise;
+    end;
+  end;
+end;
+
+end.

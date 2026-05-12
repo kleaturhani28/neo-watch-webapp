@@ -1,0 +1,53 @@
+<section class="glass-card space-scene">
+
+  <div class="scene-toolbar">
+    <span class="scene-badge">
+      <i class="fa-solid fa-shield-halved"></i>
+      Orbital Defense
+    </span>
+
+    <div class="toolbar-actions">
+      <button class="btn btn-sm btn-ghost"
+              type="button"
+              hx-get="/asteroids"
+              hx-include="#asteroidFilters"
+              hx-target="#monitoringContainer"
+              hx-swap="outerHTML"
+              hx-indicator="#globalLoader">
+        <i class="fa-solid fa-arrows-rotate me-1"></i>
+        Aggiorna
+      </button>
+
+      <button class="btn btn-sm btn-ghost"
+              type="button"
+              onclick="
+                document.getElementById('hazardous').value = 'dangerous';
+                htmx.trigger(document.getElementById('asteroidFilters'), 'submit');
+              ">
+        <i class="fa-solid fa-triangle-exclamation me-1"></i>
+        Pericolosi
+      </button>
+    </div>
+  </div>
+
+  <div class="orbit-line"></div>
+  <div class="planet-mini"></div>
+  <div class="main-asteroid"></div>
+  <div class="target-ring"></div>
+
+  <div class="scene-note note-diameter">
+    Diameter
+    <small>min/max from NASA NeoWs</small>
+  </div>
+
+  <div class="scene-note note-composition">
+    Object data
+    <small>Distance<br>Velocity<br>Hazardous</small>
+  </div>
+
+  <div class="scene-note note-distance">
+    Close approach
+    <small>distance over time</small>
+  </div>
+
+</section>

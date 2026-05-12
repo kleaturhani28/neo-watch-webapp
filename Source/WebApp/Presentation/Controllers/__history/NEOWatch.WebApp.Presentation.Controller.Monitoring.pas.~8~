@@ -1,0 +1,34 @@
+unit NEOWatch.WebApp.Presentation.Controller.Monitoring;
+
+interface
+
+uses
+  System.SysUtils,
+  Spring,
+  NEOWatch.WebApp.Presentation.View.Monitoring.Intf,
+  NEOWatch.WebApp.Presentation.Model.Monitoring.Intf;
+
+type
+  EMonitoringControllerException = class(Exception);
+
+  IMonitoringController = interface(IInvokable)
+    ['{51F12916-E6CE-4338-8C87-99D108ACC999}']
+    procedure RegisterRoutes;
+  end;
+
+  TMonitoringController = class(TInterfacedObject, IMonitoringController)
+  private
+    FViewFactory: Func<IViewMonitoring>;
+    FMonitoringModalModelFactory: Func<IModelMonitoring>;
+
+    procedure Monitoring(Req: THorseRequest; Res: THorseResponse; Next: TProc);
+  public
+    procedure RegisterRoutes;
+
+    constructor Create(const ViewFactory: Func<IViewMonitoring>; const MonitoringModelFactory: Func<IModelMonitoring>);
+
+  end;
+
+implementation
+
+end.

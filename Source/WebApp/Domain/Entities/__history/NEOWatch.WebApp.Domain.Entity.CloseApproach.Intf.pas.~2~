@@ -1,0 +1,32 @@
+unit NEOWatch.WebApp.Domain.Entity.CloseApproach.Intf;
+
+interface
+
+uses
+  Spring,
+  System.SysUtils;
+
+type
+  ICloseApproach = interface(IInvokable)
+    ['{D9A5ED90-BC12-4C99-9C77-AB9B17ACD963}']
+
+    function CloseApproachDate: TDateTime;
+    function CloseApproachDateText: string;
+    function EpochDateCloseApproach: Int64;
+
+    function RelativeVelocityKmH: Double;
+    function MissDistanceKm: Double;
+    function OrbitingBody: string;
+
+    procedure SetCloseApproachDate(const Value: TDateTime);
+    procedure SetCloseApproachDateText(const Value: string);
+    procedure SetEpochDateCloseApproach(const Value: Int64);
+
+    procedure SetRelativeVelocityKmH(const Value: Double);
+    procedure SetMissDistanceKm(const Value: Double);
+    procedure SetOrbitingBody(const Value: string);
+  end;
+
+implementation
+
+end.

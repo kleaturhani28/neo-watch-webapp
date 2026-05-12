@@ -1,0 +1,98 @@
+unit NEOWatch.WebApp.Domain.Entity.CloseApproach;
+
+interface
+
+uses
+  System.SysUtils,
+  NEOWatch.WebApp.Domain.Entity.CloseApproach.Intf;
+
+type
+  TCloseApproach = class(TInterfacedObject, ICloseApproach)
+  private
+    FCloseApproachDate: TDateTime;
+    FCloseApproachDateText: string;
+    FEpochDateCloseApproach: Int64;
+    FRelativeVelocityKmH: extended;
+    FMissDistanceKm: extended;
+    FOrbitingBody: string;
+  public
+    function CloseApproachDate: TDateTime;
+    function CloseApproachDateText: string;
+    function EpochDateCloseApproach: Int64;
+
+    function RelativeVelocityKmH: extended;
+    function MissDistanceKm: extended;
+    function OrbitingBody: string;
+
+    procedure SetCloseApproachDate(const Value: TDateTime);
+    procedure SetCloseApproachDateText(const Value: string);
+    procedure SetEpochDateCloseApproach(const Value: Int64);
+
+    procedure SetRelativeVelocityKmH(const Value: extended);
+    procedure SetMissDistanceKm(const Value: extended);
+    procedure SetOrbitingBody(const Value: string);
+  end;
+
+implementation
+
+function TCloseApproach.CloseApproachDate: TDateTime;
+begin
+  Result := FCloseApproachDate;
+end;
+
+function TCloseApproach.CloseApproachDateText: string;
+begin
+  Result := FCloseApproachDateText;
+end;
+
+function TCloseApproach.EpochDateCloseApproach: Int64;
+begin
+  Result := FEpochDateCloseApproach;
+end;
+
+function TCloseApproach.RelativeVelocityKmH: extended;
+begin
+  Result := FRelativeVelocityKmH;
+end;
+
+function TCloseApproach.MissDistanceKm: extended;
+begin
+  Result := FMissDistanceKm;
+end;
+
+function TCloseApproach.OrbitingBody: string;
+begin
+  Result := FOrbitingBody;
+end;
+
+procedure TCloseApproach.SetCloseApproachDate(const Value: TDateTime);
+begin
+  FCloseApproachDate := Value;
+end;
+
+procedure TCloseApproach.SetCloseApproachDateText(const Value: string);
+begin
+  FCloseApproachDateText := Value;
+end;
+
+procedure TCloseApproach.SetEpochDateCloseApproach(const Value: Int64);
+begin
+  FEpochDateCloseApproach := Value;
+end;
+
+procedure TCloseApproach.SetRelativeVelocityKmH(const Value: extended);
+begin
+  FRelativeVelocityKmH := Value;
+end;
+
+procedure TCloseApproach.SetMissDistanceKm(const Value: extended);
+begin
+  FMissDistanceKm := Value;
+end;
+
+procedure TCloseApproach.SetOrbitingBody(const Value: string);
+begin
+  FOrbitingBody := Value;
+end;
+
+end.

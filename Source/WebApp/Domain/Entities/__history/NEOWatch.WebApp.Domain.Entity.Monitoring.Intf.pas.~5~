@@ -1,0 +1,13 @@
+unit NEOWatch.WebApp.Domain.Entity.Monitoring.Intf;
+
+interface
+
+type
+
+  IMonitoring = interface(IInvokable)
+    ['{3A63A581-D438-4F53-BD1D-26DFF41B174C}']
+  end;
+
+implementation
+
+end.

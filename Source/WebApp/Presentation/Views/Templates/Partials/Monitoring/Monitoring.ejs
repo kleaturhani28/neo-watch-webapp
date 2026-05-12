@@ -1,0 +1,431 @@
+<div id="monitoringContainer" data-view="monitoring">
+
+  <div class="hero-grid">
+
+    <!-- FILTERS + METRICS -->
+    <aside class="glass-card filters-card">
+      <div class="section-title">
+        <div>
+          <h2>Filtri ricerca</h2>
+          <small>Range date, pericolosità e ordinamento</small>
+        </div>
+
+        <i class="fa-solid fa-filter text-info"></i>
+      </div>
+
+      <form id="asteroidFilters"
+            class="filters"
+            hx-get="/asteroids"
+            hx-target="#monitoringContainer"
+            hx-swap="outerHTML"
+            hx-indicator="#globalLoader">
+
+        <div class="row g-3">
+          <div class="col-12">
+            <label class="form-label" for="startDate">Data inizio</label>
+            <input class="form-control"
+                   id="startDate"
+                   name="startDate"
+                   type="date"
+                   value="<%= filters.StartDate %>"
+                   required>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label" for="endDate">Data fine</label>
+            <input class="form-control"
+                   id="endDate"
+                   name="endDate"
+                   type="date"
+                   value="<%= filters.EndDate %>"
+                   required>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label" for="hazardous">Pericolosità</label>
+            <select class="form-select"
+                    id="hazardous"
+                    name="hazardous">
+
+              <% if filters.Hazardous = 'all' then %>
+                <option value="all" selected>Tutti</option>
+              <% else %>
+                <option value="all">Tutti</option>
+              <% end %>
+
+              <% if filters.Hazardous = 'dangerous' then %>
+                <option value="dangerous" selected>Solo pericolosi</option>
+              <% else %>
+                <option value="dangerous">Solo pericolosi</option>
+              <% end %>
+
+              <% if filters.Hazardous = 'safe' then %>
+                <option value="safe" selected>Solo non pericolosi</option>
+              <% else %>
+                <option value="safe">Solo non pericolosi</option>
+              <% end %>
+
+            </select>
+          </div>
+
+          <div class="col-7">
+            <label class="form-label" for="sortBy">Ordina per</label>
+            <select class="form-select"
+                    id="sortBy"
+                    name="sortBy">
+
+              <% if filters.SortBy = 'distance' then %>
+                <option value="distance" selected>Distanza</option>
+              <% else %>
+                <option value="distance">Distanza</option>
+              <% end %>
+
+              <% if filters.SortBy = 'size' then %>
+                <option value="size" selected>Dimensione</option>
+              <% else %>
+                <option value="size">Dimensione</option>
+              <% end %>
+
+            </select>
+          </div>
+
+          <div class="col-5">
+            <label class="form-label" for="sortDirection">Verso</label>
+            <select class="form-select"
+                    id="sortDirection"
+                    name="sortDirection">
+
+              <% if filters.SortDirection = 'asc' then %>
+                <option value="asc" selected>ASC</option>
+              <% else %>
+                <option value="asc">ASC</option>
+              <% end %>
+
+              <% if filters.SortDirection = 'desc' then %>
+                <option value="desc" selected>DESC</option>
+              <% else %>
+                <option value="desc">DESC</option>
+              <% end %>
+
+            </select>
+          </div>
+
+          <div class="col-12 d-grid">
+            <button type="submit" class="btn btn-nasa">
+              <i class="fa-solid fa-magnifying-glass me-1"></i>
+              Cerca asteroidi
+            </button>
+          </div>
+
+          <div class="col-12 d-grid">
+            <button type="button"
+                    id="btnResetFilters"
+                    class="btn btn-ghost"
+                    onclick="
+                      document.getElementById('startDate').value = '';
+                      document.getElementById('endDate').value = '';
+                      document.getElementById('hazardous').value = 'all';
+                      document.getElementById('sortBy').value = 'distance';
+                      document.getElementById('sortDirection').value = 'asc';
+                    ">
+              <i class="fa-solid fa-rotate-left me-1"></i>
+              Reset filtri
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <hr class="border-secondary opacity-25 my-4">
+
+      <div id="summary-panel" class="metric-list">
+        <div class="metric-card">
+          <div class="metric-label">Asteroidi trovati</div>
+          <div class="metric-value"><%= summary.TotalCountText %> <small>items</small></div>
+          <div class="metric-trend <%= summary.SummaryTrendClass %>"><%= summary.SummaryMessage %></div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-label">Potenzialmente pericolosi</div>
+          <div class="metric-value"><%= summary.DangerousCountText %> <small>PHA</small></div>
+
+          <% if summary.DangerousCount > 0 then %>
+            <div class="metric-trend trend-danger">Attenzione richiesta</div>
+          <% else %>
+            <div class="metric-trend trend-good">Nessun pericoloso</div>
+          <% end %>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-label">Backend</div>
+          <div class="metric-value"><%= summary.CacheStatusText %> <small>ready</small></div>
+          <div class="metric-trend <%= summary.CacheBadgeClass %>"><%= summary.CacheDescription %></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CENTRAL SCENE -->
+    <section class="glass-card space-scene">
+      <div class="scene-toolbar">
+        <span class="scene-badge">
+          <i class="fa-solid fa-shield-halved"></i>
+          Orbital Defense
+        </span>
+
+        <div class="toolbar-actions">
+          <button class="btn btn-sm btn-ghost"
+                  type="button"
+                  hx-get="/asteroids"
+                  hx-include="#asteroidFilters"
+                  hx-target="#monitoringContainer"
+                  hx-swap="outerHTML"
+                  hx-indicator="#globalLoader">
+            <i class="fa-solid fa-arrows-rotate me-1"></i>
+            Aggiorna
+          </button>
+
+          <button class="btn btn-sm btn-ghost"
+                  type="button"
+                  onclick="
+                    document.getElementById('hazardous').value = 'dangerous';
+                    htmx.trigger(document.getElementById('asteroidFilters'), 'submit');
+                  ">
+            <i class="fa-solid fa-triangle-exclamation me-1"></i>
+            Pericolosi
+          </button>
+        </div>
+      </div>
+
+      <div class="orbit-line"></div>
+      <div class="planet-mini"></div>
+      <div class="main-asteroid"></div>
+      <div class="target-ring"></div>
+
+      <div class="scene-note note-diameter">
+        Diameter
+        <small>min/max from NASA NeoWs</small>
+      </div>
+
+      <div class="scene-note note-composition">
+        Object data
+        <small>Distance<br>Velocity<br>Hazardous</small>
+      </div>
+
+      <div class="scene-note note-distance">
+        Close approach
+        <small>distance over time</small>
+      </div>
+    </section>
+
+    <!-- ACTIVE THREAT + RADAR -->
+    <aside class="right-stack">
+      <section class="glass-card active-threat-card" id="active-threat-panel">
+        <div class="section-title">
+          <div>
+            <h3>Active threat</h3>
+            <small>Asteroide selezionato</small>
+          </div>
+
+          <% if selectedasteroid <> nil then %>
+            <span class="<%= selectedasteroid.HazardousCssClass %>" id="activeRisk">
+              <i class="fa-solid fa-circle"></i>
+              <%= selectedasteroid.HazardousLabel %>
+            </span>
+          <% else %>
+            <span class="risk-badge risk-safe" id="activeRisk">
+              <i class="fa-solid fa-circle"></i>
+              Unknown
+            </span>
+          <% end %>
+        </div>
+
+        <div class="threat-visual"></div>
+
+        <div class="neo-table mb-3">
+          <div class="neo-row">
+            <span>Object</span>
+
+            <% if selectedasteroid <> nil then %>
+              <span id="activeObject"><%= selectedasteroid.Name %></span>
+            <% else %>
+              <span id="activeObject">--</span>
+            <% end %>
+          </div>
+
+          <div class="neo-row">
+            <span>Distance</span>
+
+            <% if selectedasteroid <> nil then %>
+              <span id="activeDistance"><%= selectedasteroid.MinDistanceKmText %></span>
+            <% else %>
+              <span id="activeDistance">-- km</span>
+            <% end %>
+          </div>
+
+          <div class="neo-row">
+            <span>Velocity</span>
+
+            <% if selectedasteroid <> nil then %>
+              <span id="activeVelocity"><%= selectedasteroid.RelativeVelocityText %></span>
+            <% else %>
+              <span id="activeVelocity">-- km/h</span>
+            <% end %>
+          </div>
+        </div>
+
+        <% if selectedasteroid <> nil then %>
+          <button class="btn btn-nasa w-100"
+                  type="button"
+                  hx-get="/asteroids/<%= selectedasteroid.Id %>"
+                  hx-target="#asteroid-detail"
+                  hx-swap="innerHTML"
+                  hx-indicator="#globalLoader">
+            See more details
+          </button>
+        <% else %>
+          <button class="btn btn-nasa w-100" type="button" disabled>
+            See more details
+          </button>
+        <% end %>
+      </section>
+
+      <section class="glass-card radar-card">
+        <div class="section-title">
+          <div>
+            <h3>Impact radar</h3>
+            <small>Near Earth Object radar</small>
+          </div>
+
+          <i class="fa-solid fa-bullseye text-danger"></i>
+        </div>
+
+        <div class="radar" id="radarMock"></div>
+      </section>
+    </aside>
+  </div>
+
+  <!-- RESULTS + DETAIL -->
+  <div class="content-grid">
+    <section class="glass-card results-card">
+      <div class="section-title">
+        <div>
+          <h2>Lista asteroidi</h2>
+          <small>Risultati filtrati e ordinati dal backend</small>
+        </div>
+
+        <div class="toolbar-actions">
+          <button class="btn btn-sm btn-ghost"
+                  type="button"
+                  hx-get="/asteroids"
+                  hx-include="#asteroidFilters"
+                  hx-target="#monitoringContainer"
+                  hx-swap="outerHTML"
+                  hx-indicator="#globalLoader">
+            <i class="fa-solid fa-arrows-rotate me-1"></i>
+            Aggiorna
+          </button>
+        </div>
+      </div>
+
+      <div id="asteroid-results">
+
+        <% if asteroids.Count > 0 then %>
+
+          <div class="asteroid-list">
+
+            <% for Asteroid in asteroids do %>
+
+              <article class="<%= Asteroid.AsteroidCardCssClass %>">
+
+                <div class="asteroid-icon">
+                  <i class="fa-solid fa-meteor"></i>
+                </div>
+
+                <div>
+                  <div class="asteroid-title">
+                    <h4><%= Asteroid.Name %></h4>
+
+                    <span class="<%= Asteroid.HazardousCssClass %>">
+                      <i class="fa-solid fa-circle"></i>
+                      <%= Asteroid.HazardousLabel %>
+                    </span>
+                  </div>
+
+                  <div class="asteroid-meta">
+                    <span>
+                      <i class="fa-solid fa-ruler-horizontal me-1"></i>
+                      <%= Asteroid.MinDistanceKmText %>
+                    </span>
+
+                    <span>
+                      <i class="fa-solid fa-expand me-1"></i>
+                      <%= Asteroid.DiameterText %>
+                    </span>
+
+                    <span>
+                      <i class="fa-solid fa-gauge-high me-1"></i>
+                      <%= Asteroid.RelativeVelocityText %>
+                    </span>
+
+                    <span>
+                      <i class="fa-regular fa-calendar me-1"></i>
+                      <%= Asteroid.CloseApproachDateText %>
+                    </span>
+                  </div>
+                </div>
+
+                <button class="btn btn-sm btn-nasa"
+                        type="button"
+                        hx-get="/asteroids/<%= Asteroid.Id %>"
+                        hx-target="#asteroid-detail"
+                        hx-swap="innerHTML"
+                        hx-indicator="#globalLoader">
+                  Details
+                </button>
+
+              </article>
+
+            <% end %>
+
+          </div>
+
+        <% else %>
+
+          <div class="detail-empty">
+            <div>
+              <i class="fa-solid fa-meteor fa-2x mb-3 text-info"></i>
+              <h4>Nessun asteroide trovato</h4>
+              <p class="mb-0">
+                Cambia range date oppure modifica i filtri.
+              </p>
+            </div>
+          </div>
+
+        <% end %>
+
+      </div>
+    </section>
+
+    <aside class="glass-card detail-card">
+      <div class="section-title">
+        <div>
+          <h2>Dettaglio asteroide</h2>
+          <small>Close approach, NASA JPL link e orbital data</small>
+        </div>
+
+        <i class="fa-solid fa-circle-info text-info"></i>
+      </div>
+
+      <div id="asteroid-detail" class="detail-empty">
+        <div>
+          <i class="fa-solid fa-hand-pointer fa-2x mb-3 text-info"></i>
+          <h4>Nessun asteroide selezionato</h4>
+          <p class="mb-0">
+            Clicca su <strong>Details</strong> in una card per caricare close approach storici,
+            NASA JPL link e orbital data.
+          </p>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+</div>

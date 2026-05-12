@@ -1,0 +1,104 @@
+<div class="detail-panel w-100 text-start">
+
+  <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+    <div>
+      <h4 class="mb-1"><% asteroiddetail.Name %></h4>
+      <div class="text-secondary small">ID: <% asteroiddetail.Id %></div>
+    </div>
+
+    <span class="<% asteroiddetail.HazardousCssClass %>">
+      <i class="fa-solid fa-circle"></i>
+      <% asteroiddetail.HazardousLabel %>
+    </span>
+  </div>
+
+  <div class="detail-kv mb-3">
+    <div>
+      <span>Distanza minima</span>
+      <strong><% asteroiddetail.MinDistanceKmText %></strong>
+    </div>
+
+    <div>
+      <span>Diametro stimato</span>
+      <strong><% asteroiddetail.DiameterText %></strong>
+    </div>
+
+    <div>
+      <span>Velocità relativa</span>
+      <strong><% asteroiddetail.RelativeVelocityText %></strong>
+    </div>
+
+    <div>
+      <span>Close approach</span>
+      <strong><% asteroiddetail.CloseApproachDateText %></strong>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <h6>Orbital data</h6>
+
+    <div class="detail-kv">
+      <div>
+        <span>Orbit class</span>
+        <strong><% asteroiddetail.OrbitClassText %></strong>
+      </div>
+
+      <div>
+        <span>Orbit ID</span>
+        <strong><% asteroiddetail.OrbitId %></strong>
+      </div>
+
+      <div>
+        <span>Orbit determination</span>
+        <strong><% asteroiddetail.OrbitDeterminationDateText %></strong>
+      </div>
+
+      <div>
+        <span>First observation</span>
+        <strong><% asteroiddetail.FirstObservationDateText %></strong>
+      </div>
+
+      <div>
+        <span>Last observation</span>
+        <strong><% asteroiddetail.LastObservationDateText %></strong>
+      </div>
+
+      <div>
+        <span>Data arc</span>
+        <strong><% asteroiddetail.DataArcInDaysText %></strong>
+      </div>
+
+      <div>
+        <span>Observations used</span>
+        <strong><% asteroiddetail.ObservationsUsedText %></strong>
+      </div>
+
+      <div>
+        <span>Magnitude</span>
+        <strong><% asteroiddetail.AbsoluteMagnitudeText %></strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <h6>Close approach data storici</h6>
+
+    <ul class="small text-secondary mb-0">
+      <% for Approach in asteroiddetail.CloseApproaches %>
+        <li>
+          <% Approach.CloseApproachDateText %> —
+          <% Approach.MissDistanceKmText %> —
+          <% Approach.RelativeVelocityText %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+
+  <a class="btn btn-sm btn-ghost w-100"
+     href="<% asteroiddetail.NasaJplUrl %>"
+     target="_blank">
+    <i class="fa-solid fa-arrow-up-right-from-square me-1"></i>
+    NASA JPL page
+  </a>
+
+</div>

@@ -1,0 +1,33 @@
+unit NEOWatch.WebApp.Presentation.Model.DTO.WSCloseApproach;
+
+interface
+
+type
+  TCloseApproachDTOModel = class
+  private
+    FCloseApproachDate: TDateTime;
+    FCloseApproachDateText: string;
+
+    FMissDistanceKm: Extended;
+    FMissDistanceKmText: string;
+
+    FRelativeVelocityKmH: Extended;
+    FRelativeVelocityText: string;
+
+    FOrbitingBody: string;
+  published
+    property CloseApproachDate: TDateTime read FCloseApproachDate write FCloseApproachDate;
+    property CloseApproachDateText: string read FCloseApproachDateText write FCloseApproachDateText;
+
+    property MissDistanceKm: Extended read FMissDistanceKm write FMissDistanceKm;
+    property MissDistanceKmText: string read FMissDistanceKmText write FMissDistanceKmText;
+
+    property RelativeVelocityKmH: Extended read FRelativeVelocityKmH write FRelativeVelocityKmH;
+    property RelativeVelocityText: string read FRelativeVelocityText write FRelativeVelocityText;
+
+    property OrbitingBody: string read FOrbitingBody write FOrbitingBody;
+  end;
+
+implementation
+
+end.

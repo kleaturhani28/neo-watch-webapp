@@ -1,0 +1,50 @@
+unit NEOWatch.WebApp.Presentation.Model.DTO.WSCloseApproach;
+
+interface
+
+type
+  TCloseApproachDTOModel = class
+  private
+    FCloseApproachDate: TDateTime;
+    FCloseApproachDateText: string;
+
+    FMissDistanceKm: Extended;
+    FMissDistanceKmText: string;
+
+    FRelativeVelocityKmH: Extended;
+    FRelativeVelocityText: string;
+
+    FOrbitingBody: string;
+
+    function GetCloseApproachDate: TDateTime;
+    function GetCloseApproachDateText: string;
+    function GetMissDistanceKm: Extended;
+    function GetMissDistanceKmText: string;
+    function GetRelativeVelocityKmH: Extended;
+    function GetRelativeVelocityText: string;
+    function GetOrbitingBody: string;
+
+    procedure SetCloseApproachDate(const Value: TDateTime);
+    procedure SetCloseApproachDateText(const Value: string);
+    procedure SetMissDistanceKm(const Value: Extended);
+    procedure SetMissDistanceKmText(const Value: string);
+    procedure SetRelativeVelocityKmH(const Value: Extended);
+    procedure SetRelativeVelocityText(const Value: string);
+    procedure SetOrbitingBody(const Value: string);
+
+  published
+    property CloseApproachDate: TDateTime read GetCloseApproachDate write SetCloseApproachDate;
+    property CloseApproachDateText: string read GetCloseApproachDateText write SetCloseApproachDateText;
+
+    property MissDistanceKm: Extended read GetMissDistanceKm write SetMissDistanceKm;
+    property MissDistanceKmText: string read GetMissDistanceKmText write SetMissDistanceKmText;
+
+    property RelativeVelocityKmH: Extended read GetRelativeVelocityKmH write SetRelativeVelocityKmH;
+    property RelativeVelocityText: string read GetRelativeVelocityText write SetRelativeVelocityText;
+
+    property OrbitingBody: string read GetOrbitingBody write SetOrbitingBody;
+  end;
+
+implementation
+
+end.

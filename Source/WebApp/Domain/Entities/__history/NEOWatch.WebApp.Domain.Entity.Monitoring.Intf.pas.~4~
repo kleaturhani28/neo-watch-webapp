@@ -1,0 +1,28 @@
+unit NEOWatch.WebApp.Domain.Entity.Monitoring.Intf;
+
+interface
+
+type
+
+  IMonitoring = interface(IInvokable)
+    ['{3A63A581-D438-4F53-BD1D-26DFF41B174C}']
+    function GetFilters: TWSAsteroidFiltersDTO;
+    function GetSummary: TWSAsteroidSummaryDTO;
+    function GetAsteroids: TObjectList<TWSAsteroidCardDTO>;
+    function GetSelectedAsteroid: TWSAsteroidDetailDTO;
+    function GetHasSelectedAsteroid: Boolean;
+    function GetErrorMessage: string;
+    function GetHasError: Boolean;
+
+    procedure SetFilters(const Value: TWSAsteroidFiltersDTO);
+    procedure SetSummary(const Value: TWSAsteroidSummaryDTO);
+    procedure SetAsteroids(const Value: TObjectList<TWSAsteroidCardDTO>);
+    procedure SetSelectedAsteroid(const Value: TWSAsteroidDetailDTO);
+    procedure SetHasSelectedAsteroid(const Value: Boolean);
+    procedure SetErrorMessage(const Value: string);
+    procedure SetHasError(const Value: Boolean);
+  end;
+
+implementation
+
+end.

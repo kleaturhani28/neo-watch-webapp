@@ -1,0 +1,52 @@
+unit NEOWatch.WebApp.Presentation.Service.Authorization;
+
+interface
+
+uses
+  System.Generics.Collections,
+  System.SysUtils,
+  Fido.Utilities,
+  Casbin.Types,
+  NEOWatch.WebApp.Presentation.Service.Authorization.Intf,
+  NEOWatch.WebApp.Presentation.Service.DTO.Authorizations;
+
+type
+  TAuthorizationService = class(TInterfacedObject, IAuthorizationService)
+  private
+    FEnforcer: ICasbin;
+  public
+    function Can(const Username, &Object, Action: string): Boolean;
+    function GetList(const Username, &Object: string): TWSAuthorizationsDTO;
+
+    constructor Create(const Enforcer: ICasbin);
+  end;
+
+implementation
+
+function TAuthorizationService.Can(const Username, &Object, Action: string): Boolean;
+begin
+  result := FEnforcer.enforce([Username, &Object, Action]);
+end;
+
+constructor TAuthorizationService.Create(const Enforcer: ICasbin);
+begin
+  inherited Create;
+  FEnforcer := Utilities.CheckNotNullAndSet(Enforcer, 'Enforcer');
+end;
+
+function TAuthorizationService.GetList(const Username, &Object: string): TWSAuthorizationsDTO;
+var
+  Object_: string;
+  Policy: string;
+begin
+  result := TWSAuthorizationsDTO.Create;
+  for var PolicyToEnforce in FEnforcer.Policy.policies do begin
+    Object_ := PolicyToEnforce.Split([','])[2];
+    if not Object_.Trim.ToUpper.Equals(&Object.Trim.ToUpper) then
+      Continue;
+    Policy := PolicyToEnforce.Split([','])[3];
+    result[Policy.Trim.ToUpper] := FEnforcer.enforce([Username, &Object, Policy.Trim]);
+  end;
+end;
+
+end.

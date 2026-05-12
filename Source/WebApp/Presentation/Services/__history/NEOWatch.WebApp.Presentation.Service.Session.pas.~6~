@@ -1,0 +1,114 @@
+unit NEOWatch.WebApp.Presentation.Service.Session;
+
+interface
+
+uses
+  System.SysUtils,
+  Spring,
+  Fido.Utilities,
+  Fido.Mappers,
+  NEOWatch.WebApp.Presentation.Service.Session.Intf,
+  NEOWatch.WebApp.Presentation.Service.DTO.SessionInfo,
+  //  NEOWatch.WebApp.Persistence.Repository.Environment,
+  NEOWatch.WebApp.Domain.Entity.Session.Intf,
+  NEOWatch.WebApp.Domain.SessionRepository.Intf,
+  DateUtils;
+
+type
+  TSessionService = class(TInterfacedObject, ISessionService)
+
+  private
+    FRepository: ISessionRepository;
+  public
+    function New: TSessionInfoDTO;
+    function GetBySessionId(const Value: string): TSessionInfoDTO;
+    procedure Save(const SessionInfo: TSessionInfoDTO; const AfterSave: Action<string>);
+    procedure Update(const SessionInfo: TSessionInfoDTO);
+
+    / constructor Create(const Repository: ISessionRepository);
+  end;
+
+implementation
+
+constructor TSessionService.Create(const Repository: ISessionRepository);
+begin
+  inherited Create;
+  FRepository := Utilities.CheckNotNullAndSet(Repository, 'SessionRepository');
+end;
+
+function TSessionService.GetBySessionId(const Value: string): TSessionInfoDTO;
+var
+  Session: ISession;
+begin
+  result := TSessionInfoDTO.Create;
+  try
+    Session := FRepository.GetBySessionId(Value);
+  except
+    on E: Exception do begin
+      Session.SetIsValid(False);
+      Session.SetMessage(E.Message);
+    end;
+  end;
+  Mappers.Map(Session, result);
+end;
+
+function TSessionService.New: TSessionInfoDTO;
+var
+  Session, NewSession: ISession;
+begin
+  result := TSessionInfoDTO.Create;
+  Session := FRepository.New;
+  Mappers.Map(Session, result);
+end;
+
+procedure TSessionService.Save(const SessionInfo: TSessionInfoDTO; const AfterSave: Action<string>);
+var
+  Session, NewSession: ISession;
+begin
+  Session := FRepository.New;
+  Mappers.Map(SessionInfo, Session);
+  NewSession := FRepository.Save(Session);
+  if Assigned(AfterSave) then
+    AfterSave(NewSession.Id);
+end;
+
+procedure TSessionService.Update(const SessionInfo: TSessionInfoDTO);
+var
+  Session: ISession;
+begin
+  Session := FRepository.New;
+  Mappers.Map(SessionInfo, Session);
+  Session.SetPreviousAccess(Session.LastAccess);
+  Session.SetLastAccess(Now);
+  FRepository.Save(Session);
+end;
+
+initialization
+
+  Mappers.RegisterMapper<TSessionInfoDTO, ISession>(
+      procedure(const Source: TSessionInfoDTO; var Dest: ISession)
+      begin
+        Dest.SetId(Source.Id);
+        Dest.SetUserName(Source.UserName);
+        Dest.SetIsValid(Source.IsValid);
+        Dest.SetLastAccess(Source.LastAccess);
+        Dest.SetPreviousAccess(Source.PreviousAccess);
+        Dest.SetMessage(Source.Message);
+        Dest.SetIsAdmin(Source.IsAdmin);
+      end
+  );
+
+  Mappers.RegisterMapper<ISession, TSessionInfoDTO>(
+      procedure(const Source: ISession; var Dest: TSessionInfoDTO)
+      begin
+        Dest.Id := Source.Id;
+        Dest.UserName := Source.UserName;
+        Dest.IsValid := Source.IsValid;
+        Dest.LastAccess := Source.LastAccess;
+        Dest.PreviousAccess := Source.PreviousAccess;
+        Dest.Message := Source.Message;
+        Dest.IsAdmin := Source.IsAdmin;
+      end
+  );
+
+end.

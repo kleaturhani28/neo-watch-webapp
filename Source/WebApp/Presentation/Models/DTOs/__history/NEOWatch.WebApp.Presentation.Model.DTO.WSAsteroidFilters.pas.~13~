@@ -1,0 +1,193 @@
+unit NEOWatch.WebApp.Presentation.Model.DTO.WSAsteroidFilters;
+
+interface
+
+type
+  TWSAsteroidFiltersDTO = class
+  private
+    FStartDate: string;
+    FEndDate: string;
+    FHazardous: string;
+    FSortBy: string;
+    FSortDirection: string;
+
+    FIsAllSelected: Boolean;
+    FIsDangerousSelected: Boolean;
+    FIsSafeSelected: Boolean;
+
+    FIsSortByDistanceSelected: Boolean;
+    FIsSortBySizeSelected: Boolean;
+
+    FIsSortAscSelected: Boolean;
+    FIsSortDescSelected: Boolean;
+
+    function GetStartDate: string;
+    function GetEndDate: string;
+    function GetHazardous: string;
+    function GetSortBy: string;
+    function GetSortDirection: string;
+    function GetIsAllSelected: Boolean;
+    function GetIsDangerousSelected: Boolean;
+    function GetIsSafeSelected: Boolean;
+    function GetIsSortByDistanceSelected: Boolean;
+    function GetIsSortBySizeSelected: Boolean;
+    function GetIsSortAscSelected: Boolean;
+    function GetIsSortDescSelected: Boolean;
+
+    procedure SetStartDate(const Value: string);
+    procedure SetEndDate(const Value: string);
+    procedure SetHazardous(const Value: string);
+    procedure SetSortBy(const Value: string);
+    procedure SetSortDirection(const Value: string);
+    procedure SetIsAllSelected(const Value: Boolean);
+    procedure SetIsDangerousSelected(const Value: Boolean);
+    procedure SetIsSafeSelected(const Value: Boolean);
+    procedure SetIsSortByDistanceSelected(const Value: Boolean);
+    procedure SetIsSortBySizeSelected(const Value: Boolean);
+    procedure SetIsSortAscSelected(const Value: Boolean);
+    procedure SetIsSortDescSelected(const Value: Boolean);
+
+  published
+    property StartDate: string read GetStartDate write SetStartDate;
+    property EndDate: string read GetEndDate write SetEndDate;
+
+    property Hazardous: string read GetHazardous write SetHazardous;
+    property SortBy: string read GetSortBy write SetSortBy;
+    property SortDirection: string read GetSortDirection write SetSortDirection;
+
+    property IsAllSelected: Boolean read GetIsAllSelected write SetIsAllSelected;
+    property IsDangerousSelected: Boolean read GetIsDangerousSelected write SetIsDangerousSelected;
+    property IsSafeSelected: Boolean read GetIsSafeSelected write SetIsSafeSelected;
+
+    property IsSortByDistanceSelected: Boolean read GetIsSortByDistanceSelected write SetIsSortByDistanceSelected;
+    property IsSortBySizeSelected: Boolean read GetIsSortBySizeSelected write SetIsSortBySizeSelected;
+
+    property IsSortAscSelected: Boolean read GetIsSortAscSelected write SetIsSortAscSelected;
+    property IsSortDescSelected: Boolean read GetIsSortDescSelected write SetIsSortDescSelected;
+  end;
+
+implementation
+
+{ TAsteroidFiltersDTOModel }
+
+function TAsteroidFiltersDTOModel.GetEndDate: string;
+begin
+  Result := FEndDate;
+end;
+
+function TAsteroidFiltersDTOModel.GetHazardous: string;
+begin
+  Result := FHazardous;
+end;
+
+function TAsteroidFiltersDTOModel.GetIsAllSelected: Boolean;
+begin
+  Result := FIsAllSelected;
+end;
+
+function TAsteroidFiltersDTOModel.GetIsDangerousSelected: Boolean;
+begin
+  Result := FIsDangerousSelected;
+end;
+
+function TAsteroidFiltersDTOModel.GetIsSafeSelected: Boolean;
+begin
+  Result := FIsSafeSelected;
+end;
+
+function TAsteroidFiltersDTOModel.GetIsSortAscSelected: Boolean;
+begin
+  Result := FIsSortAscSelected;
+end;
+
+function TAsteroidFiltersDTOModel.GetIsSortByDistanceSelected: Boolean;
+begin
+  Result := FIsSortByDistanceSelected;
+end;
+
+function TAsteroidFiltersDTOModel.GetIsSortBySizeSelected: Boolean;
+begin
+  Result := FIsSortBySizeSelected;
+end;
+
+function TAsteroidFiltersDTOModel.GetIsSortDescSelected: Boolean;
+begin
+  Result := FIsSortDescSelected;
+end;
+
+function TAsteroidFiltersDTOModel.GetSortBy: string;
+begin
+  Result := FSortBy;
+end;
+
+function TAsteroidFiltersDTOModel.GetSortDirection: string;
+begin
+  Result := FSortDirection;
+end;
+
+function TAsteroidFiltersDTOModel.GetStartDate: string;
+begin
+  Result := FStartDate;
+end;
+
+procedure TAsteroidFiltersDTOModel.SetEndDate(const Value: string);
+begin
+  FEndDate := Value;
+end;
+
+procedure TAsteroidFiltersDTOModel.SetHazardous(const Value: string);
+begin
+  FHazardous := Value;
+end;
+
+procedure TAsteroidFiltersDTOModel.SetIsAllSelected(const Value: Boolean);
+begin
+  FIsAllSelected := Value;
+end;
+
+procedure TAsteroidFiltersDTOModel.SetIsDangerousSelected(const Value: Boolean);
+begin
+  FIsDangerousSelected := Value;
+end;
+
+procedure TAsteroidFiltersDTOModel.SetIsSafeSelected(const Value: Boolean);
+begin
+  FIsSafeSelected := Value;
+end;
+
+procedure TAsteroidFiltersDTOModel.SetIsSortAscSelected(const Value: Boolean);
+begin
+  FIsSortAscSelected := Value;
+end;
+
+procedure TAsteroidFiltersDTOModel.SetIsSortByDistanceSelected(const Value: Boolean);
+begin
+  FIsSortByDistanceSelected := Value;
+end;
+
+procedure TAsteroidFiltersDTOModel.SetIsSortBySizeSelected(const Value: Boolean);
+begin
+  FIsSortBySizeSelected := Value;
+end;
+
+procedure TAsteroidFiltersDTOModel.SetIsSortDescSelected(const Value: Boolean);
+begin
+  FIsSortDescSelected := Value;
+end;
+
+procedure TAsteroidFiltersDTOModel.SetSortBy(const Value: string);
+begin
+  FSortBy := Value;
+end;
+
+procedure TAsteroidFiltersDTOModel.SetSortDirection(const Value: string);
+begin
+  FSortDirection := Value;
+end;
+
+procedure TAsteroidFiltersDTOModel.SetStartDate(const Value: string);
+begin
+  FStartDate := Value;
+end;
+
+end.

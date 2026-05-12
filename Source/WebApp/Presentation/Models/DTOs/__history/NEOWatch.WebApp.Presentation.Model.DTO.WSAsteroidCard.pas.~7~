@@ -1,0 +1,88 @@
+unit NEOWatch.WebApp.Presentation.Model.DTO.WSAsteroidCard;
+
+interface
+
+type
+  TAsteroidCardDTOModel = class
+  private
+    FId: string;
+    FName: string;
+
+    FMinDistanceKm: Extended;
+    FEstimatedDiameterMinMeters: Extended;
+    FEstimatedDiameterMaxMeters: Extended;
+    FRelativeVelocityKmH: Extended;
+    FCloseApproachDate: TDateTime;
+
+    FMinDistanceKmText: string;
+    FDiameterText: string;
+    FRelativeVelocityText: string;
+    FCloseApproachDateText: string;
+
+    FIsPotentiallyHazardous: Boolean;
+    FHazardousLabel: string;
+    FHazardousCssClass: string;
+    FAsteroidCardCssClass: string;
+
+    FNasaJplUrl: string;
+
+    function GetId: string;
+    function GetName: string;
+    function GetMinDistanceKm: Extended;
+    function GetEstimatedDiameterMinMeters: Extended;
+    function GetEstimatedDiameterMaxMeters: Extended;
+    function GetRelativeVelocityKmH: Extended;
+    function GetCloseApproachDate: TDateTime;
+    function GetMinDistanceKmText: string;
+    function GetDiameterText: string;
+    function GetRelativeVelocityText: string;
+    function GetCloseApproachDateText: string;
+    function GetIsPotentiallyHazardous: Boolean;
+    function GetHazardousLabel: string;
+    function GetHazardousCssClass: string;
+    function GetAsteroidCardCssClass: string;
+    function GetNasaJplUrl: string;
+
+    procedure SetId(const Value: string);
+    procedure SetName(const Value: string);
+    procedure SetMinDistanceKm(const Value: Extended);
+    procedure SetEstimatedDiameterMinMeters(const Value: Extended);
+    procedure SetEstimatedDiameterMaxMeters(const Value: Extended);
+    procedure SetRelativeVelocityKmH(const Value: Extended);
+    procedure SetCloseApproachDate(const Value: TDateTime);
+    procedure SetMinDistanceKmText(const Value: string);
+    procedure SetDiameterText(const Value: string);
+    procedure SetRelativeVelocityText(const Value: string);
+    procedure SetCloseApproachDateText(const Value: string);
+    procedure SetIsPotentiallyHazardous(const Value: Boolean);
+    procedure SetHazardousLabel(const Value: string);
+    procedure SetHazardousCssClass(const Value: string);
+    procedure SetAsteroidCardCssClass(const Value: string);
+    procedure SetNasaJplUrl(const Value: string);
+
+  published
+    property Id: string read FId write FId;
+    property Name: string read FName write FName;
+
+    property MinDistanceKm: Extended read FMinDistanceKm write FMinDistanceKm;
+    property EstimatedDiameterMinMeters: Extended read FEstimatedDiameterMinMeters write FEstimatedDiameterMinMeters;
+    property EstimatedDiameterMaxMeters: Extended read FEstimatedDiameterMaxMeters write FEstimatedDiameterMaxMeters;
+    property RelativeVelocityKmH: Extended read FRelativeVelocityKmH write FRelativeVelocityKmH;
+    property CloseApproachDate: TDateTime read FCloseApproachDate write FCloseApproachDate;
+
+    property MinDistanceKmText: string read FMinDistanceKmText write FMinDistanceKmText;
+    property DiameterText: string read FDiameterText write FDiameterText;
+    property RelativeVelocityText: string read FRelativeVelocityText write FRelativeVelocityText;
+    property CloseApproachDateText: string read FCloseApproachDateText write FCloseApproachDateText;
+
+    property IsPotentiallyHazardous: Boolean read FIsPotentiallyHazardous write FIsPotentiallyHazardous;
+    property HazardousLabel: string read FHazardousLabel write FHazardousLabel;
+    property HazardousCssClass: string read FHazardousCssClass write FHazardousCssClass;
+    property AsteroidCardCssClass: string read FAsteroidCardCssClass write FAsteroidCardCssClass;
+
+    property NasaJplUrl: string read FNasaJplUrl write FNasaJplUrl;
+  end;
+
+implementation
+
+end.

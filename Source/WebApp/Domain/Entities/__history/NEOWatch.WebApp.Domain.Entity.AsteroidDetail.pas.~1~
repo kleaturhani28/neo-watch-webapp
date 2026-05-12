@@ -1,0 +1,7 @@
+unit NEOWatch.WebApp.Domain.Entity.AsteroidDetail;
+
+interface
+
+implementation
+
+end.
