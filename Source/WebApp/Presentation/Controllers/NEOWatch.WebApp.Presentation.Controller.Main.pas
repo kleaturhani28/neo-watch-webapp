@@ -9,7 +9,7 @@ uses
   Fido.Utilities,
   Spring,
   NEOWatch.WebApp.Presentation.View.Main.Intf,
-  NEOWatch.WebApp.Presentation.Model.DTO.WSMonitoring,
+  NEOWatch.WebApp.Presentation.Model.DTO.SMonitoring,
   NEOWatch.WebApp.Presentation.Model.Monitoring.Intf,
   System.Generics.Collections;
 

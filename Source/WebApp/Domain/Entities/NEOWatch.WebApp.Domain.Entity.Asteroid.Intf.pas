@@ -8,23 +8,36 @@ type
     ['{59F9B86F-7B04-4107-B0CF-27EFADB8DB3D}']
     function Id: string;
     function Name: string;
-    function MinDistanceKm: Extended;
-    function EstimatedDiameterMinMeters: Extended;
-    function EstimatedDiameterMaxMeters: Extended;
-    function RelativeVelocityKmH: Extended;
-    function CloseApproachDate: TDateTime;
-    function IsPotentiallyHazardous: Boolean;
     function NasaJplUrl: string;
+
+    function AbsoluteMagnitude: extended;
+
+    function DiameterMinKm: extended;
+    function DiameterMaxKm: extended;
+    function DiameterAverageKm: extended;
+
+    function IsPotentiallyHazardous: Boolean;
+    function IsSentryObject: Boolean;
+
+    function CloseApproachDate: TDateTime;
+    function MinDistanceKm: extended;
+    function RelativeVelocityKmH: extended;
 
     procedure SetId(const Value: string);
     procedure SetName(const Value: string);
-    procedure SetMinDistanceKm(const Value: extended);
-    procedure SetEstimatedDiameterMinMeters(const Value: extended);
-    procedure SetEstimatedDiameterMaxMeters(const Value: extended);
-    procedure SetRelativeVelocityKmH(const Value: Extended);
-    procedure SetCloseApproachDate(const Value: TDateTime);
-    procedure SetIsPotentiallyHazardous(const Value: Boolean);
     procedure SetNasaJplUrl(const Value: string);
+
+    procedure SetAbsoluteMagnitude(const Value: extended);
+
+    procedure SetDiameterMinKm(const Value: extended);
+    procedure SetDiameterMaxKm(const Value: extended);
+
+    procedure SetIsPotentiallyHazardous(const Value: Boolean);
+    procedure SetIsSentryObject(const Value: Boolean);
+
+    procedure SetCloseApproachDate(const Value: TDateTime);
+    procedure SetMinDistanceKm(const Value: extended);
+    procedure SetRelativeVelocityKmH(const Value: extended);
   end;
 
 implementation

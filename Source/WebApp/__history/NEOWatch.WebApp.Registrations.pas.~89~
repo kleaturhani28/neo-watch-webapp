@@ -1,0 +1,364 @@
+unit NEOWatch.WebApp.Registrations;
+
+interface
+
+uses
+  System.Classes,
+  Sempare.Template,
+  Sempare.Template.Context,
+  System.IOUtils,
+  System.SysUtils,
+  FireDAC.Stan.Def,
+  FireDAC.Phys.SQLite,
+  Spring.Container,
+  Spring,
+  Spring.Logging,
+  Spring.Logging.Controller,
+  Spring.Logging.Loggers,
+  Fido.Logging.Appenders.PermanentFile,
+  Fido.Db.Connections.FireDAC,
+  Fido.Db.Connections.FireDAC.PerThread,
+  Fido.StatementExecutor.Intf,
+  Fido.Db.Transaction.Intf,
+  Fido.Db.Transaction,
+  Fido.Db.Transaction.Handler.Intf,
+  Fido.Db.Transaction.Handler.FireDAC,
+  Fido.Db.StatementExecutor.FireDAC,
+  Fido.Db.ScriptRunner.Intf,
+  Fido.Db.ScriptRunner.FireDAC,
+  Fido.Db.Migrations.Repository.Intf,
+  Fido.Db.Migrations.Model,
+  Fido.Db.Migrations.Model.Intf,
+  Fido.EventsDriven.Broker.PubSub.Intf,
+  Fido.Memory.EventsDriven.Broker.PubSub,
+  Fido.EventsDriven.Consumer.PubSub.Intf,
+  Fido.Memory.EventsDriven.Consumer.PubSub,
+  Fido.EventsDriven.Producer.Intf,
+  Fido.Memory.EventsDriven.Producer.PubSub,
+  Fido.EventsDriven.Listener.Intf,
+  Fido.EventsDriven.Listener.PubSub,
+  Fido.EventsDriven.Publisher.Intf,
+  Fido.EventsDriven.Publisher,
+  Fido.EventsDriven.Subscriber.Intf,
+  Fido.EventsDriven.Subscriber,
+  Fido.Web.Server.Intf,
+  Fido.Web.Server.Resources,
+  Fido.Api.Server.Intf,
+  Fido.Api.Server.Indy,
+  Fido.Api.Server.Consul.Resource.Attributes,
+  Fido.Registration,
+  Fido.CommandLine.Intf,
+  Fido.Consul.DI.Registration,
+  Fido.CommandLine,
+  Fido.Api.Server.Consul,
+  Fido.Http.Types,
+  Fido.Containers,
+  Fido.Consul.Service.Intf,
+  Fido.Redis.Client.Intf,
+  Fido.Redis.Client,
+  Fido.KVStore.Intf,
+  Fido.Redis.KVStore,
+  Redis.Commons,
+  Redis.Client,
+  Redis.NetLib.Indy,
+  VSoft.CommandLine.Options,
+  IniFiles,
+  Fido.Logging.Appenders.Console,
+  Fido.DesignPatterns.Retries,
+  NEOWatch.WebApp.Constants,
+  NEOWatch.WebApp.CommandLine,
+  NEOWatch.WebApp.Presentation.View.Main.Intf,
+  NEOWatch.WebApp.Presentation.View.Main.Sempare,
+  NEOWatch.WebApp.Presentation.View.Monitoring.Intf,
+  NEOWatch.WebApp.Presentation.View.Monitoring.Sempare,
+  NEOWatch.WebApp.Presentation.View.AsteroidDetail.Intf,
+  NEOWatch.WebApp.Presentation.View.AsteroidDetail.Sempare,
+  NEOWatch.WebApp.Presentation.Model.Monitoring.Intf,
+  NEOWatch.WebApp.Presentation.Model.Monitoring,
+  NEOWatch.WebApp.Presentation.Controller.Main,
+  NEOWatch.WebApp.Presentation.Controller.Asteroids,
+  NEOWatch.WebApp.Domain.Entity.Asteroid.Intf,
+  NEOWatch.WebApp.Domain.Entity.Asteroid,
+  NEOWatch.WebApp.Domain.Entity.AsteroidFilters.Intf,
+  NEOWatch.WebApp.Domain.Entity.AsteroidFilters,
+  NEOWatch.WebApp.Domain.Entity.Monitoring.Intf,
+  NEOWatch.WebApp.Domain.Entity.Monitoring,
+  NEOWatch.WebApp.Domain.Entity.Session.Intf,
+  NEOWatch.WebApp.Domain.Entity.Session,
+  NEOWatch.WebApp.Domain.SessionRepository.Intf,
+  NEOWatch.WebApp.Persistence.Repository.Session,
+  NEOWatch.WebApp.Presentation.Service.Session.Intf,
+  NEOWatch.WebApp.Presentation.Service.Session,
+  NEOWatch.WebApp.Domain.MonitoringRepository.Intf,
+  NEOWatch.WebApp.Persistence.Repository.Monitoring,
+  Winapi.Windows,
+  NEOWatch.WebApp.Presentation.Controller.Monitoring,
+  NEOWatch.WebApp.Persistence.Repository.AsteroidDetail,
+  NEOWatch.WebApp.Domain.AsteroidDetailRepository.Intf,
+  NEOWatch.WebApp.Domain.Entity.CloseApproach.Intf,
+  NEOWatch.WebApp.Domain.Entity.CloseApproach,
+  NEOWatch.WebApp.Domain.Entity.AsteroidDetail.Intf,
+  NEOWatch.WebApp.Domain.Entity.AsteroidDetail,
+  NEOWatch.WebApp.Persistence.Gateway.NasaApi.Intf;
+
+type
+  NEOWatchRegistrations = record
+  private
+    class var
+      MainDatabaseParams: IShared<TStringList>;
+      TemplateRootFolder: string;
+  public
+    class procedure RegisterCommandLine(const Container: TContainer); static;
+    class procedure Register(const Container: TContainer; const FileIni: TMemIniFile); static;
+  end;
+
+implementation
+
+{ NEOWatchRegistrations }
+
+class procedure NEOWatchRegistrations.Register(const Container: TContainer; const FileIni: TMemIniFile);
+begin
+  Container.RegisterInstance<TMemIniFile>(FileIni);
+
+  // Logging
+  Container.RegisterType<ILogAppender>(
+      function: ILogAppender
+      var
+        LogFile: string;
+      begin
+        LogFile :=
+            FileIni.ReadString(
+                'Log',
+                'Filename',
+                FileIni.ReadString('params', 'logfile', TPath.ChangeExtension(ParamStr(0), '.log'))
+            );
+        Result := TPermanentFileLogAppender.Create(LogFile);
+      end,
+      'logappender.file'
+  );
+
+  Container.RegisterType<ILogAppender>(
+      function: ILogAppender //
+      begin
+        result := TConsoleLogAppender.Create;
+      end,
+      'logappender.console'
+  );
+
+  Container
+      .RegisterType<ILogger>(
+          function: ILogger
+          begin
+            Result :=
+                TLogger.Create(
+                    TLoggerController.Create(
+                        [
+{$IF not defined(LINUX)}
+                            Container.Resolve<ILogAppender>('logappender.file'),
+{$ENDIF}
+                            Container.Resolve<ILogAppender>('logappender.console')
+                        ]
+                    )
+                );
+          end)
+      .AsSingleton;
+
+  // Redis
+  Container.RegisterType<IRedisClient>(
+      function: IRedisClient
+      begin
+        result :=
+            Retries.Run<IRedisClient>(
+                function: IRedisClient
+                begin
+                  Result :=
+                      TRedisClient.Create(
+                          FileIni.ReadString('RedisServer', 'Address', '127.0.0.1'),
+                          FileIni.ReadInteger('RedisServer', 'Port', 6379)
+                      );
+                  Result.Connect;
+                end,
+                function(const E: Exception): Boolean
+                begin
+                  Container.Resolve<ILogger>.Error('Redis not ready... ', E);
+                  result := True;
+                end,
+                10,
+                1000
+            );
+      end
+  );
+  Container.RegisterType<IFidoRedisClient, TFidoRedisClient>;
+  Container.RegisterFactory<IFidoRedisClientFactory>;
+
+  // KVStore
+  Container.RegisterType<IKVStore>(
+      function: IKVStore
+      begin
+        Result := TRedisKVStore.Create(Container.Resolve<IFidoRedisClient>, 'neowatch.webapp.');
+      end
+  );
+
+  // Presentation
+
+  // - Models
+
+  // - Services
+  Container.RegisterType<ISessionService, TSessionService>;
+
+  // - Views
+  Container.RegisterType<IViewMain, TViewMainSempare>;
+  Container.RegisterType<IViewMonitoring, TViewMonitoringSempare>;
+  Container.RegisterType<IViewAsteroidDetail, TViewAsteroidDetailSempare>;
+
+  // - Models
+  Container.RegisterType<IModelMonitoring, TModelMonitoring>;
+
+  // - Controllers
+  Container.RegisterType<IMainController, TMainController>;
+  Container.RegisterType<IAsteroidsController, TAsteroidsController>;
+  Container.RegisterType<IMonitoringController, TMonitoringController>;
+
+  // Usecases
+
+  // Repositories
+  Container.RegisterType<ISessionRepository, TSessionRepository>;
+  Container.RegisterType<IMonitoringRepository, TMonitoringRepository>;
+  Container.RegisterType<IAsteroidDetailRepository, TAsteroidDetailRepository>;
+
+  // Gateways
+  Container
+      .RegisterType<IGetFeedNasaNeoWsApiConfiguration>(
+          function: IGetFeedNasaNeoWsApiConfiguration
+          begin
+            Result :=
+                TGetFeedNasaNeoWsApiConfiguration.Create(
+                    FileIni.ReadString('NASA', 'BaseUrl', 'https://api.nasa.gov'),
+                    FileIni.ReadString('NASA', 'ApiKey', '')
+                );
+          end)
+      .AsSingleton;
+
+  Containers.RegisterJSONClientApi<IGetFeedNasaNeoWsCommandApi, IGetFeedNasaNeoWsApiConfiguration>(Container);
+
+  //  Container
+  Container
+      .RegisterType<IGetAsteroidByIdNasaNeoWsApiConfiguration>(
+          function: IGetAsteroidByIdNasaNeoWsApiConfiguration
+          begin
+            Result :=
+                TGetAsteroidByIdNasaNeoWsApiConfiguration.Create(
+                    FileIni.ReadString('NASA', 'BaseUrl', 'https://api.nasa.gov'),
+                    FileIni.ReadString('NASA', 'ApiKey', '')
+                );
+          end)
+      .AsSingleton;
+
+  Containers
+      .RegisterJSONClientApi<IGetAsteroidByIdNasaNeoWsCommandApi, IGetAsteroidByIdNasaNeoWsApiConfiguration>(Container);
+
+  // Entities
+  Container.RegisterType<IAsteroid, TAsteroid>;
+  Container.RegisterType<IAsteroidFilters, TAsteroidFilters>;
+  Container.RegisterType<IMonitoring, TMonitoring>;
+  Container.RegisterType<ISession, TSession>;
+  Container.RegisterType<ICloseApproach, TCloseApproach>;
+  Container.RegisterType<IAsteroidDetail, TAsteroidDetail>;
+
+  // ValueObjects
+
+  // Other stuff - Sempare Template Engine
+
+{$IF defined(DEBUG) and not defined(LINUX)}
+  TemplateRootFolder :=
+      FileIni.ReadString(
+          'Templates',
+          'RootFolder',
+          'C:\FreelancerProjects.Demo\Delphi\NEOWatch\Source\WebApp\Presentation\Views\Templates'
+      );
+
+{$ELSE}
+  TemplateRootFolder := TPath.Combine([TPath.GetLibraryPath, 'Templates']);
+{$ENDIF}
+
+  TemplateRootFolder := FileIni.ReadString('Templates', 'RootFolder', TemplateRootFolder);
+
+  TTemplateRegistry.Instance.TemplateRootFolder := TemplateRootFolder;
+  TTemplateRegistry.Instance.TemplateFileExt := '.html';
+  TTemplateRegistry.Instance.LoadStrategy := [tlsLoadFile];
+  TTemplateRegistry.Instance.AutomaticRefresh := False;
+
+  // {$IF defined(DEBUG)}
+  //  TTemplateRegistry.Instance.AutomaticRefresh := True;
+  //  TTemplateRegistry.Instance.RefreshIntervalS := 2;
+  // {$ELSE}
+  //  TTemplateRegistry.Instance.AutomaticRefresh := False;
+  // {$ENDIF}
+
+  TTemplateRegistry.Instance.ExceptionLogger :=
+      procedure(const E: Exception)
+      begin
+        //
+        OutputDebugString(PChar('Sempare template error: ' + E.Message));
+      end;
+
+  // Build the container
+  Container.Build;
+
+  //  // Register environment
+  //  EnvironmentRegister.Register('TEST', 'TEST', 'Test');
+end;
+
+class procedure NEOWatchRegistrations.RegisterCommandLine(const Container: TContainer);
+var
+  cmd: TCommandDefinition;
+  option: IOptionDefinition;
+begin
+  // Common options for all commands
+
+  // Inifile
+  option :=
+      TOptionsRegistry.RegisterOption<string>(
+          Constants.CommandLine.ConfigOption,
+          Constants.CommandLine.ConfigOptionShort,
+          'The INI file name for common configurations',
+          procedure(const value: string) begin Container.Resolve<IConfigOptions>.SetIniFileName(value); end
+      );
+
+  // Logfile
+  option :=
+      TOptionsRegistry.RegisterOption<string>(
+          Constants.CommandLine.LogFile,
+          Constants.CommandLine.LogFileShort,
+          'The LOG file name for common logging',
+          procedure(const value: string) begin Container.Resolve<IConfigOptions>.SetLogFileName(value); end
+      );
+
+  // Help
+  cmd :=
+      TOptionsRegistry.RegisterCommand(
+          Constants.CommandLine.HelpCommand,
+          Constants.CommandLine.HelpCommandAlias,
+          'get some help',
+          '',
+          'help [comando]'
+      );
+  option :=
+      cmd.RegisterUnNamedOption<string>(
+          '''Choose one of the following commands:''',
+          'command',
+          procedure(const value: string) begin Container.Resolve<IHelpOptions>.SetHelpCommand(value); end
+      );
+
+  Container.RegisterType<IConfigOptions, TConfigOptions>.AsSingleton;
+  Container.RegisterType<IHelpOptions, THelpOptions>.AsSingleton;
+  Container.RegisterType<IRunOptions, TRunOptions>.AsSingleton;
+
+  Container.RegisterType<IFidoCommandLine, TFidoCommandLine>.AsSingleton;
+
+  // Must be built for reading the commandline!
+  Container.Build;
+
+end;
+
+end.

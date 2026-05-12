@@ -1,0 +1,93 @@
+unit NEOWatch.WebApp.Domain.Entity.AsteroidFilters;
+
+interface
+
+uses
+  System.SysUtils,
+  NEOWatch.WebApp.Domain.Entity.AsteroidFilters.Intf;
+
+type
+
+  TAsteroidFilters = class(TInterfacedObject, IAsteroidFilters)
+  private
+    FStartDate: TDate;
+    FEndDate: TDate;
+    FHazardousFilter: TNeoHazardousFilter;
+    FSortBy: TNeoSortBy;
+    FSortDirection: TNeoSortDirection;
+  public
+    constructor Create; overload;
+    constructor Create(
+        const StartDate: TDate;
+        const EndDate: TDate;
+        const HazardousFilter: TNeoHazardousFilter;
+        const SortBy: TNeoSortBy;
+        const SortDirection: TNeoSortDirection
+    ); overload;
+
+    function StartDate: TDate;
+    function EndDate: TDate;
+    function HazardousFilter: TNeoHazardousFilter;
+    function SortBy: TNeoSortBy;
+    function SortDirection: TNeoSortDirection;
+
+    procedure SetStartDate(const Value: TDate);
+    procedure SetEndDate(const Value: TDate);
+    procedure SetHazardousFilter(const Value: TNeoHazardousFilter);
+    procedure SetSortBy(const Value: TNeoSortBy);
+    procedure SetSortDirection(const Value: TNeoSortDirection);
+  end;
+
+implementation
+
+function TAsteroidFilters.StartDate: string;
+begin
+  Result := FStartDate;
+end;
+
+function TAsteroidFilters.EndDate: string;
+begin
+  Result := FEndDate;
+end;
+
+function TAsteroidFilters.Hazardous: string;
+begin
+  Result := FHazardous;
+end;
+
+function TAsteroidFilters.SortBy: string;
+begin
+  Result := FSortBy;
+end;
+
+function TAsteroidFilters.SortDirection: string;
+begin
+  Result := FSortDirection;
+end;
+
+procedure TAsteroidFilters.SetStartDate(const Value: string);
+begin
+  FStartDate := Value;
+end;
+
+procedure TAsteroidFilters.SetEndDate(const Value: string);
+begin
+  FEndDate := Value;
+end;
+
+procedure TAsteroidFilters.SetHazardous(const Value: string);
+begin
+  FHazardous := Value;
+end;
+
+procedure TAsteroidFilters.SetSortBy(const Value: string);
+begin
+  FSortBy := Value;
+end;
+
+procedure TAsteroidFilters.SetSortDirection(const Value: string);
+begin
+  FSortDirection := Value;
+end;
+
+end.

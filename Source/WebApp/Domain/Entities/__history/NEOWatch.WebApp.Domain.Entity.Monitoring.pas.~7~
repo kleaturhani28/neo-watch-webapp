@@ -1,0 +1,120 @@
+unit NEOWatch.WebApp.Domain.Entity.Monitoring;
+
+interface
+
+uses
+  NEOWatch.WebApp.Domain.Entity.Monitoring.Intf,
+  NEOWatch.WebApp.Domain.Entity.AsteroidFilters.Intf,
+  Spring.Collections,
+  NEOWatch.WebApp.Domain.Entity.Asteroid.Intf;
+
+type
+  TMonitoring = class(TInterfacedObject, IMonitoring)
+  private
+    FFilters: IAsteroidFilters;
+    FAsteroids: IReadOnlyList<IAsteroid>;
+
+    FTotalCount: Integer;
+    FDangerousCount: Integer;
+    FSafeCount: Integer;
+
+    FHasError: Boolean;
+    FErrorMessage: string;
+  public
+    function Asteroids: IReadOnlyList<IAsteroid>;
+    function DangerousCount: Integer;
+    function ErrorMessage: string;
+    function Filters: IAsteroidFilters;
+    function HasError: Boolean;
+    function HasResults: Boolean;
+    function SafeCount: Integer;
+    procedure SetAsteroids(const Value: IReadOnlyList<IAsteroid>);
+    procedure SetDangerousCount(const Value: Integer);
+    procedure SetErrorMessage(const Value: string);
+    procedure SetFilters(const Value: IAsteroidFilters);
+    procedure SetHasError(const Value: Boolean);
+    procedure SetSafeCount(const Value: Integer);
+    procedure SetTotalCount(const Value: Integer);
+    function TotalCount: Integer;
+  end;
+
+implementation
+
+{ TMonitoring }
+
+function TMonitoring.Filters: IAsteroidFilters;
+begin
+  Result := FFilters;
+end;
+
+function TMonitoring.Asteroids: IReadOnlyList<IAsteroid>;
+begin
+  Result := FAsteroids;
+end;
+
+function TMonitoring.TotalCount: Integer;
+begin
+  Result := FTotalCount;
+end;
+
+function TMonitoring.DangerousCount: Integer;
+begin
+  Result := FDangerousCount;
+end;
+
+function TMonitoring.SafeCount: Integer;
+begin
+  Result := FSafeCount;
+end;
+
+function TMonitoring.HasResults: Boolean;
+begin
+  Result := Assigned(FAsteroids) and not FAsteroids.IsEmpty;
+end;
+
+function TMonitoring.HasError: Boolean;
+begin
+  Result := FHasError;
+end;
+
+function TMonitoring.ErrorMessage: string;
+begin
+  Result := FErrorMessage;
+end;
+
+procedure TMonitoring.SetFilters(const Value: IAsteroidFilters);
+begin
+  FFilters := Value;
+end;
+
+procedure TMonitoring.SetAsteroids(const Value: IReadOnlyList<IAsteroid>);
+begin
+  FAsteroids := Value;
+end;
+
+procedure TMonitoring.SetTotalCount(const Value: Integer);
+begin
+  FTotalCount := Value;
+end;
+
+procedure TMonitoring.SetDangerousCount(const Value: Integer);
+begin
+  FDangerousCount := Value;
+end;
+
+procedure TMonitoring.SetSafeCount(const Value: Integer);
+begin
+  FSafeCount := Value;
+end;
+
+procedure TMonitoring.SetHasError(const Value: Boolean);
+begin
+  FHasError := Value;
+end;
+
+procedure TMonitoring.SetErrorMessage(const Value: string);
+begin
+  FErrorMessage := Value;
+end;
+
+end.

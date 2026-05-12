@@ -1,0 +1,7 @@
+unit NEOWatch.WebApp.Domain.Entity.CloseApproach.Intf;
+
+interface
+
+implementation
+
+end.

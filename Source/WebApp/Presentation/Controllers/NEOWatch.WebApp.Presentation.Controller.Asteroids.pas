@@ -11,8 +11,10 @@ uses
   NEOWatch.WebApp.Presentation.View.Monitoring.Intf,
   NEOWatch.WebApp.Presentation.View.AsteroidDetail.Intf,
   NEOWatch.WebApp.Presentation.Model.Monitoring.Intf,
-  NEOWatch.WebApp.Presentation.Model.DTO.WSMonitoring,
-  NEOWatch.WebApp.Presentation.Model.DTO.WSAsteroidDetails;
+  NEOWatch.WebApp.Presentation.Model.DTO.SMonitoring,
+  NEOWatch.WebApp.Presentation.Model.DTO.SAsteroidDetails,
+  NEOWatch.WebApp.Presentation.Model.AsteroidDetail.Intf,
+  NEOWatch.WebApp.Presentation.Model.DTO.SAsteroidFilters;
 
 type
 
@@ -29,19 +31,17 @@ type
     FAsteroidDetailViewFactory: Func<IViewAsteroidDetail>;
 
     FMonitoringModelFactory: Func<IModelMonitoring>;
-    // FAsteroidDetailModelFactory: Func<IModelAsteroidDetail>;
+    FAsteroidDetailModelFactory: Func<IModelAsteroidDetail>;
 
     procedure GetAsteroids(Req: THorseRequest; Res: THorseResponse; Next: TProc);
-
     procedure GetAsteroidDetail(Req: THorseRequest; Res: THorseResponse; Next: TProc);
 
   public
     constructor Create(
         const MonitoringViewFactory: Func<IViewMonitoring>;
         const AsteroidDetailViewFactory: Func<IViewAsteroidDetail>;
-        const MonitoringModelFactory:
-            Func<IModelMonitoring>
-                //  const AsteroidDetailModelFactory: Func<IModelAsteroidDetail>
+        const MonitoringModelFactory: Func<IModelMonitoring>;
+        const AsteroidDetailModelFactory: Func<IModelAsteroidDetail>
     );
 
     procedure RegisterRoutes;
@@ -55,9 +55,8 @@ implementation
 constructor TAsteroidsController.Create(
     const MonitoringViewFactory: Func<IViewMonitoring>;
     const AsteroidDetailViewFactory: Func<IViewAsteroidDetail>;
-    const MonitoringModelFactory:
-        Func<IModelMonitoring>
-            //  const AsteroidDetailModelFactory: Func<IModelAsteroidDetail>
+    const MonitoringModelFactory: Func<IModelMonitoring>;
+    const AsteroidDetailModelFactory: Func<IModelAsteroidDetail>
 );
 begin
   inherited Create;
@@ -71,28 +70,26 @@ begin
   FMonitoringModelFactory :=
       Utilities.CheckNotNullAndSet<Func<IModelMonitoring>>(MonitoringModelFactory, 'MonitoringModelFactory');
 
-  //  FAsteroidDetailModelFactory :=
-  //      Utilities
-  //          .CheckNotNullAndSet<Func<IModelAsteroidDetail>>(AsteroidDetailModelFactory, 'AsteroidDetailModelFactory');
+  FAsteroidDetailModelFactory :=
+      Utilities
+          .CheckNotNullAndSet<Func<IModelAsteroidDetail>>(AsteroidDetailModelFactory, 'AsteroidDetailModelFactory');
 end;
 
 procedure TAsteroidsController.GetAsteroidDetail(Req: THorseRequest; Res: THorseResponse; Next: TProc);
 var
   View: IViewAsteroidDetail;
-  //  Model: IModelAsteroidDetail;
-  AsteroidDetailDTO: TWSAsteroidDetailDTO;
+  Model: IModelAsteroidDetail;
+  AsteroidDetailDTO: TSAsteroidDetailDTO;
   AsteroidId: string;
 begin
   View := FAsteroidDetailViewFactory();
-  //  Model := FAsteroidDetailModelFactory();
+  Model := FAsteroidDetailModelFactory();
 
   AsteroidDetailDTO := nil;
   AsteroidId := Req.Params['id'];
 
   try
-    // AsteroidDetailDTO := Model.GetById(AsteroidId);
-
-    Res.Send(View.Render(AsteroidDetailDTO));
+    Res.Send(View.Render(Model.GetById(AsteroidId)));
 
   finally
     AsteroidDetailDTO.Free;
@@ -103,32 +100,36 @@ procedure TAsteroidsController.GetAsteroids(Req: THorseRequest; Res: THorseRespo
 var
   View: IViewMonitoring;
   Model: IModelMonitoring;
-  MonitoringDTO: TWSMonitoringDTO;
-
-  StartDate: string;
-  EndDate: string;
-  Hazardous: string;
-  SortBy: string;
-  SortDirection: string;
+  FiltersDTO: TSAsteroidFiltersDTO;
+  MonitoringDTO: TSMonitoringDTO;
 begin
   View := FMonitoringViewFactory();
   Model := FMonitoringModelFactory();
 
+  FiltersDTO := TSAsteroidFiltersDTO.Create;
   MonitoringDTO := nil;
 
-  StartDate := Req.Query['startDate'];
-  EndDate := Req.Query['endDate'];
-  Hazardous := Req.Query['hazardous'];
-  SortBy := Req.Query['sortBy'];
-  SortDirection := Req.Query['sortDirection'];
-
   try
-    // MonitoringDTO := Model.GetByFilters(StartDate, EndDate, Hazardous, SortBy, SortDirection);
+    FiltersDTO.StartDate := Req.Query['startDate'];
+    FiltersDTO.EndDate := Req.Query['endDate'];
+    FiltersDTO.Hazardous := Req.Query['hazardous'];
+    FiltersDTO.SortBy := Req.Query['sortBy'];
+    FiltersDTO.SortDirection := Req.Query['sortDirection'];
 
-    Res.Send(View.Render(MonitoringDTO));
+    if FiltersDTO.Hazardous.Trim.IsEmpty then
+      FiltersDTO.Hazardous := 'all';
+
+    if FiltersDTO.SortBy.Trim.IsEmpty then
+      FiltersDTO.SortBy := 'distance';
+
+    if FiltersDTO.SortDirection.Trim.IsEmpty then
+      FiltersDTO.SortDirection := 'asc';
+
+    Res.Send(View.Render(Model.GetListByFilters(FiltersDTO)));
 
   finally
     MonitoringDTO.Free;
+    FiltersDTO.Free;
   end;
 end;
 

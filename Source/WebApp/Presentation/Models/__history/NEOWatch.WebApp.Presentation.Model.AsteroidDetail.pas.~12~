@@ -1,0 +1,49 @@
+unit NEOWatch.WebApp.Presentation.Model.AsteroidDetail;
+
+interface
+
+uses
+  NEOWatch.WebApp.Presentation.Model.AsteroidDetail.Intf,
+  NEOWatch.WebApp.Presentation.Model.DTO.SAsteroidDetails,
+  NEOWatch.WebApp.Domain.AsteroidDetailRepository.Intf,
+  Fido.Utilities,
+  NEOWatch.WebApp.Domain.Entity.AsteroidDetail.Intf,
+  Fido.Mappers,
+  System.SysUtils;
+
+type
+  TModelAsteroidDetail = class(TInterfacedObject, IModelAsteroidDetail)
+  private
+    FAsteroidDetailRepository: IAsteroidDetailRepository;
+  public
+    function GetById(const Id: string): TSAsteroidDetailDTO;
+
+    constructor Create(const AsteroidDetailRepository: IAsteroidDetailRepository);
+  end;
+
+implementation
+
+constructor TModelAsteroidDetail.Create(const AsteroidDetailRepository: IAsteroidDetailRepository);
+begin
+  inherited Create;
+  FAsteroidDetailRepository := Utilities.CheckNotNullAndSet(AsteroidDetailRepository, 'AsteroidDetailRepository');
+end;
+
+function TModelAsteroidDetail.GetById(const Id: string): TSAsteroidDetailDTO;
+var
+  AsteroidDetail: IAsteroidDetail;
+begin
+  Result := TSAsteroidDetailDTO.Create;
+
+  try
+    AsteroidDetail := FAsteroidDetailRepository.GetById(Id);
+
+    Mappers.Map(AsteroidDetail, Result);
+  except
+    on E: Exception do begin
+      //
+    end;
+  end;
+end;
+
+end.

@@ -1,0 +1,86 @@
+<section class="glass-card active-threat-card" id="activeThreatPanel">
+
+  <div class="section-title">
+    <div>
+      <h3>Active threat</h3>
+      <small>Asteroide selezionato</small>
+    </div>
+
+    <% if selectedasteroid <> nil then %>
+      <span class="<%= selectedasteroid.HazardousCssClass %>" id="activeRisk">
+        <i class="fa-solid fa-circle"></i>
+        <%= selectedasteroid.HazardousLabel %>
+      </span>
+    <% else %>
+      <span class="risk-badge risk-safe" id="activeRisk">
+        <i class="fa-solid fa-circle"></i>
+        Unknown
+      </span>
+    <% end %>
+  </div>
+
+  <div class="threat-visual"></div>
+
+  <div class="neo-table mb-3">
+    <div class="neo-row">
+      <span>Object</span>
+
+      <% if selectedasteroid <> nil then %>
+        <span id="activeObject"><%= selectedasteroid.Name %></span>
+      <% else %>
+        <span id="activeObject">--</span>
+      <% end %>
+    </div>
+
+    <div class="neo-row">
+      <span>Distance</span>
+
+      <% if selectedasteroid <> nil then %>
+        <span id="activeDistance"><%= selectedasteroid.MinDistanceKmText %></span>
+      <% else %>
+        <span id="activeDistance">-- km</span>
+      <% end %>
+    </div>
+
+    <div class="neo-row">
+      <span>Velocity</span>
+
+      <% if selectedasteroid <> nil then %>
+        <span id="activeVelocity"><%= selectedasteroid.RelativeVelocityText %></span>
+      <% else %>
+        <span id="activeVelocity">-- km/h</span>
+      <% end %>
+    </div>
+  </div>
+
+  <% if selectedasteroid <> nil then %>
+    <button class="btn btn-nasa w-100"
+            type="button"
+            hx-get="/asteroids/<%= selectedasteroid.Id %>"
+            hx-target="#asteroid-detail"
+            hx-swap="innerHTML"
+            hx-indicator="#globalLoader">
+      See more details
+    </button>
+  <% else %>
+    <button class="btn btn-nasa w-100" type="button" disabled>
+      See more details
+    </button>
+  <% end %>
+
+</section>
+
+<section class="glass-card radar-card">
+
+  <div class="section-title">
+    <div>
+      <h3>Impact radar</h3>
+      <small>Near Earth Object radar</small>
+    </div>
+
+    <i class="fa-solid fa-bullseye text-danger"></i>
+  </div>
+
+  <div class="radar" id="radarMock"></div>
+
+</section>

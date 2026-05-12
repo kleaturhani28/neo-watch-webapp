@@ -92,7 +92,15 @@ uses
   NEOWatch.WebApp.Domain.MonitoringRepository.Intf,
   NEOWatch.WebApp.Persistence.Repository.Monitoring,
   Winapi.Windows,
-  NEOWatch.WebApp.Presentation.Controller.Monitoring;
+  NEOWatch.WebApp.Persistence.Repository.AsteroidDetail,
+  NEOWatch.WebApp.Domain.AsteroidDetailRepository.Intf,
+  NEOWatch.WebApp.Domain.Entity.CloseApproach.Intf,
+  NEOWatch.WebApp.Domain.Entity.CloseApproach,
+  NEOWatch.WebApp.Domain.Entity.AsteroidDetail.Intf,
+  NEOWatch.WebApp.Domain.Entity.AsteroidDetail,
+  NEOWatch.WebApp.Persistence.Gateway.NasaApi.Intf,
+  NEOWatch.WebApp.Presentation.Model.AsteroidDetail.Intf,
+  NEOWatch.WebApp.Presentation.Model.AsteroidDetail;
 
 type
   NEOWatchRegistrations = record
@@ -194,8 +202,6 @@ begin
 
   // Presentation
 
-  // - Models
-
   // - Services
   Container.RegisterType<ISessionService, TSessionService>;
 
@@ -206,25 +212,57 @@ begin
 
   // - Models
   Container.RegisterType<IModelMonitoring, TModelMonitoring>;
+  Container.RegisterType<IModelAsteroidDetail, TModelAsteroidDetail>;
 
   // - Controllers
   Container.RegisterType<IMainController, TMainController>;
   Container.RegisterType<IAsteroidsController, TAsteroidsController>;
-  Container.RegisterType<IMonitoringController, TMonitoringController>;
 
   // Usecases
 
   // Repositories
   Container.RegisterType<ISessionRepository, TSessionRepository>;
   Container.RegisterType<IMonitoringRepository, TMonitoringRepository>;
+  Container.RegisterType<IAsteroidDetailRepository, TAsteroidDetailRepository>;
 
   // Gateways
+  Container
+      .RegisterType<IGetFeedNasaNeoWsApiConfiguration>(
+          function: IGetFeedNasaNeoWsApiConfiguration
+          begin
+            Result :=
+                TGetFeedNasaNeoWsApiConfiguration.Create(
+                    FileIni.ReadString('NASA', 'BaseUrl', 'https://api.nasa.gov'),
+                    FileIni.ReadString('NASA', 'ApiKey', '')
+                );
+          end)
+      .AsSingleton;
+
+  Containers.RegisterJSONClientApi<IGetFeedNasaNeoWsCommandApi, IGetFeedNasaNeoWsApiConfiguration>(Container);
+
+  //  Container
+  Container
+      .RegisterType<IGetAsteroidByIdNasaNeoWsApiConfiguration>(
+          function: IGetAsteroidByIdNasaNeoWsApiConfiguration
+          begin
+            Result :=
+                TGetAsteroidByIdNasaNeoWsApiConfiguration.Create(
+                    FileIni.ReadString('NASA', 'BaseUrl', 'https://api.nasa.gov'),
+                    FileIni.ReadString('NASA', 'ApiKey', '')
+                );
+          end)
+      .AsSingleton;
+
+  Containers
+      .RegisterJSONClientApi<IGetAsteroidByIdNasaNeoWsCommandApi, IGetAsteroidByIdNasaNeoWsApiConfiguration>(Container);
 
   // Entities
   Container.RegisterType<IAsteroid, TAsteroid>;
   Container.RegisterType<IAsteroidFilters, TAsteroidFilters>;
   Container.RegisterType<IMonitoring, TMonitoring>;
   Container.RegisterType<ISession, TSession>;
+  Container.RegisterType<ICloseApproach, TCloseApproach>;
+  Container.RegisterType<IAsteroidDetail, TAsteroidDetail>;
 
   // ValueObjects
 
@@ -245,7 +283,7 @@ begin
   TemplateRootFolder := FileIni.ReadString('Templates', 'RootFolder', TemplateRootFolder);
 
   TTemplateRegistry.Instance.TemplateRootFolder := TemplateRootFolder;
-  TTemplateRegistry.Instance.TemplateFileExt := '.html';
+  TTemplateRegistry.Instance.TemplateFileExt := '.ejs';
   TTemplateRegistry.Instance.LoadStrategy := [tlsLoadFile];
   TTemplateRegistry.Instance.AutomaticRefresh := False;
 

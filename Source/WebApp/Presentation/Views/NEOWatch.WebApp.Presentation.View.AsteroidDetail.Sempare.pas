@@ -6,7 +6,7 @@ uses
   Spring.Logging,
   Fido.Utilities,
   NEOWatch.WebApp.Presentation.View.AsteroidDetail.Intf,
-  NEOWatch.WebApp.Presentation.Model.DTO.WSAsteroidDetails,
+  NEOWatch.WebApp.Presentation.Model.DTO.SAsteroidDetails,
   System.IOUtils,
   Sempare.Template.AST,
   Sempare.Template,
@@ -17,13 +17,13 @@ type
   TViewAsteroidDetailSempare = class(TInterfacedObject, IViewAsteroidDetail)
   private
     const
-      TemplateFileNameAsteroidDetail: array[0..2] of string = ('Partials', 'Monitoring', 'AsteroidDetail.html');
+      TemplateFileNameAsteroidDetail: array[0..2] of string = ('Partials', 'Monitoring', 'AsteroidDetail.ejs');
   private
     FLogger: ILogger;
     procedure HandleTemplateError(const AMessage: string);
   public
     constructor Create(const Logger: ILogger);
-    function Render(const AsteroidDetail: TWSAsteroidDetailDTO): string;
+    function Render(const AsteroidDetail: TSAsteroidDetailDTO): string;
   end;
 
 implementation
@@ -39,7 +39,7 @@ begin
   FLogger.Error('Error parsing Sempare template "%s": %s', [TPath.Combine(TemplateFileNameAsteroidDetail), AMessage]);
 end;
 
-function TViewAsteroidDetailSempare.Render(const AsteroidDetail: TWSAsteroidDetailDTO): string;
+function TViewAsteroidDetailSempare.Render(const AsteroidDetail: TSAsteroidDetailDTO): string;
 var
   LTemplate: ITemplate;
   LContext: ITemplateContext;

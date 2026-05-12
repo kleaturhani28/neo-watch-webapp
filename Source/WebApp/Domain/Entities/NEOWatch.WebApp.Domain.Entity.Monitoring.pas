@@ -3,16 +3,14 @@ unit NEOWatch.WebApp.Domain.Entity.Monitoring;
 interface
 
 uses
-  NEOWatch.WebApp.Domain.Entity.Monitoring.Intf,
-  NEOWatch.WebApp.Domain.Entity.AsteroidFilters.Intf,
   Spring.Collections,
+  NEOWatch.WebApp.Domain.Entity.Monitoring.Intf,
   NEOWatch.WebApp.Domain.Entity.Asteroid.Intf;
 
 type
   TMonitoring = class(TInterfacedObject, IMonitoring)
   private
-    FFilters: IAsteroidFilters;
-    FAsteroids: IReadOnlyList<IAsteroid>;
+    FAsteroids: IList<IAsteroid>;
 
     FTotalCount: Integer;
     FDangerousCount: Integer;
@@ -20,36 +18,56 @@ type
 
     FHasError: Boolean;
     FErrorMessage: string;
+
+    FCacheHitCount: Integer;
+    FCacheMissCount: Integer;
   public
+    constructor Create;
+
     function Asteroids: IReadOnlyList<IAsteroid>;
-    function DangerousCount: Integer;
-    function ErrorMessage: string;
-    function Filters: IAsteroidFilters;
-    function HasError: Boolean;
-    function HasResults: Boolean;
-    function SafeCount: Integer;
-    procedure SetAsteroids(const Value: IReadOnlyList<IAsteroid>);
-    procedure SetDangerousCount(const Value: Integer);
-    procedure SetErrorMessage(const Value: string);
-    procedure SetFilters(const Value: IAsteroidFilters);
-    procedure SetHasError(const Value: Boolean);
-    procedure SetSafeCount(const Value: Integer);
-    procedure SetTotalCount(const Value: Integer);
+
     function TotalCount: Integer;
+    function DangerousCount: Integer;
+    function SafeCount: Integer;
+
+    function HasError: Boolean;
+    function ErrorMessage: string;
+
+    function CacheHitCount: Integer;
+    function CacheMissCount: Integer;
+
+    procedure AddAsteroid(const Value: IAsteroid);
+
+    procedure SetTotalCount(const Value: Integer);
+    procedure SetDangerousCount(const Value: Integer);
+    procedure SetSafeCount(const Value: Integer);
+
+    procedure SetHasError(const Value: Boolean);
+    procedure SetErrorMessage(const Value: string);
+
+    procedure SetCacheHitCount(const Value: Integer);
+    procedure SetCacheMissCount(const Value: Integer);
   end;
 
 implementation
 
 { TMonitoring }
 
-function TMonitoring.Filters: IAsteroidFilters;
+constructor TMonitoring.Create;
 begin
-  Result := FFilters;
+  inherited Create;
+
+  FAsteroids := TCollections.CreateList<IAsteroid>;
 end;
 
 function TMonitoring.Asteroids: IReadOnlyList<IAsteroid>;
 begin
-  Result := FAsteroids;
+  Result := FAsteroids.AsReadOnly;
+end;
+
+procedure TMonitoring.AddAsteroid(const Value: IAsteroid);
+begin
+  FAsteroids.Add(Value);
 end;
 
 function TMonitoring.TotalCount: Integer;
@@ -67,11 +85,6 @@ begin
   Result := FSafeCount;
 end;
 
-function TMonitoring.HasResults: Boolean;
-begin
-  Result := Assigned(FAsteroids) and not FAsteroids.IsEmpty;
-end;
-
 function TMonitoring.HasError: Boolean;
 begin
   Result := FHasError;
@@ -82,14 +95,14 @@ begin
   Result := FErrorMessage;
 end;
 
-procedure TMonitoring.SetFilters(const Value: IAsteroidFilters);
+function TMonitoring.CacheHitCount: Integer;
 begin
-  FFilters := Value;
+  Result := FCacheHitCount;
 end;
 
-procedure TMonitoring.SetAsteroids(const Value: IReadOnlyList<IAsteroid>);
+function TMonitoring.CacheMissCount: Integer;
 begin
-  FAsteroids := Value;
+  Result := FCacheMissCount;
 end;
 
 procedure TMonitoring.SetTotalCount(const Value: Integer);
@@ -115,6 +128,16 @@ end;
 procedure TMonitoring.SetErrorMessage(const Value: string);
 begin
   FErrorMessage := Value;
+end;
+
+procedure TMonitoring.SetCacheHitCount(const Value: Integer);
+begin
+  FCacheHitCount := Value;
+end;
+
+procedure TMonitoring.SetCacheMissCount(const Value: Integer);
+begin
+  FCacheMissCount := Value;
 end;
 
 end.

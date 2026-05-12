@@ -3,20 +3,26 @@ unit NEOWatch.WebApp.Domain.Entity.AsteroidFilters.Intf;
 interface
 
 type
-  IAsteroidFilters = interface
-    ['{913EBD18-564E-41E2-BCEB-3C95DE8D5CED}']
 
-    function StartDate: string;
-    function EndDate: string;
-    function Hazardous: string;
-    function SortBy: string;
-    function SortDirection: string;
+  TNeoHazardousFilter = (nhfAll, nhfDangerous, nhfSafe);
+  TNeoSortBy = (nsbDistance, nsbSize);
+  TNeoSortDirection = (nsdAsc, nsdDesc);
 
-    procedure SetStartDate(const Value: string);
-    procedure SetEndDate(const Value: string);
-    procedure SetHazardous(const Value: string);
-    procedure SetSortBy(const Value: string);
-    procedure SetSortDirection(const Value: string);
+  IAsteroidFilters = interface(IInvokable)
+    ['{9A79119E-1687-4709-AA25-3DD4CB971C17}']
+
+    function StartDate: TDate;
+    function EndDate: TDate;
+    function HazardousFilter: TNeoHazardousFilter;
+    function SortBy: TNeoSortBy;
+    function SortDirection: TNeoSortDirection;
+
+    procedure SetStartDate(const Value: TDate);
+    procedure SetEndDate(const Value: TDate);
+    procedure SetHazardousFilter(const Value: TNeoHazardousFilter);
+    procedure SetSortBy(const Value: TNeoSortBy);
+    procedure SetSortDirection(const Value: TNeoSortDirection);
+
   end;
 
 implementation

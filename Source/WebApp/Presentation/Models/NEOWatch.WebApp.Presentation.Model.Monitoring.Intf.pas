@@ -3,18 +3,16 @@ unit NEOWatch.WebApp.Presentation.Model.Monitoring.Intf;
 interface
 
 uses
-  NEOWatch.WebApp.Presentation.Model.DTO.WSAsteroidFilters,
+  NEOWatch.WebApp.Presentation.Model.DTO.SAsteroidFilters,
   System.Generics.Collections,
-  NEOWatch.WebApp.Presentation.Model.DTO.WSAsteroidCard,
-  NEOWatch.WebApp.Presentation.Model.DTO.WSMonitoring;
+  NEOWatch.WebApp.Presentation.Model.DTO.SMonitoring;
 
 type
 
   IModelMonitoring = interface(IInvokable)
     ['{5B7E4C61-992B-4C99-9B01-D934DFD1B6DB}']
-    function GetDefaultList: TWSMonitoringDTO;
-    function GetListByFilters(const Value: TWSAsteroidFiltersDTO): TWSMonitoringDTO;
-    function GetAsteroidsList(const Value: TWSAsteroidFiltersDTO): TObjectList<TWSAsteroidCardDTO>;
+    function GetDefaultList: TSMonitoringDTO;
+    function GetListByFilters(const Filters: TSAsteroidFiltersDTO): TSMonitoringDTO;
   end;
 
 implementation

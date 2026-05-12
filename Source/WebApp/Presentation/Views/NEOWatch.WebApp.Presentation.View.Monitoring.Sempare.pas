@@ -6,7 +6,7 @@ uses
   Spring.Logging,
   Fido.Utilities,
   NEOWatch.WebApp.Presentation.View.Monitoring.Intf,
-  NEOWatch.WebApp.Presentation.Model.DTO.WSMonitoring,
+  NEOWatch.WebApp.Presentation.Model.DTO.SMonitoring,
   System.IOUtils,
   Sempare.Template,
   System.SysUtils;
@@ -16,13 +16,13 @@ type
   TViewMonitoringSempare = class(TInterfacedObject, IViewMonitoring)
   private
     const
-      TemplateFileNameMonitoring: array[0..2] of string = ('Partials', 'Monitoring', 'Monitoring.html');
+      TemplateFileNameMonitoring: array[0..2] of string = ('Partials', 'Monitoring', 'Monitoring.ejs');
   private
     FLogger: ILogger;
     procedure HandleTemplateError(const AMessage: string);
   public
     constructor Create(const Logger: ILogger);
-    function Render(const Monitoring: TWSMonitoringDTO): string;
+    function Render(const Monitoring: TSMonitoringDTO): string;
   end;
 
 implementation
@@ -38,7 +38,7 @@ begin
   FLogger.Error('Error parsing Sempare template "%s": %s', [TPath.Combine(TemplateFileNameMonitoring), AMessage]);
 end;
 
-function TViewMonitoringSempare.Render(const Monitoring: TWSMonitoringDTO): string;
+function TViewMonitoringSempare.Render(const Monitoring: TSMonitoringDTO): string;
 var
   LTemplate: ITemplate;
   LContext: ITemplateContext;
@@ -49,6 +49,10 @@ begin
     LContext := Sempare.Template.Template.Context();
 
     LContext.Variables['monitoring'] := Monitoring;
+    LContext.Variables['filters'] := Monitoring.Filters;
+    LContext.Variables['summary'] := Monitoring.Summary;
+    LContext.Variables['asteroids'] := Monitoring.Asteroids;
+    LContext.Variables['selectedasteroid'] := Monitoring.SelectedAsteroid;
 
     LTemplate := TTemplateRegistry.Instance.GetTemplate(TPath.Combine(TemplateFileNameMonitoring));
 
