@@ -9,3 +9,30 @@
 {"Level":"Info","Type":"Text","Message":"Sempare templates root folder: C:\\FreelancerProjects.Demo\\Delphi\\NEOWatch\\Source\\WebApp\\Presentation\\Views\\Templates","Tag":0}
 {"Level":"Error","Type":"Text","Message":"Error parsing Sempare template \"Dashboard.html\": Template not found: Dashboard.html","Tag":0}
 {"Level":"Error","Type":"Text","Message":"Error parsing Sempare template \"Partials\\Dashboard.html\": Template not found: Partials\\Dashboard.html","Tag":0}
+{"Level":"Info","Type":"Text","Message":"NASA CACHE MISS: nasa::feed::2024-01-01::2024-01-07","Tag":0}
+{"Level":"Info","Type":"Text","Message":"NASA CACHE SET: nasa::feed::2024-01-01::2024-01-07","Tag":0}
+{"Level":"Info","Type":"Text","Message":"NASA CACHE MISS: nasa::feed::2024-01-01::2024-01-07","Tag":0}
+{"Level":"Info","Type":"Text","Message":"NASA CACHE SET: nasa::feed::2024-01-01::2024-01-07","Tag":0}
+{"Level":"Info","Type":"Text","Message":"NASA CACHE MISS: nasa::feed::2024-01-01::2024-01-07","Tag":0}
+{"Level":"Info","Type":"Text","Message":"NASA CACHE SET: nasa::feed::2024-01-01::2024-01-07","Tag":0}
+{"Level":"Info","Type":"Text","Message":"NASA CACHE MISS: nasa::feed::2024-01-01::2024-01-07","Tag":0}
+{"Level":"Info","Type":"Text","Message":"NASA CACHE MISS: nasa::feed::2024-01-01::2024-01-07","Tag":0}
+{"Level":"Info","Type":"Text","Message":"NASA CACHE SET: nasa::feed::2024-01-01::2024-01-07","Tag":0}
+{"Level":"Info","Type":"Text","Message":"NASA CACHE MISS: nasa::feed::2024-01-01::2024-01-07","Tag":0}
+{"Level":"Info","Type":"Text","Message":"NASA CACHE SET: nasa::feed::2024-01-01::2024-01-07","Tag":0}
+{"Level":"Info","Type":"Text","Message":"NASA CACHE GET START: neowatch.webapp.synchroplan::feed::2024-01-01::2024-01-07","Tag":0}
+{"Level":"Info","Type":"Text","Message":"NASA CACHE GET VALUE LENGTH: neowatch.webapp.synchroplan::feed::2024-01-01::2024-01-07 -> 0","Tag":0}
+{"Level":"Info","Type":"Text","Message":"NASA CACHE MISS: neowatch.webapp.synchroplan::feed::2024-01-01::2024-01-07","Tag":0}
+{"Level":"Info","Type":"Text","Message":"NASA CACHE SET START: neowatch.webapp.synchroplan::feed::2024-01-01::2024-01-07. Value length: 60095","Tag":0}
+{"Level":"Info","Type":"Text","Message":"NASA CACHE SET CHECK: neowatch.webapp.synchroplan::feed::2024-01-01::2024-01-07. Read back length: 60095","Tag":0}
+{"Level":"Info","Type":"Text","Message":"NASA CACHE GET START: neowatch.webapp.synchroplan::feed::2024-01-01::2024-01-07","Tag":0}
+{"Level":"Info","Type":"Text","Message":"NASA CACHE GET VALUE LENGTH: neowatch.webapp.synchroplan::feed::2024-01-01::2024-01-07 -> 60095","Tag":0}
+{"Level":"Info","Type":"Text","Message":"NASA CACHE HIT: neowatch.webapp.synchroplan::feed::2024-01-01::2024-01-07","Tag":0}
+{"Level":"Info","Type":"Text","Message":"NASA CACHE GET START: neowatch.webapp.synchroplan::asteroid::3542519","Tag":0}
+{"Level":"Info","Type":"Text","Message":"NASA CACHE GET VALUE LENGTH: neowatch.webapp.synchroplan::asteroid::3542519 -> 0","Tag":0}
+{"Level":"Info","Type":"Text","Message":"NASA CACHE MISS: neowatch.webapp.synchroplan::asteroid::3542519","Tag":0}
+{"Level":"Info","Type":"Text","Message":"NASA CACHE SET START: neowatch.webapp.synchroplan::asteroid::3542519. Value length: 121230","Tag":0}
+{"Level":"Info","Type":"Text","Message":"NASA CACHE SET CHECK: neowatch.webapp.synchroplan::asteroid::3542519. Read back length: 121230","Tag":0}
+{"Level":"Info","Type":"Text","Message":"NASA CACHE GET START: neowatch.webapp.synchroplan::asteroid::3542519","Tag":0}
+{"Level":"Info","Type":"Text","Message":"NASA CACHE GET VALUE LENGTH: neowatch.webapp.synchroplan::asteroid::3542519 -> 121230","Tag":0}
+{"Level":"Info","Type":"Text","Message":"NASA CACHE HIT: neowatch.webapp.synchroplan::asteroid::3542519","Tag":0}

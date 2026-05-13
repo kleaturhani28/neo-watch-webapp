@@ -67,7 +67,9 @@ uses
   NEOWatch.WebApp.Domain.Entity.AsteroidDetail in 'Domain\Entities\NEOWatch.WebApp.Domain.Entity.AsteroidDetail.pas',
   NEOWatch.WebApp.Persistence.Repository.AsteroidDetail in 'Persistence\Repositories\NEOWatch.WebApp.Persistence.Repository.AsteroidDetail.pas',
   NEOWatch.WebApp.Presentation.Model.AsteroidDetail in 'Presentation\Models\NEOWatch.WebApp.Presentation.Model.AsteroidDetail.pas',
-  NEOWatch.WebApp.Presentation.Model.AsteroidDetail.Intf in 'Presentation\Models\NEOWatch.WebApp.Presentation.Model.AsteroidDetail.Intf.pas';
+  NEOWatch.WebApp.Presentation.Model.AsteroidDetail.Intf in 'Presentation\Models\NEOWatch.WebApp.Presentation.Model.AsteroidDetail.Intf.pas',
+  NEOWatch.WebApp.Domain.NasaCache.Intf in 'Domain\NEOWatch.WebApp.Domain.NasaCache.Intf.pas',
+  NEOWatch.WebApp.Persistence.NasaCache.Redis in 'Persistence\NEOWatch.WebApp.Persistence.NasaCache.Redis.pas';
 
 var
   Container: IShared<TContainer>;

@@ -1,0 +1,75 @@
+unit NEOWatch.WebApp.Persistence.NasaCache.Redis;
+
+interface
+
+uses
+  System.SysUtils,
+  Fido.Utilities,
+  NEOWatch.WebApp.Domain.NasaCache.Intf,
+  Fido.KVStore.Intf;
+
+type
+  TNasaRedisCache = class(TInterfacedObject, INasaCache)
+  private
+    FKVStore: IKVStore;
+  public
+    constructor Create(const KVStore: IKVStore);
+
+    function TryGet(const Key: string; out Value: string): Boolean;
+
+    procedure SetValue(const Key: string; const Value: string; const TtlSeconds: Integer);
+  end;
+
+implementation
+
+constructor TNasaRedisCache.Create(const KVStore: IKVStore);
+begin
+  inherited Create;
+
+  FKVStore := Utilities.CheckNotNullAndSet(KVStore, 'KVStore');
+end;
+
+function TNasaRedisCache.TryGet(const Key: string; out Value: string): Boolean;
+var
+  CacheValue: string;
+begin
+  Value := '';
+  Result := False;
+
+  if Key.Trim.IsEmpty then
+    Exit;
+
+  try
+    CacheValue := FKVStore.Get(Key, 1000).Value;
+
+    if CacheValue.Trim.IsEmpty then
+      Exit;
+
+    Value := CacheValue;
+    Result := True;
+  except
+    on E: Exception do begin
+      Value := '';
+      Result := False;
+    end;
+  end;
+end;
+
+procedure TNasaRedisCache.SetValue(const Key: string; const Value: string; const TtlSeconds: Integer);
+begin
+  if Key.Trim.IsEmpty then
+    Exit;
+
+  if Value.Trim.IsEmpty then
+    Exit;
+
+  try
+    FKVStore.Put(Key, Value, 1000);
+  except
+    on E: Exception do begin
+      // Non bloccare il flusso principale se Redis/cache fallisce.
+    end;
+  end;
+end;
+
+end.

@@ -22,7 +22,7 @@
              id="startDate"
              name="startDate"
              type="date"
-             value="<%= filters.StartDate %>"
+             value="<% filters.StartDate %>"
              required>
     </div>
 
@@ -32,7 +32,7 @@
              id="endDate"
              name="endDate"
              type="date"
-             value="<%= filters.EndDate %>"
+             value="<% filters.EndDate %>"
              required>
     </div>
 
@@ -42,19 +42,19 @@
               id="hazardous"
               name="hazardous">
 
-        <% if filters.Hazardous = 'all' then %>
+        <% if filters.Hazardous = 'all' %>
           <option value="all" selected>Tutti</option>
         <% else %>
           <option value="all">Tutti</option>
         <% end %>
 
-        <% if filters.Hazardous = 'dangerous' then %>
+        <% if filters.Hazardous = 'dangerous' %>
           <option value="dangerous" selected>Solo pericolosi</option>
         <% else %>
           <option value="dangerous">Solo pericolosi</option>
         <% end %>
 
-        <% if filters.Hazardous = 'safe' then %>
+        <% if filters.Hazardous = 'safe' %>
           <option value="safe" selected>Solo non pericolosi</option>
         <% else %>
           <option value="safe">Solo non pericolosi</option>
@@ -69,13 +69,13 @@
               id="sortBy"
               name="sortBy">
 
-        <% if filters.SortBy = 'distance' then %>
+        <% if filters.SortBy = 'distance' %>
           <option value="distance" selected>Distanza</option>
         <% else %>
           <option value="distance">Distanza</option>
         <% end %>
 
-        <% if filters.SortBy = 'size' then %>
+        <% if filters.SortBy = 'size' %>
           <option value="size" selected>Dimensione</option>
         <% else %>
           <option value="size">Dimensione</option>
@@ -90,13 +90,13 @@
               id="sortDirection"
               name="sortDirection">
 
-        <% if filters.SortDirection = 'asc' then %>
+        <% if filters.SortDirection = 'asc' %>
           <option value="asc" selected>ASC</option>
         <% else %>
           <option value="asc">ASC</option>
         <% end %>
 
-        <% if filters.SortDirection = 'desc' then %>
+        <% if filters.SortDirection = 'desc' %>
           <option value="desc" selected>DESC</option>
         <% else %>
           <option value="desc">DESC</option>

@@ -1,11 +1,10 @@
 <div id="summary-panel" class="metric-list">
-
   <div class="metric-card">
     <div class="metric-label">Asteroidi trovati</div>
 
-    <% if summary.TotalCount > 0 then %>
-      <div class="metric-value"><%= summary.TotalCountText %> <small>items</small></div>
-      <div class="metric-trend <%= summary.SummaryTrendClass %>"><%= summary.SummaryMessage %></div>
+    <% if summary.TotalCount > 0 %>
+      <div class="metric-value"><% summary.TotalCountText %> <small>items</small></div>
+      <div class="metric-trend <% summary.SummaryTrendClass %>"><% summary.SummaryMessage %></div>
     <% else %>
       <div class="metric-value">0 <small>items</small></div>
       <div class="metric-trend trend-warn">Nessun risultato</div>
@@ -15,8 +14,8 @@
   <div class="metric-card">
     <div class="metric-label">Potenzialmente pericolosi</div>
 
-    <% if summary.DangerousCount > 0 then %>
-      <div class="metric-value"><%= summary.DangerousCountText %> <small>PHA</small></div>
+    <% if summary.DangerousCount > 0 %>
+      <div class="metric-value"><% summary.DangerousCountText %> <small>PHA</small></div>
       <div class="metric-trend trend-danger">Attenzione richiesta</div>
     <% else %>
       <div class="metric-value">0 <small>PHA</small></div>
@@ -25,21 +24,8 @@
   </div>
 
   <div class="metric-card">
-    <div class="metric-label">Non pericolosi</div>
-
-    <% if summary.SafeCount > 0 then %>
-      <div class="metric-value"><%= summary.SafeCountText %> <small>safe</small></div>
-      <div class="metric-trend trend-good">Oggetti sicuri</div>
-    <% else %>
-      <div class="metric-value">0 <small>safe</small></div>
-      <div class="metric-trend trend-warn">Nessun oggetto sicuro</div>
-    <% end %>
-  </div>
-
-  <div class="metric-card">
     <div class="metric-label">Backend</div>
-    <div class="metric-value"><%= summary.CacheStatusText %> <small>ready</small></div>
-    <div class="metric-trend <%= summary.CacheBadgeClass %>"><%= summary.CacheDescription %></div>
+    <div class="metric-value"><% summary.CacheStatusText %> <small>ready</small></div>
+    <div class="metric-trend <% summary.CacheBadgeClass %>"><% summary.CacheDescription %></div>
   </div>
-
 </div>

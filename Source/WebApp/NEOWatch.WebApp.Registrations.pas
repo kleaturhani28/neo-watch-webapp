@@ -100,7 +100,9 @@ uses
   NEOWatch.WebApp.Domain.Entity.AsteroidDetail,
   NEOWatch.WebApp.Persistence.Gateway.NasaApi.Intf,
   NEOWatch.WebApp.Presentation.Model.AsteroidDetail.Intf,
-  NEOWatch.WebApp.Presentation.Model.AsteroidDetail;
+  NEOWatch.WebApp.Presentation.Model.AsteroidDetail,
+  NEOWatch.WebApp.Domain.NasaCache.Intf,
+  NEOWatch.WebApp.Persistence.NasaCache.Redis;
 
 type
   NEOWatchRegistrations = record
@@ -111,6 +113,7 @@ type
   public
     class procedure RegisterCommandLine(const Container: TContainer); static;
     class procedure Register(const Container: TContainer; const FileIni: TMemIniFile); static;
+    class procedure RegisterNasaCache(const Container: TContainer); static;
   end;
 
 implementation
@@ -200,6 +203,9 @@ begin
       end
   );
 
+  // NASA Cache
+  RegisterNasaCache(Container);
+
   // Presentation
 
   // - Services
@@ -285,7 +291,7 @@ begin
   TTemplateRegistry.Instance.TemplateRootFolder := TemplateRootFolder;
   TTemplateRegistry.Instance.TemplateFileExt := '.ejs';
   TTemplateRegistry.Instance.LoadStrategy := [tlsLoadFile];
-  TTemplateRegistry.Instance.AutomaticRefresh := False;
+  TTemplateRegistry.Instance.AutomaticRefresh := True;
 
   // {$IF defined(DEBUG)}
   //  TTemplateRegistry.Instance.AutomaticRefresh := True;
@@ -358,6 +364,17 @@ begin
   // Must be built for reading the commandline!
   Container.Build;
 
+end;
+
+class procedure NEOWatchRegistrations.RegisterNasaCache(const Container: TContainer);
+begin
+  Container
+      .RegisterType<INasaCache>(
+          function: INasaCache //
+          begin
+            Result := TNasaRedisCache.Create(Container.Resolve<IKVStore>, Container.Resolve<ILogger>);
+          end)
+      .AsSingleton;
 end;
 
 end.

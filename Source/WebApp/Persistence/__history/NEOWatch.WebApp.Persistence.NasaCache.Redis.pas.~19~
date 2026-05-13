@@ -1,0 +1,83 @@
+unit NEOWatch.WebApp.Persistence.NasaCache.Redis;
+
+interface
+
+uses
+  System.SysUtils,
+  Fido.Utilities,
+  NEOWatch.WebApp.Domain.NasaCache.Intf,
+  Fido.KVStore.Intf,
+  Spring.Logging;
+
+type
+  TNasaRedisCache = class(TInterfacedObject, INasaCache)
+  private
+    FKVStore: IKVStore;
+    FLogger: ILogger;
+  public
+    constructor Create(const KVStore: IKVStore; const Logger: ILogger);
+
+    function TryGet(const Key: string; out Value: string): Boolean;
+
+    procedure SetValue(const Key: string; const Value: string; const TtlSeconds: Integer);
+  end;
+
+implementation
+
+constructor TNasaRedisCache.Create(const KVStore: IKVStore; const Logger: ILogger);
+begin
+  inherited Create;
+
+  FKVStore := Utilities.CheckNotNullAndSet(KVStore, 'KVStore');
+end;
+
+function TNasaRedisCache.TryGet(const Key: string; out Value: string): Boolean;
+var
+  CacheValue: string;
+begin
+  Value := '';
+  Result := False;
+
+  if Key.Trim.IsEmpty then
+    Exit;
+
+  try
+    CacheValue := FKVStore.Get(Key, 1000).Value;
+
+    if CacheValue.Trim.IsEmpty then begin
+      OutputDebugString(PChar('NASA CACHE MISS: ' + Key));
+      Exit;
+    end;
+
+    Value := CacheValue;
+    Result := True;
+
+    OutputDebugString(PChar('NASA CACHE HIT: ' + Key));
+  except
+    on E: Exception do begin
+      OutputDebugString(PChar('NASA CACHE ERROR GET: ' + E.Message));
+      Value := '';
+      Result := False;
+    end;
+  end;
+end;
+
+procedure TNasaRedisCache.SetValue(const Key: string; const Value: string; const TtlSeconds: Integer);
+begin
+  if Key.Trim.IsEmpty then
+    Exit;
+
+  if Value.Trim.IsEmpty then
+    Exit;
+
+  try
+    FKVStore.Put(Key, Value, 1000);
+    OutputDebugString(PChar('NASA CACHE SET: ' + Key));
+  except
+    on E: Exception do begin
+      OutputDebugString(PChar('NASA CACHE ERROR SET: ' + E.Message));
+    end;
+  end;
+end;
+
+end.

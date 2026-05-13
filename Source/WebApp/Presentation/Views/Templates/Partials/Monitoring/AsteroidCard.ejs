@@ -1,4 +1,4 @@
-<article class="<%= Asteroid.AsteroidCardCssClass %>">
+<article class="<% Asteroid.AsteroidCardCssClass %>">
 
   <div class="asteroid-icon">
     <i class="fa-solid fa-meteor"></i>
@@ -6,40 +6,40 @@
 
   <div>
     <div class="asteroid-title">
-      <h4><%= Asteroid.Name %></h4>
+      <h4><% Asteroid.Name %></h4>
 
-      <span class="<%= Asteroid.HazardousCssClass %>">
+      <span class="<% Asteroid.HazardousCssClass %>">
         <i class="fa-solid fa-circle"></i>
-        <%= Asteroid.HazardousLabel %>
+        <% Asteroid.HazardousLabel %>
       </span>
     </div>
 
     <div class="asteroid-meta">
       <span>
         <i class="fa-solid fa-ruler-horizontal me-1"></i>
-        <%= Asteroid.MinDistanceKmText %>
+        <% Asteroid.MinDistanceKmText %>
       </span>
 
       <span>
         <i class="fa-solid fa-expand me-1"></i>
-        <%= Asteroid.DiameterText %>
+        <% Asteroid.DiameterText %>
       </span>
 
       <span>
         <i class="fa-solid fa-gauge-high me-1"></i>
-        <%= Asteroid.RelativeVelocityText %>
+        <% Asteroid.RelativeVelocityText %>
       </span>
 
       <span>
         <i class="fa-regular fa-calendar me-1"></i>
-        <%= Asteroid.CloseApproachDateText %>
+        <% Asteroid.CloseApproachDateText %>
       </span>
     </div>
   </div>
 
   <button class="btn btn-sm btn-nasa"
           type="button"
-          hx-get="/asteroids/<%= Asteroid.Id %>"
+          hx-get="/asteroids/<% Asteroid.Id %>"
           hx-target="#asteroid-detail"
           hx-swap="innerHTML"
           hx-indicator="#globalLoader">

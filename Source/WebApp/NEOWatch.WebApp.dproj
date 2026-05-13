@@ -137,6 +137,8 @@
         <DCCReference Include="Persistence\Repositories\NEOWatch.WebApp.Persistence.Repository.AsteroidDetail.pas"/>
         <DCCReference Include="Presentation\Models\NEOWatch.WebApp.Presentation.Model.AsteroidDetail.pas"/>
         <DCCReference Include="Presentation\Models\NEOWatch.WebApp.Presentation.Model.AsteroidDetail.Intf.pas"/>
+        <DCCReference Include="Domain\NEOWatch.WebApp.Domain.NasaCache.Intf.pas"/>
+        <DCCReference Include="Persistence\NEOWatch.WebApp.Persistence.NasaCache.Redis.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

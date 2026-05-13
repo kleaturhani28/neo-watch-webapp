@@ -21,13 +21,14 @@
             hx-indicator="#globalLoader">
 
         <div class="row g-3">
+
           <div class="col-12">
             <label class="form-label" for="startDate">Data inizio</label>
             <input class="form-control"
                    id="startDate"
                    name="startDate"
                    type="date"
-                   value="<%= filters.StartDate %>"
+                   value="<% filters.StartDate %>"
                    required>
           </div>
 
@@ -37,7 +38,7 @@
                    id="endDate"
                    name="endDate"
                    type="date"
-                   value="<%= filters.EndDate %>"
+                   value="<% filters.EndDate %>"
                    required>
           </div>
 
@@ -47,19 +48,19 @@
                     id="hazardous"
                     name="hazardous">
 
-              <% if filters.Hazardous = 'all' then %>
+              <% if filters.Hazardous = 'all' %>
                 <option value="all" selected>Tutti</option>
               <% else %>
                 <option value="all">Tutti</option>
               <% end %>
 
-              <% if filters.Hazardous = 'dangerous' then %>
+              <% if filters.Hazardous = 'dangerous' %>
                 <option value="dangerous" selected>Solo pericolosi</option>
               <% else %>
                 <option value="dangerous">Solo pericolosi</option>
               <% end %>
 
-              <% if filters.Hazardous = 'safe' then %>
+              <% if filters.Hazardous = 'safe' %>
                 <option value="safe" selected>Solo non pericolosi</option>
               <% else %>
                 <option value="safe">Solo non pericolosi</option>
@@ -74,13 +75,13 @@
                     id="sortBy"
                     name="sortBy">
 
-              <% if filters.SortBy = 'distance' then %>
+              <% if filters.SortBy = 'distance' %>
                 <option value="distance" selected>Distanza</option>
               <% else %>
                 <option value="distance">Distanza</option>
               <% end %>
 
-              <% if filters.SortBy = 'size' then %>
+              <% if filters.SortBy = 'size' %>
                 <option value="size" selected>Dimensione</option>
               <% else %>
                 <option value="size">Dimensione</option>
@@ -95,13 +96,13 @@
                     id="sortDirection"
                     name="sortDirection">
 
-              <% if filters.SortDirection = 'asc' then %>
+              <% if filters.SortDirection = 'asc' %>
                 <option value="asc" selected>ASC</option>
               <% else %>
                 <option value="asc">ASC</option>
               <% end %>
 
-              <% if filters.SortDirection = 'desc' then %>
+              <% if filters.SortDirection = 'desc' %>
                 <option value="desc" selected>DESC</option>
               <% else %>
                 <option value="desc">DESC</option>
@@ -132,34 +133,44 @@
               Reset filtri
             </button>
           </div>
+
         </div>
       </form>
 
       <hr class="border-secondary opacity-25 my-4">
 
       <div id="summary-panel" class="metric-list">
+
         <div class="metric-card">
           <div class="metric-label">Asteroidi trovati</div>
-          <div class="metric-value"><%= summary.TotalCountText %> <small>items</small></div>
-          <div class="metric-trend <%= summary.SummaryTrendClass %>"><%= summary.SummaryMessage %></div>
+
+          <% if summary.TotalCount > 0 %>
+            <div class="metric-value"><% summary.TotalCountText %> <small>items</small></div>
+            <div class="metric-trend <% summary.SummaryTrendClass %>"><% summary.SummaryMessage %></div>
+          <% else %>
+            <div class="metric-value">0 <small>items</small></div>
+            <div class="metric-trend trend-warn">Nessun risultato</div>
+          <% end %>
         </div>
 
         <div class="metric-card">
           <div class="metric-label">Potenzialmente pericolosi</div>
-          <div class="metric-value"><%= summary.DangerousCountText %> <small>PHA</small></div>
 
-          <% if summary.DangerousCount > 0 then %>
+          <% if summary.DangerousCount > 0 %>
+            <div class="metric-value"><% summary.DangerousCountText %> <small>PHA</small></div>
             <div class="metric-trend trend-danger">Attenzione richiesta</div>
           <% else %>
+            <div class="metric-value">0 <small>PHA</small></div>
             <div class="metric-trend trend-good">Nessun pericoloso</div>
           <% end %>
         </div>
 
         <div class="metric-card">
           <div class="metric-label">Backend</div>
-          <div class="metric-value"><%= summary.CacheStatusText %> <small>ready</small></div>
-          <div class="metric-trend <%= summary.CacheBadgeClass %>"><%= summary.CacheDescription %></div>
+          <div class="metric-value"><% summary.CacheStatusText %> <small>ready</small></div>
+          <div class="metric-trend <% summary.CacheBadgeClass %>"><% summary.CacheDescription %></div>
         </div>
+
       </div>
     </aside>
 
@@ -218,6 +229,7 @@
 
     <!-- ACTIVE THREAT + RADAR -->
     <aside class="right-stack">
+
       <section class="glass-card active-threat-card" id="active-threat-panel">
         <div class="section-title">
           <div>
@@ -225,10 +237,10 @@
             <small>Asteroide selezionato</small>
           </div>
 
-          <% if selectedasteroid <> nil then %>
-            <span class="<%= selectedasteroid.HazardousCssClass %>" id="activeRisk">
+          <% if selectedasteroid <> nil %>
+            <span class="<% selectedasteroid.HazardousCssClass %>" id="activeRisk">
               <i class="fa-solid fa-circle"></i>
-              <%= selectedasteroid.HazardousLabel %>
+              <% selectedasteroid.HazardousLabel %>
             </span>
           <% else %>
             <span class="risk-badge risk-safe" id="activeRisk">
@@ -241,11 +253,12 @@
         <div class="threat-visual"></div>
 
         <div class="neo-table mb-3">
+
           <div class="neo-row">
             <span>Object</span>
 
-            <% if selectedasteroid <> nil then %>
-              <span id="activeObject"><%= selectedasteroid.Name %></span>
+            <% if selectedasteroid <> nil %>
+              <span id="activeObject"><% selectedasteroid.Name %></span>
             <% else %>
               <span id="activeObject">--</span>
             <% end %>
@@ -254,8 +267,8 @@
           <div class="neo-row">
             <span>Distance</span>
 
-            <% if selectedasteroid <> nil then %>
-              <span id="activeDistance"><%= selectedasteroid.MinDistanceKmText %></span>
+            <% if selectedasteroid <> nil %>
+              <span id="activeDistance"><% selectedasteroid.MinDistanceKmText %></span>
             <% else %>
               <span id="activeDistance">-- km</span>
             <% end %>
@@ -264,18 +277,19 @@
           <div class="neo-row">
             <span>Velocity</span>
 
-            <% if selectedasteroid <> nil then %>
-              <span id="activeVelocity"><%= selectedasteroid.RelativeVelocityText %></span>
+            <% if selectedasteroid <> nil %>
+              <span id="activeVelocity"><% selectedasteroid.RelativeVelocityText %></span>
             <% else %>
               <span id="activeVelocity">-- km/h</span>
             <% end %>
           </div>
+
         </div>
 
-        <% if selectedasteroid <> nil then %>
+        <% if selectedasteroid <> nil %>
           <button class="btn btn-nasa w-100"
                   type="button"
-                  hx-get="/asteroids/<%= selectedasteroid.Id %>"
+                  hx-get="/asteroids/<% selectedasteroid.Id %>"
                   hx-target="#asteroid-detail"
                   hx-swap="innerHTML"
                   hx-indicator="#globalLoader">
@@ -300,11 +314,13 @@
 
         <div class="radar" id="radarMock"></div>
       </section>
+
     </aside>
   </div>
 
   <!-- RESULTS + DETAIL -->
   <div class="content-grid">
+
     <section class="glass-card results-card">
       <div class="section-title">
         <div>
@@ -328,13 +344,13 @@
 
       <div id="asteroid-results">
 
-        <% if asteroids.Count > 0 then %>
+        <% if asteroids.Count > 0 %>
 
           <div class="asteroid-list">
 
-            <% for Asteroid in asteroids do %>
+            <% for Asteroid in asteroids %>
 
-              <article class="<%= Asteroid.AsteroidCardCssClass %>">
+              <article class="<% Asteroid.AsteroidCardCssClass %>">
 
                 <div class="asteroid-icon">
                   <i class="fa-solid fa-meteor"></i>
@@ -342,40 +358,40 @@
 
                 <div>
                   <div class="asteroid-title">
-                    <h4><%= Asteroid.Name %></h4>
+                    <h4><% Asteroid.Name %></h4>
 
-                    <span class="<%= Asteroid.HazardousCssClass %>">
+                    <span class="<% Asteroid.HazardousCssClass %>">
                       <i class="fa-solid fa-circle"></i>
-                      <%= Asteroid.HazardousLabel %>
+                      <% Asteroid.HazardousLabel %>
                     </span>
                   </div>
 
                   <div class="asteroid-meta">
                     <span>
                       <i class="fa-solid fa-ruler-horizontal me-1"></i>
-                      <%= Asteroid.MinDistanceKmText %>
+                      <% Asteroid.MinDistanceKmText %>
                     </span>
 
                     <span>
                       <i class="fa-solid fa-expand me-1"></i>
-                      <%= Asteroid.DiameterText %>
+                      <% Asteroid.DiameterText %>
                     </span>
 
                     <span>
                       <i class="fa-solid fa-gauge-high me-1"></i>
-                      <%= Asteroid.RelativeVelocityText %>
+                      <% Asteroid.RelativeVelocityText %>
                     </span>
 
                     <span>
                       <i class="fa-regular fa-calendar me-1"></i>
-                      <%= Asteroid.CloseApproachDateText %>
+                      <% Asteroid.CloseApproachDateText %>
                     </span>
                   </div>
                 </div>
 
                 <button class="btn btn-sm btn-nasa"
                         type="button"
-                        hx-get="/asteroids/<%= Asteroid.Id %>"
+                        hx-get="/asteroids/<% Asteroid.Id %>"
                         hx-target="#asteroid-detail"
                         hx-swap="innerHTML"
                         hx-indicator="#globalLoader">
@@ -426,6 +442,7 @@
         </div>
       </div>
     </aside>
+
   </div>
 
 </div>

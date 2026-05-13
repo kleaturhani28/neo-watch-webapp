@@ -6,10 +6,10 @@
       <small>Asteroide selezionato</small>
     </div>
 
-    <% if selectedasteroid <> nil then %>
-      <span class="<%= selectedasteroid.HazardousCssClass %>" id="activeRisk">
+    <% if selectedasteroid <> nil %>
+      <span class="<% selectedasteroid.HazardousCssClass %>" id="activeRisk">
         <i class="fa-solid fa-circle"></i>
-        <%= selectedasteroid.HazardousLabel %>
+        <% selectedasteroid.HazardousLabel %>
       </span>
     <% else %>
       <span class="risk-badge risk-safe" id="activeRisk">
@@ -25,8 +25,8 @@
     <div class="neo-row">
       <span>Object</span>
 
-      <% if selectedasteroid <> nil then %>
-        <span id="activeObject"><%= selectedasteroid.Name %></span>
+      <% if selectedasteroid <> nil %>
+        <span id="activeObject"><% selectedasteroid.Name %></span>
       <% else %>
         <span id="activeObject">--</span>
       <% end %>
@@ -35,8 +35,8 @@
     <div class="neo-row">
       <span>Distance</span>
 
-      <% if selectedasteroid <> nil then %>
-        <span id="activeDistance"><%= selectedasteroid.MinDistanceKmText %></span>
+      <% if selectedasteroid <> nil %>
+        <span id="activeDistance"><% selectedasteroid.MinDistanceKmText %></span>
       <% else %>
         <span id="activeDistance">-- km</span>
       <% end %>
@@ -45,18 +45,18 @@
     <div class="neo-row">
       <span>Velocity</span>
 
-      <% if selectedasteroid <> nil then %>
-        <span id="activeVelocity"><%= selectedasteroid.RelativeVelocityText %></span>
+      <% if selectedasteroid <> nil %>
+        <span id="activeVelocity"><% selectedasteroid.RelativeVelocityText %></span>
       <% else %>
         <span id="activeVelocity">-- km/h</span>
       <% end %>
     </div>
   </div>
 
-  <% if selectedasteroid <> nil then %>
+  <% if selectedasteroid <> nil %>
     <button class="btn btn-nasa w-100"
             type="button"
-            hx-get="/asteroids/<%= selectedasteroid.Id %>"
+            hx-get="/asteroids/<% selectedasteroid.Id %>"
             hx-target="#asteroid-detail"
             hx-swap="innerHTML"
             hx-indicator="#globalLoader">
