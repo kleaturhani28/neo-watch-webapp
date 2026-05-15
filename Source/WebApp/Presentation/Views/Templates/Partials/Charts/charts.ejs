@@ -1,0 +1,130 @@
+<section class="glass-card charts-card charts-dashboard">
+
+  <div class="charts-header">
+    <div>
+      <h2>Asteroid Analytics</h2>
+      <p>
+        Explore visual insights from the current NASA NeoWs results.
+        Charts update when filters change.
+      </p>
+    </div>
+
+    <button class="btn btn-sm btn-nasa" type="button" onclick="window.NEOWatchCharts.render()">
+      <i class="fa-solid fa-chart-simple me-1"></i>
+      Refresh charts
+    </button>
+  </div>
+
+  <div class="charts-example-grid">
+
+    <article class="chart-example-card">
+      <div class="chart-example-body">
+        <canvas id="distanceChart"></canvas>
+      </div>
+
+      <div class="chart-example-footer">
+        <div>
+          <h3>Distance Chart</h3>
+          <small>Closest approach distance by asteroid</small>
+        </div>
+
+        <span class="chart-badge">
+          <i class="fa-solid fa-ruler-horizontal"></i>
+          km
+        </span>
+      </div>
+    </article>
+
+    <article class="chart-example-card">
+      <div class="chart-example-body">
+        <canvas id="diameterChart"></canvas>
+      </div>
+
+      <div class="chart-example-footer">
+        <div>
+          <h3>Size Distribution</h3>
+          <small>Estimated average diameter</small>
+        </div>
+
+        <span class="chart-badge">
+          <i class="fa-solid fa-expand"></i>
+          km
+        </span>
+      </div>
+    </article>
+
+    <article class="chart-example-card">
+      <div class="chart-example-body">
+        <canvas id="riskChart"></canvas>
+      </div>
+
+      <div class="chart-example-footer">
+        <div>
+          <h3>Risk Distribution</h3>
+          <small>Potentially hazardous vs safe objects</small>
+        </div>
+
+        <span class="chart-badge warning">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          PHA
+        </span>
+      </div>
+    </article>
+
+    <article class="chart-example-card">
+      <div class="chart-example-body">
+        <canvas id="velocityChart"></canvas>
+      </div>
+
+      <div class="chart-example-footer">
+        <div>
+          <h3>Velocity Chart</h3>
+          <small>Relative velocity by asteroid</small>
+        </div>
+
+        <span class="chart-badge">
+          <i class="fa-solid fa-gauge-high"></i>
+          km/h
+        </span>
+      </div>
+    </article>
+
+    <article class="chart-example-card">
+      <div class="chart-example-body">
+        <canvas id="scatterChart"></canvas>
+      </div>
+
+      <div class="chart-example-footer">
+        <div>
+          <h3>Distance vs Size</h3>
+          <small>Object size compared with miss distance</small>
+        </div>
+
+        <span class="chart-badge">
+          <i class="fa-solid fa-circle-nodes"></i>
+          scatter
+        </span>
+      </div>
+    </article>
+
+    <article class="chart-example-card">
+      <div class="chart-example-body">
+        <canvas id="hazardBarChart"></canvas>
+      </div>
+
+      <div class="chart-example-footer">
+        <div>
+          <h3>Hazard Ranking</h3>
+          <small>Largest objects highlighted by risk</small>
+        </div>
+
+        <span class="chart-badge warning">
+          <i class="fa-solid fa-shield-halved"></i>
+          ranking
+        </span>
+      </div>
+    </article>
+
+  </div>
+
+</section>

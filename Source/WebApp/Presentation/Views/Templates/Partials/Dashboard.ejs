@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>NASA NeoWs Dashboard</title>
+  <title>Asteroid Monitoring</title>
 
   <link rel="icon" href="data:,">
 
@@ -14,67 +14,6 @@
   <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.min.css" rel="stylesheet">
 
   <style>
-    /* =========================================================
-   Typography – industrial UI
-   ========================================================= */
-
-    html,
-    body {
-      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-      font-size: 14px;
-      line-height: 1.35;
-    }
-
-    h1,
-    h2,
-    h3 {
-      font-weight: 600;
-      letter-spacing: -0.02em;
-    }
-
-    .card-header {
-      font-weight: 600;
-      font-size: 0.95rem;
-    }
-
-    .badge {
-      font-weight: 600;
-      letter-spacing: 0.02em;
-      border-radius: 0.35rem;
-    }
-
-    .btn {
-      font-weight: 500;
-    }
-
-    .badge,
-    .progress-bar,
-    .fs-5,
-    .card-title,
-    .card-text em {
-      font-variant-numeric: tabular-nums;
-    }
-
-    /* Label "Seleziona" */
-
-    .selection-label {
-      font-size: 0.90rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      opacity: 0.65;
-      margin-right: 0.4rem;
-      align-self: center;
-      white-space: nowrap;
-    }
-
-    [data-bs-theme="dark"] .selection-label {
-      opacity: 0.75;
-    }
-
-    /* =========================================================
-   NASA NeoWs Dashboard Theme
-   ========================================================= */
-
     :root {
       --nasa-bg: #07090f;
       --nasa-panel: rgba(15, 18, 28, 0.92);
@@ -92,9 +31,12 @@
       --nasa-radius: 18px;
     }
 
-    /* =========================================================
-   Page Background
-   ========================================================= */
+    html,
+    body {
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      font-size: 14px;
+      line-height: 1.35;
+    }
 
     body {
       min-height: 100vh;
@@ -121,12 +63,17 @@
       z-index: -1;
     }
 
-    /* =========================================================
-   Layout
-   ========================================================= */
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      letter-spacing: -0.02em;
+    }
 
     .app-shell {
-      width: min(1600px, calc(100% - 32px));
+      width: min(1560px, calc(100% - 32px));
       margin: 0 auto;
       padding: 24px 0 40px;
     }
@@ -137,6 +84,11 @@
       border-radius: var(--nasa-radius);
       box-shadow: 0 20px 60px rgba(0, 0, 0, .22);
       backdrop-filter: blur(18px);
+      transition: border-color .18s ease, box-shadow .18s ease;
+    }
+
+    .glass-card:hover {
+      border-color: rgba(110, 231, 255, .18);
     }
 
     .dashboard-header {
@@ -144,7 +96,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 18px;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     .brand-block {
@@ -154,27 +106,31 @@
     }
 
     .brand-logo {
-      width: 52px;
-      height: 52px;
-      border-radius: 16px;
+      width: 54px;
+      height: 54px;
+      border-radius: 17px;
       display: grid;
       place-items: center;
-      background: linear-gradient(135deg, var(--nasa-blue), var(--nasa-cyan));
+      background:
+        radial-gradient(circle at 30% 25%, rgba(255, 255, 255, .65), transparent 18%),
+        linear-gradient(135deg, var(--nasa-blue), var(--nasa-cyan));
       color: #031018;
       font-size: 25px;
       box-shadow: 0 0 35px rgba(110, 231, 255, .24);
+      transform: rotate(-10deg);
     }
 
     .brand-title {
       margin: 0;
-      font-size: clamp(24px, 3vw, 38px);
-      font-weight: 800;
-      letter-spacing: -.03em;
+      font-size: clamp(28px, 3.4vw, 44px);
+      font-weight: 850;
+      letter-spacing: -.04em;
     }
 
     .brand-subtitle {
       color: var(--nasa-muted);
       font-size: 14px;
+      margin-top: 3px;
     }
 
     .status-pill {
@@ -198,9 +154,33 @@
       box-shadow: 0 0 14px var(--nasa-green);
     }
 
-    /* =========================================================
-   Tabs
-   ========================================================= */
+    .btn-ghost {
+      border: 1px solid var(--nasa-border);
+      background: rgba(255, 255, 255, .055);
+      color: var(--nasa-text);
+      border-radius: 12px;
+    }
+
+    .btn-ghost:hover {
+      border-color: rgba(110, 231, 255, .38);
+      color: var(--nasa-cyan);
+      background: rgba(110, 231, 255, .08);
+    }
+
+    .btn-nasa {
+      border: 0;
+      background: linear-gradient(135deg, var(--nasa-blue), var(--nasa-cyan));
+      color: #031018;
+      font-weight: 800;
+      border-radius: 12px;
+      min-height: 40px;
+      box-shadow: 0 0 22px rgba(110, 231, 255, .16);
+    }
+
+    .btn-nasa:hover {
+      filter: brightness(1.05);
+      color: #031018;
+    }
 
     .nasa-tabs .nav-link {
       color: var(--nasa-muted);
@@ -215,13 +195,9 @@
       color: var(--nasa-cyan);
     }
 
-    /* =========================================================
-   Main Grid
-   ========================================================= */
-
     .hero-grid {
       display: grid;
-      grid-template-columns: 320px minmax(0, 1fr) 360px;
+      grid-template-columns: 300px minmax(420px, 1fr) 320px;
       gap: 18px;
       align-items: stretch;
     }
@@ -229,9 +205,20 @@
     .content-grid {
       margin-top: 18px;
       display: grid;
-      grid-template-columns: minmax(0, 1.4fr) minmax(340px, .75fr);
+      grid-template-columns: minmax(0, 1.35fr) minmax(340px, .8fr);
       gap: 18px;
       align-items: start;
+    }
+
+    .filters-card,
+    .space-scene,
+    .active-threat-card,
+    .mission-status-card,
+    .results-card,
+    .charts-card,
+    .detail-card {
+      padding: 18px;
+      min-width: 0;
     }
 
     .section-title {
@@ -246,36 +233,29 @@
     .section-title h3 {
       margin: 0;
       font-size: 17px;
-      font-weight: 750;
+      font-weight: 800;
     }
 
     .section-title small {
       color: var(--nasa-muted);
     }
 
-    /* =========================================================
-   Filters
-   ========================================================= */
-
-    .filters-card,
-    .results-card,
-    .charts-card,
-    .detail-card,
-    .active-threat-card,
-    .radar-card {
-      padding: 18px;
+    .filters .row {
+      --bs-gutter-y: .75rem;
     }
 
     .form-label {
       color: #cbd5e1;
-      font-size: 12px;
+      font-size: 11px;
       text-transform: uppercase;
       letter-spacing: .08em;
-      font-weight: 700;
+      font-weight: 750;
     }
 
     .form-control,
     .form-select {
+      min-height: 38px;
+      font-size: 13px;
       background-color: rgba(255, 255, 255, .06);
       border-color: rgba(255, 255, 255, .13);
       color: var(--nasa-text);
@@ -295,36 +275,6 @@
       color: #fff;
     }
 
-    .btn-nasa {
-      border: 0;
-      background: linear-gradient(135deg, var(--nasa-blue), var(--nasa-cyan));
-      color: #031018;
-      font-weight: 800;
-      border-radius: 12px;
-    }
-
-    .btn-nasa:hover {
-      filter: brightness(1.05);
-      color: #031018;
-    }
-
-    .btn-ghost {
-      border: 1px solid var(--nasa-border);
-      background: rgba(255, 255, 255, .055);
-      color: var(--nasa-text);
-      border-radius: 12px;
-    }
-
-    .btn-ghost:hover {
-      border-color: rgba(110, 231, 255, .38);
-      color: var(--nasa-cyan);
-      background: rgba(110, 231, 255, .08);
-    }
-
-    /* =========================================================
-   Metric Cards
-   ========================================================= */
-
     .metric-list {
       display: grid;
       gap: 12px;
@@ -337,6 +287,18 @@
       border: 1px solid rgba(255, 255, 255, .085);
     }
 
+    .metric-card-primary {
+      border-color: rgba(110, 231, 255, .18);
+    }
+
+    .metric-card-danger {
+      border-color: rgba(239, 68, 68, .20);
+    }
+
+    .metric-card-source {
+      border-color: rgba(34, 197, 94, .18);
+    }
+
     .metric-label {
       color: var(--nasa-muted);
       font-size: 12px;
@@ -346,7 +308,8 @@
     .metric-value {
       font-size: 28px;
       line-height: 1;
-      font-weight: 800;
+      font-weight: 850;
+      font-variant-numeric: tabular-nums;
     }
 
     .metric-value small {
@@ -372,15 +335,10 @@
       color: var(--nasa-red);
     }
 
-    /* =========================================================
-   Space Scene
-   ========================================================= */
-
     .space-scene {
       position: relative;
-      min-height: 465px;
+      min-height: 390px;
       overflow: hidden;
-      padding: 18px;
       background:
         radial-gradient(circle at 60% 28%, rgba(255, 255, 255, .18), transparent 16%),
         radial-gradient(circle at 24% 70%, rgba(110, 231, 255, .09), transparent 22%),
@@ -393,7 +351,7 @@
       display: flex;
       justify-content: space-between;
       gap: 12px;
-      align-items: center;
+      align-items: flex-start;
     }
 
     .scene-badge {
@@ -406,14 +364,31 @@
       border-radius: 999px;
       padding: 7px 12px;
       font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .space-scene .toolbar-actions {
+      max-width: 58%;
+    }
+
+    .space-scene .toolbar-actions .btn {
+      white-space: nowrap;
     }
 
     .main-asteroid {
       position: absolute;
       left: 50%;
-      top: 53%;
-      width: min(560px, 78%);
-      height: 290px;
+      top: 54%;
+      width: min(520px, 78%);
+      height: 250px;
       transform: translate(-50%, -50%) rotate(-14deg);
       clip-path: polygon(4% 49%, 13% 29%, 34% 9%, 64% 4%, 90% 18%, 98% 42%, 86% 66%, 61% 88%, 30% 95%, 9% 76%);
       background:
@@ -433,7 +408,7 @@
 
     .orbit-line {
       position: absolute;
-      inset: 80px 90px;
+      inset: 76px 86px;
       border: 1px dashed rgba(110, 231, 255, .17);
       border-radius: 50%;
       transform: rotate(-18deg);
@@ -443,8 +418,8 @@
       position: absolute;
       left: 42px;
       bottom: 45px;
-      width: 150px;
-      height: 150px;
+      width: 135px;
+      height: 135px;
       border-radius: 50%;
       background:
         radial-gradient(circle at 65% 34%, rgba(255, 255, 255, .38), transparent 12%),
@@ -457,8 +432,8 @@
       position: absolute;
       left: 44%;
       top: 57%;
-      width: 68px;
-      height: 68px;
+      width: 64px;
+      height: 64px;
       border-radius: 50%;
       border: 1px solid rgba(255, 255, 255, .55);
       display: grid;
@@ -484,6 +459,12 @@
     .scene-note {
       position: absolute;
       z-index: 5;
+      max-width: 150px;
+      padding: 7px 9px;
+      border-radius: 12px;
+      background: rgba(3, 7, 18, .42);
+      border: 1px solid rgba(255, 255, 255, .08);
+      backdrop-filter: blur(8px);
       font-size: 12px;
       color: #e2e8f0;
     }
@@ -495,24 +476,20 @@
     }
 
     .note-diameter {
-      left: 48%;
-      top: 22%;
+      left: 50%;
+      top: 24%;
     }
 
     .note-composition {
-      left: 16%;
-      top: 46%;
+      left: 7%;
+      top: 48%;
       text-align: center;
     }
 
     .note-distance {
-      right: 11%;
-      bottom: 22%;
+      right: 7%;
+      bottom: 18%;
     }
-
-    /* =========================================================
-   Active Threat + Radar
-   ========================================================= */
 
     .right-stack {
       display: grid;
@@ -520,7 +497,7 @@
     }
 
     .threat-visual {
-      height: 110px;
+      height: 96px;
       margin: 4px 0 14px;
       position: relative;
       border-radius: 16px;
@@ -534,23 +511,25 @@
     .risk-badge {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 7px;
       border-radius: 999px;
-      padding: 6px 10px;
+      padding: 6px 12px;
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 800;
+      letter-spacing: .02em;
     }
 
     .risk-danger {
-      background: rgba(239, 68, 68, .15);
+      background: rgba(239, 68, 68, .20);
       color: #fecaca;
-      border: 1px solid rgba(239, 68, 68, .32);
+      border: 1px solid rgba(239, 68, 68, .55);
+      box-shadow: 0 0 18px rgba(239, 68, 68, .12);
     }
 
     .risk-safe {
-      background: rgba(34, 197, 94, .15);
+      background: rgba(34, 197, 94, .18);
       color: #bbf7d0;
-      border: 1px solid rgba(34, 197, 94, .32);
+      border: 1px solid rgba(34, 197, 94, .45);
     }
 
     .neo-table {
@@ -573,58 +552,34 @@
     }
 
     .neo-row span:last-child {
+      min-width: 0;
       text-align: right;
-      font-weight: 700;
+      font-weight: 750;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
-    .radar {
-      position: relative;
-      width: 190px;
-      height: 190px;
-      margin: 10px auto 0;
-      border-radius: 50%;
-      background:
-        repeating-radial-gradient(circle, transparent 0 18px, rgba(255, 255, 255, .12) 19px 20px),
-        conic-gradient(from 20deg, rgba(239, 68, 68, .92), rgba(245, 158, 11, .86), rgba(110, 231, 255, .18), rgba(239, 68, 68, .92));
+    .mission-status-box {
       display: grid;
-      place-items: center;
-      box-shadow: 0 0 45px rgba(239, 68, 68, .12);
+      gap: 10px;
     }
 
-    .radar::before {
-      content: "";
-      position: absolute;
-      inset: 28px;
-      border-radius: 50%;
-      background:
-        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, .16), transparent 25%),
-        conic-gradient(from 20deg, rgba(239, 68, 68, .72), rgba(245, 158, 11, .62), rgba(239, 68, 68, .72));
-      box-shadow: inset 0 0 38px rgba(0, 0, 0, .58);
-    }
-
-    .radar::after {
-      content: "+";
-      position: relative;
-      z-index: 1;
-      width: 48px;
-      height: 48px;
-      display: grid;
-      place-items: center;
-      border: 1px solid rgba(255, 255, 255, .38);
-      border-radius: 50%;
-      font-size: 28px;
-      color: rgba(255, 255, 255, .75);
-    }
-
-    /* =========================================================
-   Asteroid List
-   ========================================================= */
-
-    .toolbar-actions {
+    .mission-status-box div {
       display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 8px;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 11px 12px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, .055);
+    }
+
+    .mission-status-box span {
+      color: var(--nasa-muted);
+    }
+
+    .mission-status-box strong {
+      color: var(--nasa-cyan);
     }
 
     .asteroid-list {
@@ -635,22 +590,36 @@
     .asteroid-card {
       display: grid;
       grid-template-columns: auto 1fr auto;
-      gap: 14px;
+      gap: 16px;
       align-items: center;
-      padding: 14px;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, .055);
-      border: 1px solid rgba(255, 255, 255, .08);
+      padding: 17px 18px;
+      border-radius: 18px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, .075), rgba(255, 255, 255, .035));
+      border: 1px solid rgba(255, 255, 255, .11);
+      transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease;
+    }
+
+    .asteroid-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(110, 231, 255, .35);
+      background: linear-gradient(90deg, rgba(110, 231, 255, .10), rgba(255, 255, 255, .045));
+    }
+
+    .asteroid-card.selected {
+      border-color: rgba(110, 231, 255, .65);
+      box-shadow:
+        0 0 0 1px rgba(110, 231, 255, .18),
+        0 18px 48px rgba(110, 231, 255, .08);
     }
 
     .asteroid-card.dangerous {
-      border-color: rgba(239, 68, 68, .32);
-      background: linear-gradient(90deg, rgba(239, 68, 68, .10), rgba(255, 255, 255, .045));
+      border-color: rgba(239, 68, 68, .45);
+      background: linear-gradient(90deg, rgba(239, 68, 68, .14), rgba(255, 255, 255, .045));
     }
 
     .asteroid-icon {
-      width: 52px;
-      height: 52px;
+      width: 54px;
+      height: 54px;
       border-radius: 16px;
       display: grid;
       place-items: center;
@@ -667,26 +636,28 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 8px;
-      margin-bottom: 4px;
+      min-width: 0;
+      margin-bottom: 5px;
     }
 
     .asteroid-title h4 {
       margin: 0;
-      font-size: 16px;
-      font-weight: 800;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 18px;
+      font-weight: 850;
     }
 
     .asteroid-meta {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
+      min-width: 0;
       color: var(--nasa-muted);
       font-size: 12px;
     }
-
-    /* =========================================================
-   Charts
-   ========================================================= */
 
     .chart-grid {
       display: grid;
@@ -741,10 +712,6 @@
       background: linear-gradient(180deg, var(--nasa-cyan), rgba(59, 130, 246, .55));
     }
 
-    /* =========================================================
-   Detail
-   ========================================================= */
-
     .detail-empty {
       min-height: 280px;
       display: grid;
@@ -757,8 +724,37 @@
       padding: 24px;
     }
 
+    .detail-panel {
+      width: 100%;
+    }
+
     .detail-panel h4 {
       color: #fff;
+      font-size: 20px;
+      font-weight: 850;
+    }
+
+    .detail-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 14px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(110, 231, 255, .10);
+      border: 1px solid rgba(110, 231, 255, .25);
+      color: var(--nasa-cyan);
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .detail-section-title {
+      margin: 0 0 10px;
+      color: #e5e7eb;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-weight: 850;
     }
 
     .detail-kv {
@@ -773,6 +769,7 @@
       padding: 10px;
       border-radius: 12px;
       background: rgba(255, 255, 255, .055);
+      border: 1px solid rgba(255, 255, 255, .06);
       font-size: 13px;
     }
 
@@ -780,9 +777,43 @@
       color: var(--nasa-muted);
     }
 
-    /* =========================================================
-   Loader / Toast
-   ========================================================= */
+    .detail-kv strong {
+      text-align: right;
+      color: #e5e7eb;
+    }
+
+    .close-approach-list {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .close-approach-item {
+      display: grid;
+      gap: 3px;
+      padding: 10px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, .055);
+      border: 1px solid rgba(255, 255, 255, .06);
+    }
+
+    .close-approach-item strong {
+      color: #e5e7eb;
+      font-size: 13px;
+    }
+
+    .close-approach-item span {
+      color: var(--nasa-muted);
+      font-size: 12px;
+    }
+
+    .detail-loading {
+      margin-top: 12px;
+      color: var(--nasa-cyan);
+      font-size: 13px;
+    }
 
     .loader-overlay {
       position: fixed;
@@ -799,10 +830,6 @@
       display: none;
     }
 
-    .loader-overlay.show {
-      display: block;
-    }
-
     .loader-overlay.htmx-request {
       display: block;
     }
@@ -815,11 +842,7 @@
       width: min(420px, calc(100% - 48px));
     }
 
-    /* =========================================================
-   Responsive
-   ========================================================= */
-
-    @media (max-width: 1300px) {
+    @media (max-width: 1450px) {
       .hero-grid {
         grid-template-columns: 300px minmax(0, 1fr);
       }
@@ -832,6 +855,21 @@
       .content-grid {
         grid-template-columns: 1fr;
       }
+
+      .space-scene .toolbar-actions {
+        max-width: 48%;
+      }
+
+      .space-scene .toolbar-actions .btn {
+        font-size: 12px;
+        padding: 6px 9px;
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .scene-note {
+        display: none;
+      }
     }
 
     @media (max-width: 900px) {
@@ -840,24 +878,29 @@
       }
 
       .dashboard-header,
-      .top-actions,
       .nav {
         flex-wrap: wrap;
       }
 
       .hero-grid,
       .right-stack,
+      .content-grid,
       .chart-grid {
         grid-template-columns: 1fr;
       }
 
       .space-scene {
-        min-height: 390px;
+        min-height: 360px;
+      }
+
+      .space-scene .toolbar-actions {
+        max-width: 100%;
+        justify-content: flex-start;
       }
 
       .main-asteroid {
         width: 92%;
-        height: 220px;
+        height: 210px;
       }
 
       .asteroid-card {
@@ -866,6 +909,310 @@
 
       .asteroid-card .btn {
         grid-column: 1 / -1;
+      }
+    }
+
+    /* =========================================================
+   Asteroid list pagination
+   ========================================================= */
+
+    .asteroid-list-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 14px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .04);
+      border: 1px solid rgba(255, 255, 255, .07);
+    }
+
+    .list-counter {
+      display: inline-flex;
+      align-items: center;
+      color: var(--nasa-muted);
+      font-size: 13px;
+    }
+
+    .list-counter strong {
+      color: var(--nasa-text);
+      font-weight: 800;
+    }
+
+    .page-size-control {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .page-size-control label {
+      color: var(--nasa-muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-weight: 800;
+    }
+
+    .page-size-control .form-select {
+      width: 82px;
+      min-height: 34px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+    }
+
+    .asteroid-pagination {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .pagination-pages {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .pagination-page-btn {
+      min-width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, .10);
+      background: rgba(255, 255, 255, .055);
+      color: var(--nasa-text);
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    .pagination-page-btn:hover {
+      border-color: rgba(110, 231, 255, .38);
+      color: var(--nasa-cyan);
+      background: rgba(110, 231, 255, .08);
+    }
+
+    .pagination-page-btn.active {
+      background: linear-gradient(135deg, var(--nasa-blue), var(--nasa-cyan));
+      color: #031018;
+      border-color: transparent;
+    }
+
+    .asteroid-page-item.is-hidden {
+      display: none;
+    }
+
+    @media (max-width: 700px) {
+
+      .asteroid-list-toolbar,
+      .asteroid-pagination {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .pagination-pages {
+        order: -1;
+      }
+
+      .page-size-control {
+        justify-content: space-between;
+      }
+    }
+
+    /* =========================================================
+   Mission visualizer
+   ========================================================= */
+
+    .mission-visualizer {
+      isolation: isolate;
+    }
+
+    .visualizer-overlay {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 18px;
+      z-index: 7;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 1.25fr;
+      gap: 14px;
+      align-items: end;
+      pointer-events: none;
+    }
+
+    .visualizer-title {
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(3, 7, 18, .58);
+      border: 1px solid rgba(255, 255, 255, .10);
+      backdrop-filter: blur(10px);
+    }
+
+    .visualizer-title h3 {
+      margin: 10px 0 6px;
+      font-size: 22px;
+      font-weight: 850;
+    }
+
+    .visualizer-title p {
+      margin: 0;
+      color: var(--nasa-muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .visualizer-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .visualizer-stats div {
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(3, 7, 18, .58);
+      border: 1px solid rgba(255, 255, 255, .10);
+      backdrop-filter: blur(10px);
+    }
+
+    .visualizer-stats span {
+      display: block;
+      color: var(--nasa-muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 5px;
+    }
+
+    .visualizer-stats strong {
+      color: var(--nasa-text);
+      font-size: 13px;
+      font-weight: 850;
+      word-break: break-word;
+    }
+
+    @media (max-width: 1100px) {
+      .visualizer-overlay {
+        grid-template-columns: 1fr;
+      }
+
+      .visualizer-stats {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* =========================================================
+   Recharts-like chart cards
+   ========================================================= */
+
+    .charts-dashboard {
+      padding: 22px;
+    }
+
+    .charts-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+
+    .charts-header h2 {
+      margin: 0 0 8px;
+      font-size: 30px;
+      font-weight: 900;
+    }
+
+    .charts-header p {
+      margin: 0;
+      color: var(--nasa-muted);
+      max-width: 760px;
+    }
+
+    .charts-example-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .chart-example-card {
+      min-width: 0;
+      overflow: hidden;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, .035);
+      border: 1px solid rgba(255, 255, 255, .13);
+      box-shadow: 0 18px 50px rgba(0, 0, 0, .22);
+    }
+
+    .chart-example-body {
+      height: 260px;
+      padding: 14px;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(110, 231, 255, .08), transparent 28%),
+        rgba(0, 0, 0, .18);
+      border-bottom: 1px solid rgba(255, 255, 255, .10);
+    }
+
+    .chart-example-body canvas {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .chart-example-footer {
+      min-height: 72px;
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .chart-example-footer h3 {
+      margin: 0 0 4px;
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    .chart-example-footer small {
+      color: var(--nasa-muted);
+    }
+
+    .chart-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      padding: 7px 10px;
+      background: rgba(110, 231, 255, .10);
+      border: 1px solid rgba(110, 231, 255, .24);
+      color: var(--nasa-cyan);
+      font-size: 11px;
+      font-weight: 850;
+      white-space: nowrap;
+    }
+
+    .chart-badge.warning {
+      background: rgba(245, 158, 11, .12);
+      border-color: rgba(245, 158, 11, .28);
+      color: #fbbf24;
+    }
+
+    @media (max-width: 1250px) {
+      .charts-example-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 780px) {
+      .charts-header {
+        flex-direction: column;
+      }
+
+      .charts-example-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -882,9 +1229,9 @@
         </div>
 
         <div>
-          <h1 class="brand-title">NASA NeoWs Dashboard</h1>
+          <h1 class="brand-title">Asteroid Monitoring</h1>
           <div class="brand-subtitle">
-            Near Earth Objects monitoring, filters, details and charts.
+            Real-time view of near-Earth asteroids, risk level and close approach data.
           </div>
         </div>
       </div>
@@ -892,39 +1239,22 @@
       <div class="d-flex align-items-center flex-wrap gap-2">
         <span class="status-pill">
           <span class="status-dot"></span>
-          Backend ready
+          Live data
         </span>
 
         <span class="status-pill">
-          <i class="fa-solid fa-database text-info"></i>
-          Redis ready
+          <i class="fa-solid fa-meteor text-info"></i>
+          NASA NeoWs
         </span>
 
-        <div class="dropdown">
-          <button class="btn btn-sm btn-ghost dropdown-toggle" type="button" data-bs-toggle="dropdown">
-            <i class="fa-solid fa-user-astronaut me-1"></i>
-            Operator
-          </button>
+        <span class="status-pill">
+          <i class="fa-solid fa-triangle-exclamation text-warning"></i>
+          Risk monitor
+        </span>
 
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li>
-              <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#settingsModal">
-                <i class="fa-solid fa-gear me-2"></i>
-                Settings
-              </a>
-            </li>
-
-            <li>
-              <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#apiInfoModal">
-                <i class="fa-solid fa-key me-2"></i>
-                NASA API
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        <button id="themeToggle" class="btn btn-sm btn-ghost" type="button">
-          <i class="fa-solid fa-sun" id="themeIcon"></i>
+        <button class="btn btn-sm btn-ghost" type="button" data-bs-toggle="modal" data-bs-target="#apiInfoModal">
+          <i class="fa-solid fa-circle-info me-1"></i>
+          About data
         </button>
       </div>
     </header>
@@ -952,546 +1282,655 @@
     <div class="tab-content" id="mainTabContent">
 
       <!-- TAB MONITORING -->
-      <div class="tab-pane fade show active"
-           id="monitor"
-           role="tabpanel"
-           aria-labelledby="monitor-tab">
-
-        <div id="monitoringContainer" data-view="monitoring">
-
-          <div class="hero-grid">
-
-            <!-- FILTERS + METRICS -->
-            <aside class="glass-card filters-card">
-              <div class="section-title">
-                <div>
-                  <h2>Filtri ricerca</h2>
-                  <small>Range date, pericolosità e ordinamento</small>
-                </div>
-                <i class="fa-solid fa-filter text-info"></i>
-              </div>
-
-              <form id="asteroidFilters"
-                    class="filters"
-                    hx-get="/asteroids"
-                    hx-target="#monitoringContainer"
-                    hx-swap="outerHTML"
-                    hx-indicator="#globalLoader">
-
-                <div class="row g-3">
-                  <div class="col-12">
-                    <label class="form-label" for="startDate">Data inizio</label>
-                    <input class="form-control"
-                           id="startDate"
-                           name="startDate"
-                           type="date"
-                           value="<% filters.StartDate %>"
-                           required>
-                  </div>
-
-                  <div class="col-12">
-                    <label class="form-label" for="endDate">Data fine</label>
-                    <input class="form-control"
-                           id="endDate"
-                           name="endDate"
-                           type="date"
-                           value="<% filters.EndDate %>"
-                           required>
-                  </div>
-
-                  <div class="col-12">
-                    <label class="form-label" for="hazardous">Pericolosità</label>
-                    <select class="form-select" id="hazardous" name="hazardous">
-                      <% if filters.Hazardous = 'all' %>
-                        <option value="all" selected>Tutti</option>
-                      <% else %>
-                        <option value="all">Tutti</option>
-                      <% end %>
-
-                      <% if filters.Hazardous = 'dangerous' %>
-                        <option value="dangerous" selected>Solo pericolosi</option>
-                      <% else %>
-                        <option value="dangerous">Solo pericolosi</option>
-                      <% end %>
-
-                      <% if filters.Hazardous = 'safe' %>
-                        <option value="safe" selected>Solo non pericolosi</option>
-                      <% else %>
-                        <option value="safe">Solo non pericolosi</option>
-                      <% end %>
-                    </select>
-                  </div>
-
-                  <div class="col-7">
-                    <label class="form-label" for="sortBy">Ordina per</label>
-                    <select class="form-select" id="sortBy" name="sortBy">
-                      <% if filters.SortBy = 'distance' %>
-                        <option value="distance" selected>Distanza</option>
-                      <% else %>
-                        <option value="distance">Distanza</option>
-                      <% end %>
-
-                      <% if filters.SortBy = 'size' %>
-                        <option value="size" selected>Dimensione</option>
-                      <% else %>
-                        <option value="size">Dimensione</option>
-                      <% end %>
-                    </select>
-                  </div>
-
-                  <div class="col-5">
-                    <label class="form-label" for="sortDirection">Verso</label>
-                    <select class="form-select" id="sortDirection" name="sortDirection">
-                      <% if filters.SortDirection = 'asc' %>
-                        <option value="asc" selected>ASC</option>
-                      <% else %>
-                        <option value="asc">ASC</option>
-                      <% end %>
-
-                      <% if filters.SortDirection = 'desc' %>
-                        <option value="desc" selected>DESC</option>
-                      <% else %>
-                        <option value="desc">DESC</option>
-                      <% end %>
-                    </select>
-                  </div>
-
-                  <div class="col-12 d-grid">
-                    <button type="submit" class="btn btn-nasa">
-                      <i class="fa-solid fa-magnifying-glass me-1"></i>
-                      Cerca asteroidi
-                    </button>
-                  </div>
-
-                  <div class="col-12 d-grid">
-                    <button type="button"
-                            id="btnResetFilters"
-                            class="btn btn-ghost"
-                            onclick="
-                              document.getElementById('startDate').value = '';
-                              document.getElementById('endDate').value = '';
-                              document.getElementById('hazardous').value = 'all';
-                              document.getElementById('sortBy').value = 'distance';
-                              document.getElementById('sortDirection').value = 'asc';
-                            ">
-                      <i class="fa-solid fa-rotate-left me-1"></i>
-                      Reset filtri
-                    </button>
-                  </div>
-                </div>
-              </form>
-
-              <hr class="border-secondary opacity-25 my-4">
-
-              <div id="summary-panel" class="metric-list">
-                <div class="metric-card">
-                  <div class="metric-label">Asteroidi trovati</div>
-
-                  <% if summary.TotalCount > 0 %>
-                    <div class="metric-value"><% summary.TotalCountText %> <small>items</small></div>
-                    <div class="metric-trend <% summary.SummaryTrendClass %>"><% summary.SummaryMessage %></div>
-                  <% else %>
-                    <div class="metric-value">0 <small>items</small></div>
-                    <div class="metric-trend trend-warn">Nessun risultato</div>
-                  <% end %>
-                </div>
-
-                <div class="metric-card">
-                  <div class="metric-label">Potenzialmente pericolosi</div>
-
-                  <% if summary.DangerousCount > 0 %>
-                    <div class="metric-value"><% summary.DangerousCountText %> <small>PHA</small></div>
-                    <div class="metric-trend trend-danger">Attenzione richiesta</div>
-                  <% else %>
-                    <div class="metric-value">0 <small>PHA</small></div>
-                    <div class="metric-trend trend-good">Nessun pericoloso</div>
-                  <% end %>
-                </div>
-
-                <div class="metric-card">
-                  <div class="metric-label">Backend</div>
-                  <div class="metric-value"><% summary.CacheStatusText %> <small>ready</small></div>
-                  <div class="metric-trend <% summary.CacheBadgeClass %>"><% summary.CacheDescription %></div>
-                </div>
-              </div>
-            </aside>
-
-            <!-- CENTRAL SCENE -->
-            <section class="glass-card space-scene">
-              <div class="scene-toolbar">
-                <span class="scene-badge">
-                  <i class="fa-solid fa-shield-halved"></i>
-                  Orbital Defense
-                </span>
-
-                <div class="toolbar-actions">
-                  <button class="btn btn-sm btn-ghost"
-                          type="button"
-                          hx-get="/asteroids"
-                          hx-include="#asteroidFilters"
-                          hx-target="#monitoringContainer"
-                          hx-swap="outerHTML"
-                          hx-indicator="#globalLoader">
-                    <i class="fa-solid fa-arrows-rotate me-1"></i>
-                    Aggiorna
-                  </button>
-
-                  <button class="btn btn-sm btn-ghost"
-                          type="button"
-                          onclick="
-                            document.getElementById('hazardous').value = 'dangerous';
-                            htmx.trigger(document.getElementById('asteroidFilters'), 'submit');
-                          ">
-                    <i class="fa-solid fa-triangle-exclamation me-1"></i>
-                    Pericolosi
-                  </button>
-                </div>
-              </div>
-
-              <div class="orbit-line"></div>
-              <div class="planet-mini"></div>
-              <div class="main-asteroid"></div>
-              <div class="target-ring"></div>
-
-              <div class="scene-note note-diameter">
-                Diameter
-                <small>min/max from NASA NeoWs</small>
-              </div>
-
-              <div class="scene-note note-composition">
-                Object data
-                <small>Distance<br>Velocity<br>Hazardous</small>
-              </div>
-
-              <div class="scene-note note-distance">
-                Close approach
-                <small>distance over time</small>
-              </div>
-            </section>
-
-            <!-- ACTIVE THREAT + RADAR -->
-            <aside class="right-stack">
-              <section class="glass-card active-threat-card" id="active-threat-panel">
-                <div class="section-title">
-                  <div>
-                    <h3>Active threat</h3>
-                    <small>Asteroide selezionato</small>
-                  </div>
-
-                  <% if selectedasteroid <> nil %>
-                    <span class="<% selectedasteroid.HazardousCssClass %>" id="activeRisk">
-                      <i class="fa-solid fa-circle"></i>
-                      <% selectedasteroid.HazardousLabel %>
-                    </span>
-                  <% else %>
-                    <span class="risk-badge risk-safe" id="activeRisk">
-                      <i class="fa-solid fa-circle"></i>
-                      Unknown
-                    </span>
-                  <% end %>
-                </div>
-
-                <div class="threat-visual"></div>
-
-                <div class="neo-table mb-3">
-                  <div class="neo-row">
-                    <span>Object</span>
-                    <% if selectedasteroid <> nil %>
-                      <span id="activeObject"><% selectedasteroid.Name %></span>
-                    <% else %>
-                      <span id="activeObject">--</span>
-                    <% end %>
-                  </div>
-
-                  <div class="neo-row">
-                    <span>Distance</span>
-                    <% if selectedasteroid <> nil %>
-                      <span id="activeDistance"><% selectedasteroid.MinDistanceKmText %></span>
-                    <% else %>
-                      <span id="activeDistance">-- km</span>
-                    <% end %>
-                  </div>
-
-                  <div class="neo-row">
-                    <span>Velocity</span>
-                    <% if selectedasteroid <> nil %>
-                      <span id="activeVelocity"><% selectedasteroid.RelativeVelocityText %></span>
-                    <% else %>
-                      <span id="activeVelocity">-- km/h</span>
-                    <% end %>
-                  </div>
-                </div>
-
-                <% if selectedasteroid <> nil %>
-                  <button class="btn btn-nasa w-100"
-                          type="button"
-                          hx-get="/asteroids/<% selectedasteroid.Id %>"
-                          hx-target="#asteroid-detail"
-                          hx-swap="innerHTML"
-                          hx-indicator="#globalLoader">
-                    See more details
-                  </button>
-                <% else %>
-                  <button class="btn btn-nasa w-100" type="button" disabled>
-                    See more details
-                  </button>
-                <% end %>
-              </section>
-
-              <section class="glass-card radar-card">
-                <div class="section-title">
-                  <div>
-                    <h3>Impact radar</h3>
-                    <small>Near Earth Object radar</small>
-                  </div>
-
-                  <i class="fa-solid fa-bullseye text-danger"></i>
-                </div>
-
-                <div class="radar" id="radarMock"></div>
-              </section>
-            </aside>
-          </div>
-
-          <!-- RESULTS + DETAIL -->
-          <div class="content-grid">
-            <section class="glass-card results-card">
-              <div class="section-title">
-                <div>
-                  <h2>Lista asteroidi</h2>
-                  <small>Risultati filtrati e ordinati dal backend</small>
-                </div>
-
-                <div class="toolbar-actions">
-                  <button class="btn btn-sm btn-ghost"
-                          type="button"
-                          hx-get="/asteroids"
-                          hx-include="#asteroidFilters"
-                          hx-target="#monitoringContainer"
-                          hx-swap="outerHTML"
-                          hx-indicator="#globalLoader">
-                    <i class="fa-solid fa-arrows-rotate me-1"></i>
-                    Aggiorna
-                  </button>
-                </div>
-              </div>
-
-              <div id="asteroid-results">
-                <% if asteroids.Count > 0 %>
-                  <div class="asteroid-list">
-                    <% for Asteroid in asteroids %>
-                      <article class="<% Asteroid.AsteroidCardCssClass %>">
-                        <div class="asteroid-icon">
-                          <i class="fa-solid fa-meteor"></i>
-                        </div>
-
-                        <div>
-                          <div class="asteroid-title">
-                            <h4><% Asteroid.Name %></h4>
-
-                            <span class="<% Asteroid.HazardousCssClass %>">
-                              <i class="fa-solid fa-circle"></i>
-                              <% Asteroid.HazardousLabel %>
-                            </span>
-                          </div>
-
-                          <div class="asteroid-meta">
-                            <span>
-                              <i class="fa-solid fa-ruler-horizontal me-1"></i>
-                              <% Asteroid.MinDistanceKmText %>
-                            </span>
-
-                            <span>
-                              <i class="fa-solid fa-expand me-1"></i>
-                              <% Asteroid.DiameterText %>
-                            </span>
-
-                            <span>
-                              <i class="fa-solid fa-gauge-high me-1"></i>
-                              <% Asteroid.RelativeVelocityText %>
-                            </span>
-
-                            <span>
-                              <i class="fa-regular fa-calendar me-1"></i>
-                              <% Asteroid.CloseApproachDateText %>
-                            </span>
-                          </div>
-                        </div>
-
-                        <button class="btn btn-sm btn-nasa"
-                                type="button"
-                                hx-get="/asteroids/<% Asteroid.Id %>"
-                                hx-target="#asteroid-detail"
-                                hx-swap="innerHTML"
-                                hx-indicator="#globalLoader">
-                          Details
-                        </button>
-                      </article>
-                    <% end %>
-                  </div>
-                <% else %>
-                  <div class="detail-empty">
-                    <div>
-                      <i class="fa-solid fa-meteor fa-2x mb-3 text-info"></i>
-                      <h4>Nessun asteroide trovato</h4>
-                      <p class="mb-0">
-                        Cambia range date oppure modifica i filtri.
-                      </p>
-                    </div>
-                  </div>
-                <% end %>
-              </div>
-            </section>
-
-            <aside class="glass-card detail-card">
-              <div class="section-title">
-                <div>
-                  <h2>Dettaglio asteroide</h2>
-                  <small>Close approach, NASA JPL link e orbital data</small>
-                </div>
-
-                <i class="fa-solid fa-circle-info text-info"></i>
-              </div>
-
-              <div id="asteroid-detail" class="detail-empty">
-                <div>
-                  <i class="fa-solid fa-hand-pointer fa-2x mb-3 text-info"></i>
-                  <h4>Nessun asteroide selezionato</h4>
-                  <p class="mb-0">
-                    Clicca su <strong>Details</strong> in una card per caricare close approach storici,
-                    NASA JPL link e orbital data.
-                  </p>
-                </div>
-              </div>
-            </aside>
-          </div>
-
-        </div>
+      <div class="tab-pane fade show active" id="monitor" role="tabpanel" aria-labelledby="monitor-tab">
+        <% monitoringHtml %>
       </div>
 
       <!-- TAB CHARTS -->
-      <div class="tab-pane fade"
-           id="charts"
-           role="tabpanel"
-           aria-labelledby="charts-tab">
+      <div class="tab-pane fade" id="charts" role="tabpanel" aria-labelledby="charts-tab">
 
-        <section class="glass-card charts-card">
-          <div class="section-title">
-            <div>
-              <h2>Charts</h2>
-              <small>Visualizzazioni dati NASA NeoWs</small>
-            </div>
+        <% chartsHtml %>
 
-            <i class="fa-solid fa-chart-line text-info"></i>
+      </div>
+
+    </div>
+
+    <!-- MODALE DATA INFO -->
+    <div class="modal fade" id="apiInfoModal" tabindex="-1" aria-labelledby="apiInfoModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content bg-dark text-light border-secondary">
+          <div class="modal-header">
+            <h5 class="modal-title" id="apiInfoModalLabel">
+              <i class="fa-solid fa-circle-info me-2"></i>
+              About the data
+            </h5>
+
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
 
-          <div class="chart-grid">
-            <div class="chart-placeholder">
-              <h6>Distanza nel tempo</h6>
-              <div class="fake-line-chart"></div>
-            </div>
+          <div class="modal-body">
+            <p>
+              This dashboard tracks near-Earth objects using NASA NeoWs data.
+              Each object includes close approach information, estimated diameter, speed, miss distance and risk
+              classification.
+            </p>
 
-            <div class="chart-placeholder">
-              <h6>Distribuzione dimensioni</h6>
-              <div class="fake-bars">
-                <span style="height:45%"></span>
-                <span style="height:70%"></span>
-                <span style="height:35%"></span>
-                <span style="height:85%"></span>
-                <span style="height:55%"></span>
-              </div>
-            </div>
+            <p class="mb-0 text-secondary">
+              The dashboard focuses on the monitoring experience: filtering, risk visibility and quick access to
+              asteroid details.
+            </p>
           </div>
-        </section>
-      </div>
-
-    </div>
-
-  <!-- MODALE API INFO -->
-  <div class="modal fade" id="apiInfoModal" tabindex="-1" aria-labelledby="apiInfoModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-      <div class="modal-content bg-dark text-light border-secondary">
-        <div class="modal-header">
-          <h5 class="modal-title" id="apiInfoModalLabel">
-            <i class="fa-solid fa-key me-2"></i>
-            NASA API configuration
-          </h5>
-
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-
-        <div class="modal-body">
-          <p>
-            The NASA API key must not be stored in frontend code.
-            The backend reads it from environment variables and proxies all NASA requests.
-          </p>
-
-          <pre class="p-3 rounded bg-black border border-secondary"><code>NASA_API_KEY=your_key
-REDIS_URL=redis://...
-CACHE_TTL_FEED_SECONDS=21600
-CACHE_TTL_DETAIL_SECONDS=86400</code></pre>
-
-          <p class="mb-0 text-secondary">
-            The frontend calls only your Delphi backend endpoints.
-          </p>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- MODALE SETTINGS -->
-  <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content bg-dark text-light border-secondary">
-        <div class="modal-header">
-          <h5 class="modal-title" id="settingsModalLabel">
-            <i class="fa-solid fa-gear me-2"></i>
-            Dashboard settings
-          </h5>
-
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-
-        <div class="modal-body">
-          <form id="settingsForm">
-            <div class="mb-3">
-              <label class="form-label" for="refreshInterval">Auto refresh</label>
-              <select id="refreshInterval" class="form-select">
-                <option value="0">Disabled</option>
-                <option value="30">Every 30 seconds</option>
-                <option value="60">Every minute</option>
-                <option value="300">Every 5 minutes</option>
-              </select>
-            </div>
-
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="showOnlyCached">
-              <label class="form-check-label" for="showOnlyCached">
-                Highlight cached results
-              </label>
-            </div>
-          </form>
-        </div>
-
-        <div class="modal-footer">
-          <button type="button" class="btn btn-ghost" data-bs-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-nasa" data-bs-dismiss="modal">Save</button>
-        </div>
-      </div>
+    <div id="globalLoader" class="loader-overlay htmx-indicator">
+      <i class="fa-solid fa-spinner fa-spin me-2"></i>
+      Loading...
     </div>
-  </div>
 
-  <div id="globalLoader" class="loader-overlay htmx-indicator">
-    <i class="fa-solid fa-spinner fa-spin me-2"></i>
-    Loading...
-  </div>
+    <div id="toast-target" class="toast-target"></div>
 
-  <div id="toast-target" class="toast-target"></div>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://unpkg.com/htmx.org@1.9.12"></script>
-  <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+
+
+  <script>
+    window.NEOWatchPagination = (function () {
+      let currentPage = 1;
+      let pageSize = 5;
+
+      function getItems() {
+        return Array.from(document.querySelectorAll('#asteroidList .asteroid-page-item'));
+      }
+
+      function getTotalPages(items) {
+        if (!items.length) {
+          return 1;
+        }
+
+        return Math.max(1, Math.ceil(items.length / pageSize));
+      }
+
+      function updateVisibleRange(items, totalPages) {
+        const range = document.getElementById('asteroidVisibleRange');
+
+        if (!range) {
+          return;
+        }
+
+        if (!items.length) {
+          range.textContent = 'No objects';
+          return;
+        }
+
+        const start = ((currentPage - 1) * pageSize) + 1;
+        const end = Math.min(currentPage * pageSize, items.length);
+
+        range.textContent = `${start}-${end} of ${items.length} objects`;
+      }
+
+      function renderPageButtons(totalPages) {
+        const container = document.getElementById('asteroidPaginationPages');
+
+        if (!container) {
+          return;
+        }
+
+        container.innerHTML = '';
+
+        for (let index = 1; index <= totalPages; index++) {
+          const button = document.createElement('button');
+
+          button.type = 'button';
+          button.className = 'pagination-page-btn' + (index === currentPage ? ' active' : '');
+          button.textContent = index;
+
+          button.addEventListener('click', function () {
+            currentPage = index;
+            render();
+          });
+
+          container.appendChild(button);
+        }
+      }
+
+      function render() {
+        const items = getItems();
+
+        if (!items.length) {
+          return;
+        }
+
+        const totalPages = getTotalPages(items);
+
+        if (currentPage > totalPages) {
+          currentPage = totalPages;
+        }
+
+        if (currentPage < 1) {
+          currentPage = 1;
+        }
+
+        items.forEach(function (item, index) {
+          const startIndex = (currentPage - 1) * pageSize;
+          const endIndex = startIndex + pageSize;
+
+          if (index >= startIndex && index < endIndex) {
+            item.classList.remove('is-hidden');
+          } else {
+            item.classList.add('is-hidden');
+          }
+        });
+
+        updateVisibleRange(items, totalPages);
+        renderPageButtons(totalPages);
+      }
+
+      function initialize() {
+        currentPage = 1;
+
+        const pageSizeSelect = document.getElementById('asteroidPageSize');
+
+        if (pageSizeSelect) {
+          pageSize = parseInt(pageSizeSelect.value || '5', 10);
+        }
+
+        render();
+      }
+
+      function changePageSize(value) {
+        pageSize = parseInt(value || '5', 10);
+        currentPage = 1;
+        render();
+      }
+
+      function nextPage() {
+        const items = getItems();
+        const totalPages = getTotalPages(items);
+
+        if (currentPage < totalPages) {
+          currentPage++;
+          render();
+        }
+      }
+
+      function previousPage() {
+        if (currentPage > 1) {
+          currentPage--;
+          render();
+        }
+      }
+
+      return {
+        initialize: initialize,
+        changePageSize: changePageSize,
+        nextPage: nextPage,
+        previousPage: previousPage
+      };
+    })();
+
+    document.addEventListener('DOMContentLoaded', function () {
+      window.NEOWatchPagination.initialize();
+    });
+
+    document.body.addEventListener('htmx:afterSwap', function (event) {
+      if (event.detail && event.detail.target && event.detail.target.id === 'monitoringContainer') {
+        window.NEOWatchPagination.initialize();
+      }
+    });
+  </script>
+
+
+  <script>
+    window.NEOWatchSelection = (function () {
+      function setText(id, value) {
+        const element = document.getElementById(id);
+
+        if (element) {
+          element.textContent = value;
+        }
+      }
+
+      function setRiskBadge(id, riskClass, riskLabel) {
+        const element = document.getElementById(id);
+
+        if (!element) {
+          return;
+        }
+
+        element.className = riskClass || 'risk-badge risk-safe';
+        element.innerHTML = '<i class="fa-solid fa-circle"></i> ' + (riskLabel || 'Unknown');
+      }
+
+      function selectCard(button) {
+        document.querySelectorAll('.asteroid-card').forEach(function (card) {
+          card.classList.remove('selected');
+        });
+
+        const card = button.closest('.asteroid-card');
+
+        if (card) {
+          card.classList.add('selected');
+        }
+      }
+
+      function updateActiveDetailsButton(id) {
+        const button = document.getElementById('activeDetailsButton');
+
+        if (!button || !id) {
+          return;
+        }
+
+        button.disabled = false;
+        button.textContent = 'Open full details';
+        button.setAttribute('hx-get', '/asteroids/' + id);
+
+        if (window.htmx) {
+          htmx.process(button);
+        }
+      }
+
+      function updateFromButton(button) {
+        const id = button.dataset.id || '';
+        const name = button.dataset.name || '--';
+        const distance = button.dataset.distance || '-- km';
+        const velocity = button.dataset.velocity || '-- km/h';
+        const diameter = button.dataset.diameter || '-- m';
+        const riskClass = button.dataset.riskClass || 'risk-badge risk-safe';
+        const riskLabel = button.dataset.riskLabel || 'Unknown';
+
+        selectCard(button);
+
+        setRiskBadge('activeRisk', riskClass, riskLabel);
+        setText('activeObject', name);
+        setText('activeDistance', distance);
+        setText('activeVelocity', velocity);
+        updateActiveDetailsButton(id);
+
+        setRiskBadge('visualRisk', riskClass, riskLabel);
+        setText('visualName', name);
+        setText(
+          'visualDescription',
+          'Selected NASA NeoWs object. Inspect distance, velocity, estimated size and orbital details.'
+        );
+        setText('visualDistance', distance);
+        setText('visualVelocity', velocity);
+        setText('visualDiameter', diameter);
+      }
+
+      return {
+        updateFromButton: updateFromButton
+      };
+    })();
+  </script>
+
+
+  <script>
+    window.NEOWatchCharts = (function () {
+      let charts = [];
+
+      function destroyCharts() {
+        charts.forEach(function (chart) {
+          if (chart) {
+            chart.destroy();
+          }
+        });
+
+        charts = [];
+      }
+
+      function readData() {
+        const element = document.getElementById('asteroidChartData');
+
+        if (!element) {
+          console.warn('Missing asteroidChartData element.');
+          return [];
+        }
+
+        const raw = element.textContent || '[]';
+
+        try {
+          const data = JSON.parse(raw).filter(function (item) {
+            return item && item.name;
+          });
+
+          console.log('Parsed asteroid chart data:', data);
+
+          return data;
+        } catch (error) {
+          console.error('Invalid asteroid chart data:', error);
+          console.log('Raw asteroidChartData:', raw);
+          return [];
+        }
+      }
+
+      function colors() {
+        return {
+          blue: 'rgba(129, 124, 216, .92)',
+          blueSoft: 'rgba(129, 124, 216, .26)',
+          cyan: 'rgba(110, 231, 255, .92)',
+          green: 'rgba(74, 222, 128, .88)',
+          greenSoft: 'rgba(74, 222, 128, .18)',
+          red: 'rgba(239, 68, 68, .88)',
+          orange: 'rgba(245, 158, 11, .88)',
+          grid: 'rgba(255,255,255,.20)',
+          gridSoft: 'rgba(255,255,255,.08)',
+          label: '#dbeafe'
+        };
+      }
+
+      function compact(value) {
+        return new Intl.NumberFormat('en-US', {
+          notation: 'compact',
+          maximumFractionDigits: 1
+        }).format(value);
+      }
+
+      function baseOptions() {
+        const c = colors();
+
+        return {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              labels: {
+                color: c.label,
+                usePointStyle: true,
+                boxWidth: 8
+              }
+            },
+            tooltip: {
+              backgroundColor: 'rgba(3,7,18,.96)',
+              borderColor: 'rgba(110,231,255,.25)',
+              borderWidth: 1,
+              titleColor: '#fff',
+              bodyColor: c.label
+            }
+          },
+          scales: {
+            x: {
+              ticks: {
+                color: c.label,
+                maxRotation: 0
+              },
+              grid: {
+                color: c.gridSoft
+              }
+            },
+            y: {
+              ticks: {
+                color: c.label,
+                callback: function (value) {
+                  return compact(value);
+                }
+              },
+              grid: {
+                color: c.grid
+              }
+            }
+          }
+        };
+      }
+
+      function createChart(canvasId, config) {
+        const canvas = document.getElementById(canvasId);
+
+        if (!canvas) {
+          return;
+        }
+
+        charts.push(new Chart(canvas, config));
+      }
+
+      function renderDistanceChart(data) {
+        const c = colors();
+
+        const top = data
+          .slice()
+          .sort(function (a, b) { return a.distance - b.distance; })
+          .slice(0, 8);
+
+        createChart('distanceChart', {
+          type: 'line',
+          data: {
+            labels: top.map(function (x) { return x.name; }),
+            datasets: [
+              {
+                label: 'Distance',
+                data: top.map(function (x) { return x.distance; }),
+                borderColor: c.blue,
+                backgroundColor: c.blueSoft,
+                pointBackgroundColor: c.blue,
+                pointBorderColor: '#050816',
+                pointRadius: 4,
+                tension: .38,
+                fill: true,
+                borderWidth: 2
+              }
+            ]
+          },
+          options: baseOptions()
+        });
+      }
+
+      function renderDiameterChart(data) {
+        const c = colors();
+
+        const top = data
+          .slice()
+          .sort(function (a, b) { return b.diameter - a.diameter; })
+          .slice(0, 8);
+
+        createChart('diameterChart', {
+          type: 'bar',
+          data: {
+            labels: top.map(function (x) { return x.name; }),
+            datasets: [{
+              label: 'Diameter',
+              data: top.map(function (x) { return x.diameter; }),
+              backgroundColor: top.map(function (x) {
+                return x.hazardous ? c.red : c.blue;
+              }),
+              borderColor: top.map(function (x) {
+                return x.hazardous ? c.red : c.cyan;
+              }),
+              borderWidth: 1,
+              borderRadius: 8,
+              maxBarThickness: 42
+            }]
+          },
+          options: baseOptions()
+        });
+      }
+
+      function renderRiskChart(data) {
+        const c = colors();
+
+        const hazardous = data.filter(function (x) {
+          return x.hazardous === true;
+        }).length;
+
+        const safe = data.length - hazardous;
+
+        createChart('riskChart', {
+          type: 'doughnut',
+          data: {
+            labels: ['Safe', 'Potentially hazardous'],
+            datasets: [{
+              data: [safe, hazardous],
+              backgroundColor: [c.green, c.red],
+              borderColor: ['rgba(74,222,128,1)', 'rgba(239,68,68,1)'],
+              borderWidth: 1,
+              hoverOffset: 10
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '66%',
+            plugins: {
+              legend: {
+                position: 'bottom',
+                labels: {
+                  color: c.label,
+                  usePointStyle: true,
+                  padding: 14
+                }
+              },
+              tooltip: {
+                backgroundColor: 'rgba(3,7,18,.96)',
+                borderColor: 'rgba(110,231,255,.25)',
+                borderWidth: 1,
+                titleColor: '#fff',
+                bodyColor: c.label
+              }
+            }
+          }
+        });
+      }
+
+      function renderVelocityChart(data) {
+        const c = colors();
+
+        const top = data
+          .slice()
+          .sort(function (a, b) { return b.velocity - a.velocity; })
+          .slice(0, 8);
+
+        createChart('velocityChart', {
+          type: 'line',
+          data: {
+            labels: top.map(function (x) { return x.name; }),
+            datasets: [{
+              label: 'Velocity',
+              data: top.map(function (x) { return x.velocity; }),
+              borderColor: c.orange,
+              backgroundColor: 'rgba(245,158,11,.18)',
+              pointBackgroundColor: c.orange,
+              pointBorderColor: '#050816',
+              pointRadius: 5,
+              tension: .36,
+              fill: true,
+              borderWidth: 2
+            }]
+          },
+          options: baseOptions()
+        });
+      }
+
+      function renderScatterChart(data) {
+        const c = colors();
+
+        createChart('scatterChart', {
+          type: 'scatter',
+          data: {
+            datasets: [{
+              label: 'Distance vs size',
+              data: data.map(function (x) {
+                return {
+                  x: x.diameter,
+                  y: x.distance
+                };
+              }),
+              backgroundColor: data.map(function (x) {
+                return x.hazardous ? c.red : c.blue;
+              }),
+              pointRadius: 6,
+              pointHoverRadius: 8
+            }]
+          },
+          options: baseOptions()
+        });
+      }
+
+      function renderHazardBarChart(data) {
+        const c = colors();
+
+        const top = data
+          .slice()
+          .sort(function (a, b) { return b.diameter - a.diameter; })
+          .slice(0, 8);
+
+        createChart('hazardBarChart', {
+          type: 'bar',
+          data: {
+            labels: top.map(function (x) { return x.name; }),
+            datasets: [{
+              label: 'Diameter',
+              data: top.map(function (x) { return x.diameter; }),
+              backgroundColor: top.map(function (x) {
+                return x.hazardous ? c.red : c.blue;
+              }),
+              borderRadius: 8,
+              maxBarThickness: 44
+            }]
+          },
+          options: baseOptions()
+        });
+      }
+
+      function render() {
+        if (!window.Chart) {
+          console.warn('Chart.js is not loaded.');
+          return;
+        }
+
+        const data = readData();
+
+        destroyCharts();
+
+        if (!data.length) {
+          console.warn('No real asteroid chart data available.');
+          return;
+        }
+
+        renderDistanceChart(data);
+        renderDiameterChart(data);
+        renderRiskChart(data);
+        renderVelocityChart(data);
+        renderScatterChart(data);
+        renderHazardBarChart(data);
+      }
+
+      return {
+        render: render
+      };
+    })();
+
+    document.addEventListener('DOMContentLoaded', function () {
+      if (window.NEOWatchPagination) {
+        window.NEOWatchPagination.initialize();
+      }
+    });
+
+    document.body.addEventListener('shown.bs.tab', function (event) {
+      if (event.target && event.target.id === 'charts-tab') {
+        setTimeout(function () {
+          window.NEOWatchCharts.render();
+        }, 150);
+      }
+    });
+
+    document.body.addEventListener('htmx:afterSwap', function (event) {
+      if (event.detail && event.detail.target && event.detail.target.id === 'monitoringContainer') {
+        if (window.NEOWatchPagination) {
+          window.NEOWatchPagination.initialize();
+        }
+
+        setTimeout(function () {
+          window.NEOWatchCharts.render();
+        }, 150);
+      }
+    });
+
+  </script>
+
 
 </body>
 

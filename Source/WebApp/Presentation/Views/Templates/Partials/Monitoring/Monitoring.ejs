@@ -6,107 +6,88 @@
     <aside class="glass-card filters-card">
       <div class="section-title">
         <div>
-          <h2>Filtri ricerca</h2>
-          <small>Range date, pericolosità e ordinamento</small>
+          <h2>Search filters</h2>
+          <small>Date range, risk level and sorting</small>
         </div>
 
         <i class="fa-solid fa-filter text-info"></i>
       </div>
 
-      <form id="asteroidFilters"
-            class="filters"
-            hx-get="/asteroids"
-            hx-target="#monitoringContainer"
-            hx-swap="outerHTML"
-            hx-indicator="#globalLoader">
+      <form id="asteroidFilters" class="filters" hx-get="/asteroids" hx-target="#monitoringContainer"
+        hx-swap="outerHTML" hx-indicator="#globalLoader">
 
         <div class="row g-3">
 
-          <div class="col-12">
-            <label class="form-label" for="startDate">Data inizio</label>
-            <input class="form-control"
-                   id="startDate"
-                   name="startDate"
-                   type="date"
-                   value="<% filters.StartDate %>"
-                   required>
+          <div class="col-6">
+            <label class="form-label" for="startDate">Start date</label>
+            <input class="form-control" id="startDate" name="startDate" type="date" value="<% filters.StartDate %>"
+              required>
+          </div>
+
+          <div class="col-6">
+            <label class="form-label" for="endDate">End date</label>
+            <input class="form-control" id="endDate" name="endDate" type="date" value="<% filters.EndDate %>" required>
           </div>
 
           <div class="col-12">
-            <label class="form-label" for="endDate">Data fine</label>
-            <input class="form-control"
-                   id="endDate"
-                   name="endDate"
-                   type="date"
-                   value="<% filters.EndDate %>"
-                   required>
-          </div>
+            <label class="form-label" for="hazardous">Risk level</label>
+            <select class="form-select" id="hazardous" name="hazardous">
 
-          <div class="col-12">
-            <label class="form-label" for="hazardous">Pericolosità</label>
-            <select class="form-select"
-                    id="hazardous"
-                    name="hazardous">
+              <% if filters.Hazardous='all' %>
+                <option value="all" selected>All objects</option>
+                <% else %>
+                  <option value="all">All objects</option>
+                  <% end %>
 
-              <% if filters.Hazardous = 'all' %>
-                <option value="all" selected>Tutti</option>
-              <% else %>
-                <option value="all">Tutti</option>
-              <% end %>
+                    <% if filters.Hazardous='dangerous' %>
+                      <option value="dangerous" selected>Potentially hazardous</option>
+                      <% else %>
+                        <option value="dangerous">Potentially hazardous</option>
+                        <% end %>
 
-              <% if filters.Hazardous = 'dangerous' %>
-                <option value="dangerous" selected>Solo pericolosi</option>
-              <% else %>
-                <option value="dangerous">Solo pericolosi</option>
-              <% end %>
-
-              <% if filters.Hazardous = 'safe' %>
-                <option value="safe" selected>Solo non pericolosi</option>
-              <% else %>
-                <option value="safe">Solo non pericolosi</option>
-              <% end %>
+                          <% if filters.Hazardous='safe' %>
+                            <option value="safe" selected>Non hazardous</option>
+                            <% else %>
+                              <option value="safe">Non hazardous</option>
+                              <% end %>
 
             </select>
           </div>
 
           <div class="col-7">
-            <label class="form-label" for="sortBy">Ordina per</label>
-            <select class="form-select"
-                    id="sortBy"
-                    name="sortBy">
+            <label class="form-label" for="sortBy">Sort by</label>
+            <select class="form-select" id="sortBy" name="sortBy">
 
-              <% if filters.SortBy = 'distance' %>
-                <option value="distance" selected>Distanza</option>
-              <% else %>
-                <option value="distance">Distanza</option>
-              <% end %>
+              <% if filters.SortBy='distance' %>
+                <option value="distance" selected>Distance</option>
+                <% else %>
+                  <option value="distance">Distance</option>
+                  <% end %>
 
-              <% if filters.SortBy = 'size' %>
-                <option value="size" selected>Dimensione</option>
-              <% else %>
-                <option value="size">Dimensione</option>
-              <% end %>
+                    <% if filters.SortBy='size' %>
+                      <option value="size" selected>Size</option>
+                      <% else %>
+                        <option value="size">Size</option>
+                        <% end %>
 
             </select>
           </div>
 
           <div class="col-5">
-            <label class="form-label" for="sortDirection">Verso</label>
-            <select class="form-select"
-                    id="sortDirection"
-                    name="sortDirection">
+            <label class="form-label" for="sortDirection">Order</label>
+            <select class="form-select" id="sortDirection" name="sortDirection">
 
-              <% if filters.SortDirection = 'asc' %>
+              <% if filters.SortDirection='asc' %>
                 <option value="asc" selected>ASC</option>
-              <% else %>
-                <option value="asc">ASC</option>
-              <% end %>
+                <% else %>
+                  <option value="asc">ASC</option>
+                  <% end %>
 
-              <% if filters.SortDirection = 'desc' %>
-                <option value="desc" selected>DESC</option>
-              <% else %>
-                <option value="desc">DESC</option>
-              <% end %>
+                    <% if filters.SortDirection='desc' %>
+                      <option value="desc" selected>DESC</option>
+                      <% else %>
+                        <option value="desc">DESC</option>
+                        <% end %>
 
             </select>
           </div>
@@ -114,15 +95,12 @@
           <div class="col-12 d-grid">
             <button type="submit" class="btn btn-nasa">
               <i class="fa-solid fa-magnifying-glass me-1"></i>
-              Cerca asteroidi
+              Search asteroids
             </button>
           </div>
 
           <div class="col-12 d-grid">
-            <button type="button"
-                    id="btnResetFilters"
-                    class="btn btn-ghost"
-                    onclick="
+            <button type="button" id="btnResetFilters" class="btn btn-ghost" onclick="
                       document.getElementById('startDate').value = '';
                       document.getElementById('endDate').value = '';
                       document.getElementById('hazardous').value = 'all';
@@ -130,7 +108,7 @@
                       document.getElementById('sortDirection').value = 'asc';
                     ">
               <i class="fa-solid fa-rotate-left me-1"></i>
-              Reset filtri
+              Reset filters
             </button>
           </div>
 
@@ -141,67 +119,68 @@
 
       <div id="summary-panel" class="metric-list">
 
-        <div class="metric-card">
-          <div class="metric-label">Asteroidi trovati</div>
+        <div class="metric-card metric-card-primary">
+          <div class="metric-label">Objects found</div>
 
-          <% if summary.TotalCount > 0 %>
-            <div class="metric-value"><% summary.TotalCountText %> <small>items</small></div>
-            <div class="metric-trend <% summary.SummaryTrendClass %>"><% summary.SummaryMessage %></div>
-          <% else %>
-            <div class="metric-value">0 <small>items</small></div>
-            <div class="metric-trend trend-warn">Nessun risultato</div>
-          <% end %>
+          <% if summary.TotalCount> 0 %>
+            <div class="metric-value">
+              <% summary.TotalCountText %> <small>NEO</small>
+            </div>
+
+            <div class="metric-trend <% summary.SummaryTrendClass %>">
+              <% summary.SummaryMessage %>
+            </div>
+            <% else %>
+              <div class="metric-value">0 <small>NEO</small></div>
+              <div class="metric-trend trend-warn">No objects found</div>
+              <% end %>
         </div>
 
-        <div class="metric-card">
-          <div class="metric-label">Potenzialmente pericolosi</div>
+        <div class="metric-card metric-card-danger">
+          <div class="metric-label">Potentially hazardous</div>
 
-          <% if summary.DangerousCount > 0 %>
-            <div class="metric-value"><% summary.DangerousCountText %> <small>PHA</small></div>
-            <div class="metric-trend trend-danger">Attenzione richiesta</div>
-          <% else %>
-            <div class="metric-value">0 <small>PHA</small></div>
-            <div class="metric-trend trend-good">Nessun pericoloso</div>
-          <% end %>
+          <% if summary.DangerousCount> 0 %>
+            <div class="metric-value">
+              <% summary.DangerousCountText %> <small>PHA</small>
+            </div>
+
+            <div class="metric-trend trend-danger">Risk objects detected</div>
+            <% else %>
+              <div class="metric-value">0 <small>PHA</small></div>
+              <div class="metric-trend trend-good">No hazardous objects</div>
+              <% end %>
         </div>
 
-        <div class="metric-card">
-          <div class="metric-label">Backend</div>
-          <div class="metric-value"><% summary.CacheStatusText %> <small>ready</small></div>
-          <div class="metric-trend <% summary.CacheBadgeClass %>"><% summary.CacheDescription %></div>
+        <div class="metric-card metric-card-source">
+          <div class="metric-label">Data source</div>
+          <div class="metric-value">NASA <small>NeoWs</small></div>
+          <div class="metric-trend trend-good">Real near-Earth object data</div>
         </div>
 
       </div>
     </aside>
 
     <!-- CENTRAL SCENE -->
-    <section class="glass-card space-scene">
+    <section class="glass-card space-scene mission-visualizer">
       <div class="scene-toolbar">
         <span class="scene-badge">
-          <i class="fa-solid fa-shield-halved"></i>
-          Orbital Defense
+          <i class="fa-solid fa-crosshairs"></i>
+          Mission visualizer
         </span>
 
         <div class="toolbar-actions">
-          <button class="btn btn-sm btn-ghost"
-                  type="button"
-                  hx-get="/asteroids"
-                  hx-include="#asteroidFilters"
-                  hx-target="#monitoringContainer"
-                  hx-swap="outerHTML"
-                  hx-indicator="#globalLoader">
+          <button class="btn btn-sm btn-ghost" type="button" hx-get="/asteroids" hx-include="#asteroidFilters"
+            hx-target="#monitoringContainer" hx-swap="outerHTML" hx-indicator="#globalLoader">
             <i class="fa-solid fa-arrows-rotate me-1"></i>
-            Aggiorna
+            Refresh
           </button>
 
-          <button class="btn btn-sm btn-ghost"
-                  type="button"
-                  onclick="
+          <button class="btn btn-sm btn-ghost" type="button" onclick="
                     document.getElementById('hazardous').value = 'dangerous';
                     htmx.trigger(document.getElementById('asteroidFilters'), 'submit');
                   ">
             <i class="fa-solid fa-triangle-exclamation me-1"></i>
-            Pericolosi
+            Risk objects
           </button>
         </div>
       </div>
@@ -211,43 +190,69 @@
       <div class="main-asteroid"></div>
       <div class="target-ring"></div>
 
+      <div class="visualizer-overlay">
+        <div class="visualizer-title">
+          <span class="risk-badge risk-safe" id="visualRisk">
+            <i class="fa-solid fa-hand-pointer"></i>
+            Waiting for selection
+          </span>
+
+          <h3 id="visualName">Select an asteroid</h3>
+
+          <p id="visualDescription">
+            Click <strong>Details</strong> on an asteroid card to load its NASA JPL data,
+            close approach values and orbital information.
+          </p>
+        </div>
+
+        <div class="visualizer-stats">
+          <div>
+            <span>Closest approach</span>
+            <strong id="visualDistance">-- km</strong>
+          </div>
+
+          <div>
+            <span>Velocity</span>
+            <strong id="visualVelocity">-- km/h</strong>
+          </div>
+
+          <div>
+            <span>Estimated size</span>
+            <strong id="visualDiameter">-- m</strong>
+          </div>
+        </div>
+      </div>
+
       <div class="scene-note note-diameter">
-        Diameter
-        <small>min/max from NASA NeoWs</small>
+        Estimated size
+        <small>diameter range</small>
       </div>
 
       <div class="scene-note note-composition">
-        Object data
-        <small>Distance<br>Velocity<br>Hazardous</small>
+        NASA NeoWs
+        <small>Distance<br>Velocity<br>Risk flag</small>
       </div>
 
       <div class="scene-note note-distance">
         Close approach
-        <small>distance over time</small>
+        <small>miss distance</small>
       </div>
     </section>
 
-    <!-- ACTIVE THREAT + RADAR -->
+    <!-- ACTIVE OBJECT + MISSION STATUS -->
     <aside class="right-stack">
 
       <section class="glass-card active-threat-card" id="active-threat-panel">
         <div class="section-title">
           <div>
-            <h3>Active threat</h3>
-            <small>Asteroide selezionato</small>
+            <h3>Selected object</h3>
+            <small>Quick overview</small>
           </div>
 
-          <% if selectedasteroid <> nil %>
-            <span class="<% selectedasteroid.HazardousCssClass %>" id="activeRisk">
-              <i class="fa-solid fa-circle"></i>
-              <% selectedasteroid.HazardousLabel %>
-            </span>
-          <% else %>
-            <span class="risk-badge risk-safe" id="activeRisk">
-              <i class="fa-solid fa-circle"></i>
-              Unknown
-            </span>
-          <% end %>
+          <span class="risk-badge risk-safe" id="activeRisk">
+            <i class="fa-solid fa-circle"></i>
+            Waiting
+          </span>
         </div>
 
         <div class="threat-visual"></div>
@@ -256,63 +261,53 @@
 
           <div class="neo-row">
             <span>Object</span>
-
-            <% if selectedasteroid <> nil %>
-              <span id="activeObject"><% selectedasteroid.Name %></span>
-            <% else %>
-              <span id="activeObject">--</span>
-            <% end %>
+            <span id="activeObject">--</span>
           </div>
 
           <div class="neo-row">
             <span>Distance</span>
-
-            <% if selectedasteroid <> nil %>
-              <span id="activeDistance"><% selectedasteroid.MinDistanceKmText %></span>
-            <% else %>
-              <span id="activeDistance">-- km</span>
-            <% end %>
+            <span id="activeDistance">-- km</span>
           </div>
 
           <div class="neo-row">
             <span>Velocity</span>
-
-            <% if selectedasteroid <> nil %>
-              <span id="activeVelocity"><% selectedasteroid.RelativeVelocityText %></span>
-            <% else %>
-              <span id="activeVelocity">-- km/h</span>
-            <% end %>
+            <span id="activeVelocity">-- km/h</span>
           </div>
 
         </div>
 
-        <% if selectedasteroid <> nil %>
-          <button class="btn btn-nasa w-100"
-                  type="button"
-                  hx-get="/asteroids/<% selectedasteroid.Id %>"
-                  hx-target="#asteroid-detail"
-                  hx-swap="innerHTML"
-                  hx-indicator="#globalLoader">
-            See more details
-          </button>
-        <% else %>
-          <button class="btn btn-nasa w-100" type="button" disabled>
-            See more details
-          </button>
-        <% end %>
+        <button id="activeDetailsButton" class="btn btn-nasa w-100" type="button" disabled hx-get=""
+          hx-target="#asteroid-detail" hx-swap="innerHTML" hx-indicator="#globalLoader">
+          Select an asteroid
+        </button>
       </section>
 
-      <section class="glass-card radar-card">
+      <section class="glass-card mission-status-card">
         <div class="section-title">
           <div>
-            <h3>Impact radar</h3>
-            <small>Near Earth Object radar</small>
+            <h3>Mission status</h3>
+            <small>Near-Earth object monitoring</small>
           </div>
 
-          <i class="fa-solid fa-bullseye text-danger"></i>
+          <i class="fa-solid fa-satellite text-info"></i>
         </div>
 
-        <div class="radar" id="radarMock"></div>
+        <div class="mission-status-box">
+          <div>
+            <span>Data source</span>
+            <strong>NASA NeoWs</strong>
+          </div>
+
+          <div>
+            <span>Risk analysis</span>
+            <strong>Active</strong>
+          </div>
+
+          <div>
+            <span>Object details</span>
+            <strong>JPL data</strong>
+          </div>
+        </div>
       </section>
 
     </aside>
@@ -324,33 +319,48 @@
     <section class="glass-card results-card">
       <div class="section-title">
         <div>
-          <h2>Lista asteroidi</h2>
-          <small>Risultati filtrati e ordinati dal backend</small>
+          <h2>Asteroid list</h2>
+          <small>Filtered and sorted near-Earth objects</small>
         </div>
 
         <div class="toolbar-actions">
-          <button class="btn btn-sm btn-ghost"
-                  type="button"
-                  hx-get="/asteroids"
-                  hx-include="#asteroidFilters"
-                  hx-target="#monitoringContainer"
-                  hx-swap="outerHTML"
-                  hx-indicator="#globalLoader">
+          <button class="btn btn-sm btn-ghost" type="button" hx-get="/asteroids" hx-include="#asteroidFilters"
+            hx-target="#monitoringContainer" hx-swap="outerHTML" hx-indicator="#globalLoader">
             <i class="fa-solid fa-arrows-rotate me-1"></i>
-            Aggiorna
+            Refresh
           </button>
         </div>
       </div>
 
       <div id="asteroid-results">
 
-        <% if asteroids.Count > 0 %>
+        <% if asteroids.Count> 0 %>
 
-          <div class="asteroid-list">
+          <div class="asteroid-list-toolbar">
+            <div>
+              <span class="list-counter">
+                <i class="fa-solid fa-meteor me-1"></i>
+                <strong id="asteroidVisibleRange">--</strong>
+              </span>
+            </div>
+
+            <div class="page-size-control">
+              <label for="asteroidPageSize">Rows</label>
+
+              <select id="asteroidPageSize" class="form-select form-select-sm"
+                onchange="window.NEOWatchPagination.changePageSize(this.value)">
+                <option value="5" selected>5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="asteroid-list" id="asteroidList">
 
             <% for Asteroid in asteroids %>
 
-              <article class="<% Asteroid.AsteroidCardCssClass %>">
+              <article class="asteroid-card <% Asteroid.AsteroidCardCssClass %> asteroid-page-item">
 
                 <div class="asteroid-icon">
                   <i class="fa-solid fa-meteor"></i>
@@ -358,7 +368,9 @@
 
                 <div>
                   <div class="asteroid-title">
-                    <h4><% Asteroid.Name %></h4>
+                    <h4>
+                      <% Asteroid.Name %>
+                    </h4>
 
                     <span class="<% Asteroid.HazardousCssClass %>">
                       <i class="fa-solid fa-circle"></i>
@@ -389,34 +401,50 @@
                   </div>
                 </div>
 
-                <button class="btn btn-sm btn-nasa"
-                        type="button"
-                        hx-get="/asteroids/<% Asteroid.Id %>"
-                        hx-target="#asteroid-detail"
-                        hx-swap="innerHTML"
-                        hx-indicator="#globalLoader">
+                <button class="btn btn-sm btn-nasa" type="button" data-id="<% Asteroid.Id %>"
+                  data-name="<% Asteroid.Name %>" data-distance="<% Asteroid.MinDistanceKmText %>"
+                  data-velocity="<% Asteroid.RelativeVelocityText %>" data-diameter="<% Asteroid.DiameterText %>"
+                  data-risk-class="<% Asteroid.HazardousCssClass %>" data-risk-label="<% Asteroid.HazardousLabel %>"
+                  onclick="window.NEOWatchSelection.updateFromButton(this)" hx-get="/asteroids/<% Asteroid.Id %>"
+                  hx-target="#asteroid-detail" hx-swap="innerHTML" hx-indicator="#globalLoader">
                   Details
                 </button>
 
               </article>
 
-            <% end %>
+              <% end %>
 
           </div>
 
-        <% else %>
+          <div class="asteroid-pagination">
+            <button class="btn btn-sm btn-ghost" type="button" onclick="window.NEOWatchPagination.previousPage()">
+              <i class="fa-solid fa-chevron-left me-1"></i>
+              Previous
+            </button>
 
-          <div class="detail-empty">
-            <div>
-              <i class="fa-solid fa-meteor fa-2x mb-3 text-info"></i>
-              <h4>Nessun asteroide trovato</h4>
-              <p class="mb-0">
-                Cambia range date oppure modifica i filtri.
-              </p>
+            <div id="asteroidPaginationPages" class="pagination-pages"></div>
+
+            <button class="btn btn-sm btn-ghost" type="button" onclick="window.NEOWatchPagination.nextPage()">
+              Next
+              <i class="fa-solid fa-chevron-right ms-1"></i>
+            </button>
+          </div>
+
+          <% else %>
+
+            <div class="detail-empty">
+              <div>
+                <i class="fa-solid fa-meteor fa-2x mb-3 text-info"></i>
+
+                <h4>No asteroids found</h4>
+
+                <p class="mb-0">
+                  Change the date range or adjust the filters.
+                </p>
+              </div>
             </div>
-          </div>
 
-        <% end %>
+            <% end %>
 
       </div>
     </section>
@@ -424,8 +452,8 @@
     <aside class="glass-card detail-card">
       <div class="section-title">
         <div>
-          <h2>Dettaglio asteroide</h2>
-          <small>Close approach, NASA JPL link e orbital data</small>
+          <h2>Asteroid details</h2>
+          <small>Close approach, NASA JPL link and orbital data</small>
         </div>
 
         <i class="fa-solid fa-circle-info text-info"></i>
@@ -434,15 +462,37 @@
       <div id="asteroid-detail" class="detail-empty">
         <div>
           <i class="fa-solid fa-hand-pointer fa-2x mb-3 text-info"></i>
-          <h4>Nessun asteroide selezionato</h4>
+
+          <h4>No asteroid selected</h4>
+
           <p class="mb-0">
-            Clicca su <strong>Details</strong> in una card per caricare close approach storici,
-            NASA JPL link e orbital data.
+            Click <strong>Details</strong> on an asteroid card to load historical close approaches,
+            NASA JPL link and orbital data.
           </p>
+
+          <div id="asteroidDetailLoader" class="detail-loading htmx-indicator">
+            <i class="fa-solid fa-spinner fa-spin me-2"></i>
+            Loading asteroid details...
+          </div>
         </div>
       </div>
     </aside>
 
   </div>
+
+  <script type="application/json" id="asteroidChartData">
+[
+  <% for Asteroid in asteroids %>
+    {
+      "name": "<% Asteroid.Name %>",
+      "distance": <% Asteroid.MinDistanceKm %>,
+      "diameter": <% Asteroid.DiameterAverageKm %>,
+      "velocity": <% Asteroid.RelativeVelocityKmH %>,
+      "hazardous": <% Asteroid.HazardousJsonValue %>
+    },
+  <% end %>
+  {}
+]
+  </script>
 
 </div>
