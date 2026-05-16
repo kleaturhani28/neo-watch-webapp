@@ -86,7 +86,7 @@ type
     property AsteroidCardCssClass: string read GetAsteroidCardCssClass write SetAsteroidCardCssClass;
 
     property NasaJplUrl: string read GetNasaJplUrl write SetNasaJplUrl;
-    property SizeClass: string read GetSizeClass write SetSizeClass;
+    property SizeClass: string read GetSizeClass write GetSizeClass;
   end;
 
 implementation
@@ -174,17 +174,8 @@ begin
 end;
 
 function TSAsteroidCardDTO.GetSizeClass: string;
-var
-  AverageDiameterMeters: extended;
 begin
-  AverageDiameterMeters := (Extended(EstimatedDiameterMinMeters) + Extended(EstimatedDiameterMaxMeters)) / 2;
-
-  if AverageDiameterMeters >= 500 then
-    Result := 'Large object'
-  else if AverageDiameterMeters >= 100 then
-    Result := 'Medium object'
-  else
-    Result := 'Small object';
+  result := FSizeClass;
 end;
 
 procedure TSAsteroidCardDTO.SetAsteroidCardCssClass(const Value: string);
@@ -269,7 +260,7 @@ end;
 
 procedure TSAsteroidCardDTO.SetSizeClass(const Value: string);
 begin
-  FSizeClass := Value;
+
 end;
 
 end.

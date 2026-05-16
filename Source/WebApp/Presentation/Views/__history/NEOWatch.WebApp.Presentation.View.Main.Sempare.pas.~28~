@@ -10,9 +10,7 @@ uses
   Sempare.Template,
   Sempare.Template.Context,
   NEOWatch.WebApp.Presentation.View.Main.Intf,
-  NEOWatch.WebApp.Presentation.Model.DTO.SMonitoring,
-  JOSE.Types.JSON,
-  NEOWatch.WebApp.Presentation.Model.DTO.SAsteroidCard;
+  NEOWatch.WebApp.Presentation.Model.DTO.SMonitoring;
 
 type
 
@@ -32,46 +30,6 @@ type
   end;
 
 implementation
-
-function TViewMainSempare.BuildAsteroidChartDataJson(const Monitoring: TSMonitoringDTO): string;
-var
-  JsonArray: TJSONArray;
-  JsonObject: TJSONObject;
-  Asteroid: TSAsteroidCardDTO;
-  DiameterAverageKm: Double;
-begin
-  JsonArray := TJSONArray.Create;
-  try
-    if Assigned(Monitoring) and Assigned(Monitoring.Asteroids) then begin
-      for Asteroid in Monitoring.Asteroids do begin
-        if not Assigned(Asteroid) then
-          Continue;
-
-        DiameterAverageKm :=
-            ((Double(Asteroid.EstimatedDiameterMinMeters) + Double(Asteroid.EstimatedDiameterMaxMeters)) / 2) / 1000;
-
-        JsonObject := TJSONObject.Create;
-
-        JsonObject.AddPair('name', Asteroid.Name);
-        JsonObject.AddPair('distance', TJSONNumber.Create(Double(Asteroid.MinDistanceKm)));
-        JsonObject.AddPair('diameter', TJSONNumber.Create(DiameterAverageKm));
-        JsonObject.AddPair('velocity', TJSONNumber.Create(Double(Asteroid.RelativeVelocityKmH)));
-
-        if Asteroid.IsPotentiallyHazardous then
-          JsonObject.AddPair('hazardous', TJSONTrue.Create)
-        else
-          JsonObject.AddPair('hazardous', TJSONFalse.Create);
-
-        JsonArray.AddElement(JsonObject);
-      end;
-    end;
-
-    Result := JsonArray.ToJSON;
-  finally
-    JsonArray.Free;
-  end;
-
-end;
 
 constructor TViewMainSempare.Create(const Logger: ILogger);
 begin

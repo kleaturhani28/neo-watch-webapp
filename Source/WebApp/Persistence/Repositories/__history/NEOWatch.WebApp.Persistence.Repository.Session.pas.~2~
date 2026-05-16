@@ -47,7 +47,7 @@ end;
 
 procedure TSessionRepository.Delete(const Value: ISession);
 begin
-  FSessionGateway.Delete(Format('neowatch::session::%s', [Value.Id])).Value;
+  FSessionGateway.Delete(Format('synchroplan::session::%s', [Value.Id])).Value;
 end;
 
 function TSessionRepository.GetBySessionId(const Id: string): ISession;
@@ -59,7 +59,7 @@ begin
   StringSession := '';
 
   if not Id.trim.IsEmpty then
-    StringSession := FSessionGateway.Get(Format('neowatch::session::%s', [Id])).Value;
+    StringSession := FSessionGateway.Get(Format('synchroplan::session::%s', [Id])).Value;
 
   if StringSession.trim.IsEmpty then begin
     result.SetIsValid(False);
@@ -96,7 +96,7 @@ begin
   SessionDTO.PreviousAccess := Value.PreviousAccess.ToISO8601();
   SessionString := JSONMarshaller.From<TSessionDTO>(SessionDTO);
   try
-    FSessionGateway.Put(Format('neowatch::session::%s', [SessionDTO.Id]), SessionString).Value;
+    FSessionGateway.Put(Format('synchroplan::session::%s', [SessionDTO.Id]), SessionString).Value;
 
     result := FSessionFactory();
     Mappers.Map(SessionDTO, result);

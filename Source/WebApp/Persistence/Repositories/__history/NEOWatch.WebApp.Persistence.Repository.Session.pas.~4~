@@ -47,7 +47,7 @@ end;
 
 procedure TSessionRepository.Delete(const Value: ISession);
 begin
-  FSessionGateway.Delete(Format('neowatch::session::%s', [Value.Id])).Value;
+  FSessionGateway.Delete(Format('synchroplan::session::%s', [Value.Id])).Value;
 end;
 
 function TSessionRepository.GetBySessionId(const Id: string): ISession;

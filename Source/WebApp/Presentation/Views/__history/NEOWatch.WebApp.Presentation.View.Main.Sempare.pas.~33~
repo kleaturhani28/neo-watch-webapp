@@ -11,8 +11,7 @@ uses
   Sempare.Template.Context,
   NEOWatch.WebApp.Presentation.View.Main.Intf,
   NEOWatch.WebApp.Presentation.Model.DTO.SMonitoring,
-  JOSE.Types.JSON,
-  NEOWatch.WebApp.Presentation.Model.DTO.SAsteroidCard;
+  JOSE.Types.JSON;
 
 type
 

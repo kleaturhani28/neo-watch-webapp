@@ -347,7 +347,7 @@
 
     .scene-toolbar {
       position: relative;
-      z-index: 5;
+      z-index: 20;
       display: flex;
       justify-content: space-between;
       gap: 12px;
@@ -383,131 +383,6 @@
       white-space: nowrap;
     }
 
-    .main-asteroid {
-      position: absolute;
-      left: 50%;
-      top: 54%;
-      width: min(520px, 78%);
-      height: 250px;
-      transform: translate(-50%, -50%) rotate(-14deg);
-      clip-path: polygon(4% 49%, 13% 29%, 34% 9%, 64% 4%, 90% 18%, 98% 42%, 86% 66%, 61% 88%, 30% 95%, 9% 76%);
-      background:
-        radial-gradient(circle at 24% 33%, rgba(255, 255, 255, .82), transparent 8%),
-        radial-gradient(circle at 39% 50%, rgba(0, 0, 0, .72), transparent 10%),
-        radial-gradient(circle at 67% 39%, rgba(0, 0, 0, .68), transparent 9%),
-        radial-gradient(circle at 72% 68%, rgba(255, 255, 255, .28), transparent 10%),
-        radial-gradient(circle at 31% 74%, rgba(0, 0, 0, .62), transparent 10%),
-        linear-gradient(135deg, #111 0%, #4b5251 22%, #d6dbda 47%, #5b6261 62%, #111 100%);
-      filter: grayscale(.7) contrast(1.14);
-      box-shadow:
-        inset -80px -35px 110px rgba(0, 0, 0, .88),
-        inset 40px 24px 85px rgba(255, 255, 255, .22),
-        0 34px 90px rgba(255, 255, 255, .13);
-      opacity: .96;
-    }
-
-    .orbit-line {
-      position: absolute;
-      inset: 76px 86px;
-      border: 1px dashed rgba(110, 231, 255, .17);
-      border-radius: 50%;
-      transform: rotate(-18deg);
-    }
-
-    .planet-mini {
-      position: absolute;
-      left: 42px;
-      bottom: 45px;
-      width: 135px;
-      height: 135px;
-      border-radius: 50%;
-      background:
-        radial-gradient(circle at 65% 34%, rgba(255, 255, 255, .38), transparent 12%),
-        radial-gradient(circle at 50% 50%, #9aa2a2 0, #3d4545 34%, #0a0c0c 72%);
-      box-shadow: inset -22px -20px 52px rgba(0, 0, 0, .82);
-      opacity: .72;
-    }
-
-    .target-ring {
-      position: absolute;
-      left: 44%;
-      top: 57%;
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      border: 1px solid rgba(255, 255, 255, .55);
-      display: grid;
-      place-items: center;
-      background: rgba(0, 0, 0, .25);
-    }
-
-    .target-ring::before {
-      content: "";
-      position: absolute;
-      inset: 13px;
-      border: 1px solid rgba(255, 255, 255, .25);
-      border-radius: 50%;
-    }
-
-    .target-ring::after {
-      content: "−";
-      color: rgba(255, 255, 255, .72);
-      font-size: 30px;
-      margin-top: -4px;
-    }
-
-    .scene-note {
-      position: absolute;
-      z-index: 5;
-      max-width: 150px;
-      padding: 7px 9px;
-      border-radius: 12px;
-      background: rgba(3, 7, 18, .42);
-      border: 1px solid rgba(255, 255, 255, .08);
-      backdrop-filter: blur(8px);
-      font-size: 12px;
-      color: #e2e8f0;
-    }
-
-    .scene-note small {
-      display: block;
-      color: var(--nasa-muted);
-      margin-top: 4px;
-    }
-
-    .note-diameter {
-      left: 50%;
-      top: 24%;
-    }
-
-    .note-composition {
-      left: 7%;
-      top: 48%;
-      text-align: center;
-    }
-
-    .note-distance {
-      right: 7%;
-      bottom: 18%;
-    }
-
-    .right-stack {
-      display: grid;
-      gap: 18px;
-    }
-
-    .threat-visual {
-      height: 96px;
-      margin: 4px 0 14px;
-      position: relative;
-      border-radius: 16px;
-      background:
-        radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, .75), rgba(92, 99, 98, .54) 43%, transparent 45%),
-        rgba(255, 255, 255, .045);
-      filter: grayscale(.85);
-      transform: rotate(7deg);
-    }
-
     .risk-badge {
       display: inline-flex;
       align-items: center;
@@ -532,32 +407,353 @@
       border: 1px solid rgba(34, 197, 94, .45);
     }
 
-    .neo-table {
-      display: grid;
-      gap: 7px;
+    /* =========================================================
+       Cinematic mission visualizer
+       ========================================================= */
+
+    .mission-visualizer {
+      isolation: isolate;
     }
 
-    .neo-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      border-radius: 12px;
-      background: rgba(255, 255, 255, .065);
-      padding: 10px;
+    .cinematic-visualizer {
+      position: relative;
+      min-height: 560px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 70% 18%, rgba(255,255,255,.20), transparent 10%),
+        radial-gradient(circle at 28% 45%, rgba(110,231,255,.12), transparent 26%),
+        radial-gradient(circle at 80% 85%, rgba(168,85,247,.13), transparent 28%),
+        linear-gradient(135deg, #03060b 0%, #111827 52%, #07111f 100%);
+    }
+
+    .cinematic-stars {
+      position: absolute;
+      inset: 0;
+      opacity: .48;
+      background-image:
+        radial-gradient(circle, rgba(255,255,255,.75) 0 1px, transparent 1.5px),
+        radial-gradient(circle, rgba(110,231,255,.55) 0 1px, transparent 1.4px);
+      background-size: 110px 110px, 180px 180px;
+      background-position: 20px 40px, 90px 80px;
+      z-index: 1;
+    }
+
+    .cinematic-sun {
+      position: absolute;
+      right: 18%;
+      top: 4%;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,.95), rgba(255,255,255,.32) 28%, transparent 68%);
+      filter: blur(1px);
+      box-shadow: 0 0 95px rgba(255,255,255,.45);
+      opacity: .76;
+      z-index: 2;
+    }
+
+    .cinematic-earth {
+      position: absolute;
+      left: -35px;
+      bottom: -45px;
+      width: 170px;
+      height: 170px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 60% 30%, rgba(255,255,255,.55), transparent 9%),
+        radial-gradient(circle at 35% 45%, rgba(110,231,255,.22), transparent 22%),
+        linear-gradient(135deg, #d1d5db, #334155 45%, #020617);
+      box-shadow:
+        inset -30px -25px 55px rgba(0,0,0,.82),
+        0 0 55px rgba(110,231,255,.12);
+      opacity: .72;
+      z-index: 2;
+    }
+
+    .cinematic-asteroid {
+      position: absolute;
+      left: 50%;
+      top: 43%;
+      width: min(760px, 84%);
+      height: 255px;
+      transform: translate(-50%, -50%) rotate(-17deg);
+      clip-path: polygon(
+        2% 57%,
+        10% 35%,
+        28% 16%,
+        48% 5%,
+        76% 8%,
+        96% 27%,
+        91% 50%,
+        73% 71%,
+        47% 91%,
+        20% 86%,
+        6% 71%
+      );
+      background:
+        radial-gradient(circle at 23% 48%, rgba(255,255,255,.80), transparent 7%),
+        radial-gradient(circle at 44% 53%, rgba(0,0,0,.78), transparent 8%),
+        radial-gradient(circle at 67% 37%, rgba(0,0,0,.72), transparent 9%),
+        radial-gradient(circle at 72% 64%, rgba(255,255,255,.22), transparent 9%),
+        radial-gradient(circle at 38% 76%, rgba(0,0,0,.65), transparent 9%),
+        linear-gradient(135deg, #050505 0%, #202426 23%, #e5e7eb 47%, #555d60 64%, #090909 100%);
+      box-shadow:
+        inset -120px -42px 120px rgba(0,0,0,.92),
+        inset 65px 25px 95px rgba(255,255,255,.28),
+        0 36px 120px rgba(255,255,255,.18);
+      filter: grayscale(.75) contrast(1.22);
+      z-index: 3;
+    }
+
+    .cinematic-asteroid::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(100deg, transparent 0 34%, rgba(255,255,255,.20) 42%, transparent 56%),
+        radial-gradient(circle at 54% 48%, rgba(0,0,0,.55), transparent 9%),
+        radial-gradient(circle at 75% 25%, rgba(0,0,0,.45), transparent 7%);
+      opacity: .55;
+    }
+
+    .cinematic-asteroid .crater {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle at 38% 35%, rgba(255,255,255,.22), rgba(0,0,0,.72) 62%);
+      box-shadow: inset 3px 3px 9px rgba(255,255,255,.12);
+    }
+
+    .crater-a {
+      width: 44px;
+      height: 44px;
+      left: 37%;
+      top: 48%;
+    }
+
+    .crater-b {
+      width: 58px;
+      height: 58px;
+      left: 63%;
+      top: 30%;
+    }
+
+    .crater-c {
+      width: 38px;
+      height: 38px;
+      left: 27%;
+      top: 58%;
+    }
+
+    .crater-d {
+      width: 52px;
+      height: 52px;
+      left: 47%;
+      top: 72%;
+    }
+
+    .scene-tech-label {
+      position: absolute;
+      z-index: 8;
+      padding: 10px 12px;
+      border-radius: 13px;
+      background: rgba(3, 7, 18, .52);
+      border: 1px solid rgba(255,255,255,.12);
+      backdrop-filter: blur(10px);
+      min-width: 132px;
+    }
+
+    .scene-tech-label span {
+      display: block;
+      color: var(--nasa-muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-weight: 800;
+    }
+
+    .scene-tech-label strong {
+      display: block;
+      color: #fff;
       font-size: 13px;
+      margin-top: 4px;
     }
 
-    .neo-row span:first-child {
+    .label-risk {
+      left: 7%;
+      top: 47%;
+    }
+
+    .label-distance {
+      right: 8%;
+      bottom: 29%;
+    }
+
+    .label-size {
+      top: 18%;
+      left: 42%;
+    }
+
+    .tech-line {
+      position: absolute;
+      z-index: 7;
+      height: 1px;
+      background: rgba(255,255,255,.34);
+      transform-origin: left center;
+    }
+
+    .line-risk {
+      width: 150px;
+      left: 18%;
+      top: 52%;
+      transform: rotate(-8deg);
+    }
+
+    .line-distance {
+      width: 130px;
+      right: 15%;
+      bottom: 38%;
+      transform: rotate(-18deg);
+    }
+
+    .line-size {
+      width: 120px;
+      left: 48%;
+      top: 29%;
+      transform: rotate(32deg);
+    }
+
+    .visualizer-bottom-panel {
+      position: absolute;
+      left: 24px;
+      right: 24px;
+      bottom: 18px;
+      z-index: 9;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 260px;
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .visualizer-bottom-panel > div {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(3, 7, 18, .62);
+      border: 1px solid rgba(255,255,255,.12);
+      backdrop-filter: blur(12px);
+    }
+
+    .visualizer-bottom-panel h3 {
+      margin: 10px 0 6px;
+      font-size: 22px;
+      font-weight: 900;
+    }
+
+    .visualizer-bottom-panel p {
+      margin: 0;
+      color: var(--nasa-muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .mission-energy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .mission-energy span {
+      color: var(--nasa-muted);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .mission-energy strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 22px;
+      color: var(--nasa-cyan);
+      font-weight: 900;
+    }
+
+    .mission-energy small {
+      display: block;
+      margin-top: 5px;
       color: var(--nasa-muted);
     }
 
-    .neo-row span:last-child {
-      min-width: 0;
-      text-align: right;
-      font-weight: 750;
+    /* =========================================================
+       Selected object compact
+       ========================================================= */
+
+    .selected-object-card {
+      min-height: auto;
+    }
+
+    .selected-object-compact {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      align-items: center;
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.055);
+      border: 1px solid rgba(255,255,255,.08);
+      margin-bottom: 14px;
+    }
+
+    .selected-object-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 15px;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 35% 30%, rgba(255,255,255,.75), transparent 12%),
+        linear-gradient(135deg, #d1d5db, #374151);
+      color: #111827;
+      transform: rotate(-12deg);
+    }
+
+    .selected-label {
+      display: block;
+      color: var(--nasa-muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-weight: 800;
+    }
+
+    .selected-object-compact strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 900;
+      color: var(--nasa-text);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+    }
+
+    .selected-object-compact small {
+      color: var(--nasa-muted);
+    }
+
+    .selected-object-actions {
+      margin-bottom: 12px;
+    }
+
+    .selected-object-note {
+      display: flex;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--nasa-muted);
+      line-height: 1.45;
+    }
+
+    .right-stack {
+      display: grid;
+      gap: 18px;
     }
 
     .mission-status-box {
@@ -657,59 +853,6 @@
       min-width: 0;
       color: var(--nasa-muted);
       font-size: 12px;
-    }
-
-    .chart-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-
-    .chart-placeholder {
-      min-height: 250px;
-      border-radius: 16px;
-      padding: 14px;
-      border: 1px dashed rgba(255, 255, 255, .18);
-      background: rgba(255, 255, 255, .035);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .fake-line-chart {
-      position: absolute;
-      inset: 52px 18px 28px;
-      border-left: 1px solid rgba(255, 255, 255, .16);
-      border-bottom: 1px solid rgba(255, 255, 255, .16);
-    }
-
-    .fake-line-chart::before {
-      content: "";
-      position: absolute;
-      left: 8px;
-      right: 8px;
-      bottom: 45px;
-      height: 80px;
-      background:
-        linear-gradient(135deg, transparent 0 15%, var(--nasa-cyan) 16% 18%, transparent 19% 36%, var(--nasa-cyan) 37% 39%, transparent 40% 62%, var(--nasa-cyan) 63% 65%, transparent 66%),
-        linear-gradient(to top, rgba(110, 231, 255, .12), transparent);
-      opacity: .9;
-    }
-
-    .fake-bars {
-      position: absolute;
-      inset: 62px 22px 32px;
-      display: flex;
-      align-items: end;
-      gap: 10px;
-      border-left: 1px solid rgba(255, 255, 255, .16);
-      border-bottom: 1px solid rgba(255, 255, 255, .16);
-      padding-left: 16px;
-    }
-
-    .fake-bars span {
-      width: 22px;
-      border-radius: 8px 8px 0 0;
-      background: linear-gradient(180deg, var(--nasa-cyan), rgba(59, 130, 246, .55));
     }
 
     .detail-empty {
@@ -842,79 +985,9 @@
       width: min(420px, calc(100% - 48px));
     }
 
-    @media (max-width: 1450px) {
-      .hero-grid {
-        grid-template-columns: 300px minmax(0, 1fr);
-      }
-
-      .right-stack {
-        grid-column: 1 / -1;
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .content-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .space-scene .toolbar-actions {
-        max-width: 48%;
-      }
-
-      .space-scene .toolbar-actions .btn {
-        font-size: 12px;
-        padding: 6px 9px;
-      }
-    }
-
-    @media (max-width: 1100px) {
-      .scene-note {
-        display: none;
-      }
-    }
-
-    @media (max-width: 900px) {
-      body {
-        padding: 14px;
-      }
-
-      .dashboard-header,
-      .nav {
-        flex-wrap: wrap;
-      }
-
-      .hero-grid,
-      .right-stack,
-      .content-grid,
-      .chart-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .space-scene {
-        min-height: 360px;
-      }
-
-      .space-scene .toolbar-actions {
-        max-width: 100%;
-        justify-content: flex-start;
-      }
-
-      .main-asteroid {
-        width: 92%;
-        height: 210px;
-      }
-
-      .asteroid-card {
-        grid-template-columns: auto 1fr;
-      }
-
-      .asteroid-card .btn {
-        grid-column: 1 / -1;
-      }
-    }
-
     /* =========================================================
-   Asteroid list pagination
-   ========================================================= */
+       Asteroid list pagination
+       ========================================================= */
 
     .asteroid-list-toolbar {
       display: flex;
@@ -1005,108 +1078,9 @@
       display: none;
     }
 
-    @media (max-width: 700px) {
-
-      .asteroid-list-toolbar,
-      .asteroid-pagination {
-        align-items: stretch;
-        flex-direction: column;
-      }
-
-      .pagination-pages {
-        order: -1;
-      }
-
-      .page-size-control {
-        justify-content: space-between;
-      }
-    }
-
     /* =========================================================
-   Mission visualizer
-   ========================================================= */
-
-    .mission-visualizer {
-      isolation: isolate;
-    }
-
-    .visualizer-overlay {
-      position: absolute;
-      left: 18px;
-      right: 18px;
-      bottom: 18px;
-      z-index: 7;
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 1.25fr;
-      gap: 14px;
-      align-items: end;
-      pointer-events: none;
-    }
-
-    .visualizer-title {
-      padding: 14px;
-      border-radius: 16px;
-      background: rgba(3, 7, 18, .58);
-      border: 1px solid rgba(255, 255, 255, .10);
-      backdrop-filter: blur(10px);
-    }
-
-    .visualizer-title h3 {
-      margin: 10px 0 6px;
-      font-size: 22px;
-      font-weight: 850;
-    }
-
-    .visualizer-title p {
-      margin: 0;
-      color: var(--nasa-muted);
-      font-size: 13px;
-      line-height: 1.45;
-    }
-
-    .visualizer-stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-    }
-
-    .visualizer-stats div {
-      padding: 12px;
-      border-radius: 14px;
-      background: rgba(3, 7, 18, .58);
-      border: 1px solid rgba(255, 255, 255, .10);
-      backdrop-filter: blur(10px);
-    }
-
-    .visualizer-stats span {
-      display: block;
-      color: var(--nasa-muted);
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      margin-bottom: 5px;
-    }
-
-    .visualizer-stats strong {
-      color: var(--nasa-text);
-      font-size: 13px;
-      font-weight: 850;
-      word-break: break-word;
-    }
-
-    @media (max-width: 1100px) {
-      .visualizer-overlay {
-        grid-template-columns: 1fr;
-      }
-
-      .visualizer-stats {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* =========================================================
-   Recharts-like chart cards
-   ========================================================= */
+       Recharts-like chart cards
+       ========================================================= */
 
     .charts-dashboard {
       padding: 22px;
@@ -1200,9 +1174,94 @@
       color: #fbbf24;
     }
 
+    @media (max-width: 1450px) {
+      .hero-grid {
+        grid-template-columns: 300px minmax(0, 1fr);
+      }
+
+      .right-stack {
+        grid-column: 1 / -1;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .space-scene .toolbar-actions {
+        max-width: 48%;
+      }
+
+      .space-scene .toolbar-actions .btn {
+        font-size: 12px;
+        padding: 6px 9px;
+      }
+    }
+
     @media (max-width: 1250px) {
       .charts-example-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 1200px) {
+      .cinematic-visualizer {
+        min-height: 620px;
+      }
+
+      .visualizer-bottom-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .cinematic-asteroid {
+        width: 88%;
+        height: 225px;
+      }
+    }
+
+    @media (max-width: 900px) {
+      body {
+        padding: 14px;
+      }
+
+      .dashboard-header,
+      .nav {
+        flex-wrap: wrap;
+      }
+
+      .hero-grid,
+      .right-stack,
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .space-scene .toolbar-actions {
+        max-width: 100%;
+        justify-content: flex-start;
+      }
+
+      .asteroid-card {
+        grid-template-columns: auto 1fr;
+      }
+
+      .asteroid-card .btn {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 800px) {
+      .scene-tech-label,
+      .tech-line {
+        display: none;
+      }
+
+      .cinematic-visualizer {
+        min-height: 560px;
+      }
+
+      .cinematic-asteroid {
+        width: 96%;
+        height: 190px;
       }
     }
 
@@ -1213,6 +1272,22 @@
 
       .charts-example-grid {
         grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .asteroid-list-toolbar,
+      .asteroid-pagination {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .pagination-pages {
+        order: -1;
+      }
+
+      .page-size-control {
+        justify-content: space-between;
       }
     }
   </style>
@@ -1288,9 +1363,7 @@
 
       <!-- TAB CHARTS -->
       <div class="tab-pane fade" id="charts" role="tabpanel" aria-labelledby="charts-tab">
-
         <% chartsHtml %>
-
       </div>
 
     </div>
@@ -1338,7 +1411,6 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.all.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 
-
   <script>
     window.NEOWatchPagination = (function () {
       let currentPage = 1;
@@ -1356,7 +1428,7 @@
         return Math.max(1, Math.ceil(items.length / pageSize));
       }
 
-      function updateVisibleRange(items, totalPages) {
+      function updateVisibleRange(items) {
         const range = document.getElementById('asteroidVisibleRange');
 
         if (!range) {
@@ -1427,7 +1499,7 @@
           }
         });
 
-        updateVisibleRange(items, totalPages);
+        updateVisibleRange(items);
         renderPageButtons(totalPages);
       }
 
@@ -1485,7 +1557,6 @@
     });
   </script>
 
-
   <script>
     window.NEOWatchSelection = (function () {
       function setText(id, value) {
@@ -1535,6 +1606,71 @@
         }
       }
 
+      function parseNumber(value) {
+        if (!value) {
+          return 0;
+        }
+
+        return Number(
+          String(value)
+            .replace(/[^\d,.-]/g, '')
+            .replace(/\./g, '')
+            .replace(',', '.')
+        ) || 0;
+      }
+
+      function getDistanceClass(distanceText) {
+        const distance = parseNumber(distanceText);
+
+        if (distance <= 7500000) {
+          return 'Close range';
+        }
+
+        if (distance <= 20000000) {
+          return 'Medium range';
+        }
+
+        return 'Long range';
+      }
+
+      function getVelocityClass(velocityText) {
+        const velocity = parseNumber(velocityText);
+
+        if (velocity >= 70000) {
+          return 'High speed';
+        }
+
+        if (velocity >= 35000) {
+          return 'Medium speed';
+        }
+
+        return 'Low speed';
+      }
+
+      function getSizeClass(diameterText) {
+        const size = parseNumber(diameterText);
+
+        if (size >= 500) {
+          return 'Large object';
+        }
+
+        if (size >= 100) {
+          return 'Medium object';
+        }
+
+        return 'Small object';
+      }
+
+      function getRiskProfile(riskLabel) {
+        const label = (riskLabel || '').toLowerCase();
+
+        if (label.includes('danger') || label.includes('hazard')) {
+          return 'Potential threat';
+        }
+
+        return 'Safe object';
+      }
+
       function updateFromButton(button) {
         const id = button.dataset.id || '';
         const name = button.dataset.name || '--';
@@ -1543,24 +1679,27 @@
         const diameter = button.dataset.diameter || '-- m';
         const riskClass = button.dataset.riskClass || 'risk-badge risk-safe';
         const riskLabel = button.dataset.riskLabel || 'Unknown';
+        const sizeClass = button.dataset.sizeClass || '--';
 
         selectCard(button);
 
         setRiskBadge('activeRisk', riskClass, riskLabel);
         setText('activeObject', name);
-        setText('activeDistance', distance);
-        setText('activeVelocity', velocity);
+        setText('activeObjectId', 'NASA object ID: ' + id);
         updateActiveDetailsButton(id);
 
         setRiskBadge('visualRisk', riskClass, riskLabel);
         setText('visualName', name);
         setText(
           'visualDescription',
-          'Selected NASA NeoWs object. Inspect distance, velocity, estimated size and orbital details.'
+          'Selected NASA NeoWs object. The panel translates raw values into a mission-style risk profile.'
         );
-        setText('visualDistance', distance);
+
+        setText('visualRiskProfile', getRiskProfile(riskLabel));
+        setText('visualDistanceClass', getDistanceClass(distance));
+        setText('visualVelocityClass', getVelocityClass(velocity));
+        setText('visualSizeClass', sizeClass);
         setText('visualVelocity', velocity);
-        setText('visualDiameter', diameter);
       }
 
       return {
@@ -1568,7 +1707,6 @@
       };
     })();
   </script>
-
 
   <script>
     window.NEOWatchCharts = (function () {
@@ -1598,8 +1736,6 @@
           const data = JSON.parse(raw).filter(function (item) {
             return item && item.name;
           });
-
-          console.log('Parsed asteroid chart data:', data);
 
           return data;
         } catch (error) {
@@ -1928,9 +2064,7 @@
         }, 150);
       }
     });
-
   </script>
-
 
 </body>
 

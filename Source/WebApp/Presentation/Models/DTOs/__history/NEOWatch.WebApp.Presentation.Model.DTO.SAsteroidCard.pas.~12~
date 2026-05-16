@@ -175,9 +175,9 @@ end;
 
 function TSAsteroidCardDTO.GetSizeClass: string;
 var
-  AverageDiameterMeters: extended;
+  AverageDiameterMeters: Double;
 begin
-  AverageDiameterMeters := (Extended(EstimatedDiameterMinMeters) + Extended(EstimatedDiameterMaxMeters)) / 2;
+  AverageDiameterMeters := (Double(EstimatedDiameterMinMeters) + Double(EstimatedDiameterMaxMeters)) / 2;
 
   if AverageDiameterMeters >= 500 then
     Result := 'Large object'

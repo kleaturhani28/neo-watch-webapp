@@ -1,23 +1,22 @@
-unit NEOWatch.WebApp.Presentation.View.Main.Sempare;
+unit NEOWatch.WebApp.Presentation.View.Monitoring.Sempare;
 
 interface
 
 uses
-  System.SysUtils,
-  System.IOUtils,
   Spring.Logging,
   Fido.Utilities,
+  NEOWatch.WebApp.Presentation.View.Monitoring.Intf,
+  NEOWatch.WebApp.Presentation.Model.DTO.SMonitoring,
+  System.IOUtils,
   Sempare.Template,
-  Sempare.Template.Context,
-  NEOWatch.WebApp.Presentation.View.Main.Intf,
-  NEOWatch.WebApp.Presentation.Model.DTO.SMonitoring;
+  System.SysUtils;
 
 type
 
-  TViewMainSempare = class(TInterfacedObject, IViewMain)
+  TViewMonitoringSempare = class(TInterfacedObject, IViewMonitoring)
   private
     const
-      TemplateFileName: array[0..1] of string = ('Partials', 'Dashboard.html');
+      TemplateFileNameMonitoring: array[0..2] of string = ('Partials', 'Monitoring', 'Monitoring.ejs');
   private
     FLogger: ILogger;
     procedure HandleTemplateError(const AMessage: string);
@@ -28,23 +27,22 @@ type
 
 implementation
 
-constructor TViewMainSempare.Create(const Logger: ILogger);
+constructor TViewMonitoringSempare.Create(const Logger: ILogger);
 begin
   inherited Create;
   FLogger := Utilities.CheckNotNullAndSet(Logger, 'Logger');
 end;
 
-procedure TViewMainSempare.HandleTemplateError(const AMessage: string);
+procedure TViewMonitoringSempare.HandleTemplateError(const AMessage: string);
 begin
-  FLogger.Error('Error parsing Sempare template "%s": %s', [TPath.Combine(TemplateFileName), AMessage]);
+  FLogger.Error('Error parsing Sempare template "%s": %s', [TPath.Combine(TemplateFileNameMonitoring), AMessage]);
 end;
 
-function TViewMainSempare.Render(const Monitoring: TSMonitoringDTO): string;
+function TViewMonitoringSempare.Render(const Monitoring: TSMonitoringDTO): string;
 var
   LTemplate: ITemplate;
   LContext: ITemplateContext;
 begin
-
   Result := '';
 
   try
@@ -55,8 +53,9 @@ begin
     LContext.Variables['summary'] := Monitoring.Summary;
     LContext.Variables['asteroids'] := Monitoring.Asteroids;
     LContext.Variables['selectedasteroid'] := Monitoring.SelectedAsteroid;
+    Context.Variables['chartDataJson'] := BuildAsteroidChartDataJson(Monitoring);
 
-    LTemplate := TTemplateRegistry.Instance.GetTemplate(TPath.Combine(TemplateFileName));
+    LTemplate := TTemplateRegistry.Instance.GetTemplate(TPath.Combine(TemplateFileNameMonitoring));
 
     Result := Sempare.Template.Template.Eval(LContext, LTemplate);
   except

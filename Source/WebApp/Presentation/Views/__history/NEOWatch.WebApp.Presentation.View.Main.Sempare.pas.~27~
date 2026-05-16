@@ -17,10 +17,12 @@ type
   TViewMainSempare = class(TInterfacedObject, IViewMain)
   private
     const
-      TemplateFileName: array[0..1] of string = ('Partials', 'Dashboard.ejs');
+      DashboardTemplateFileName: array[0..1] of string = ('Partials', 'Dashboard');
+      MonitoringTemplateFileName: array[0..2] of string = ('Partials', 'Monitoring', 'Monitoring');
+      ChartsTemplateFileName: array[0..2] of string = ('Partials', 'Charts', 'charts');
   private
     FLogger: ILogger;
-    procedure HandleTemplateError(const AMessage: string);
+    procedure HandleTemplateError(const TemplateName: string; const AMessage: string);
   public
     constructor Create(const Logger: ILogger);
     function Render(const Monitoring: TSMonitoringDTO): string;
@@ -34,19 +36,28 @@ begin
   FLogger := Utilities.CheckNotNullAndSet(Logger, 'Logger');
 end;
 
-procedure TViewMainSempare.HandleTemplateError(const AMessage: string);
+procedure TViewMainSempare.HandleTemplateError(const TemplateName: string; const AMessage: string);
 begin
-  FLogger.Error('Error parsing Sempare template "%s": %s', [TPath.Combine(TemplateFileName), AMessage]);
+  FLogger.Error('Error parsing Sempare template "%s": %s', [TemplateName, AMessage]);
 end;
 
 function TViewMainSempare.Render(const Monitoring: TSMonitoringDTO): string;
 var
   DashboardTemplate: ITemplate;
   MonitoringTemplate: ITemplate;
+  ChartsTemplate: ITemplate;
   Context: ITemplateContext;
   MonitoringHtml: string;
+  ChartsHtml: string;
+  DashboardTemplatePath: string;
+  MonitoringTemplatePath: string;
+  ChartsTemplatePath: string;
 begin
   Result := '';
+
+  DashboardTemplatePath := TPath.Combine(DashboardTemplateFileName);
+  MonitoringTemplatePath := TPath.Combine(MonitoringTemplateFileName);
+  ChartsTemplatePath := TPath.Combine(ChartsTemplateFileName);
 
   try
     Context := Sempare.Template.Template.Context;
@@ -57,19 +68,28 @@ begin
     Context.Variables['asteroids'] := Monitoring.Asteroids;
     Context.Variables['selectedasteroid'] := Monitoring.SelectedAsteroid;
 
-    MonitoringTemplate :=
-        TTemplateRegistry.Instance.GetTemplate(TPath.Combine(['Partials', 'Monitoring', 'Monitoring']));
+    MonitoringTemplate := TTemplateRegistry.Instance.GetTemplate(MonitoringTemplatePath);
 
     MonitoringHtml := Sempare.Template.Template.Eval(Context, MonitoringTemplate);
 
     Context.Variables['monitoringHtml'] := MonitoringHtml;
 
-    DashboardTemplate := TTemplateRegistry.Instance.GetTemplate(TPath.Combine(['Partials', 'Dashboard']));
+    ChartsTemplate := TTemplateRegistry.Instance.GetTemplate(ChartsTemplatePath);
+
+    ChartsHtml := Sempare.Template.Template.Eval(Context, ChartsTemplate);
+
+    Context.Variables['chartsHtml'] := ChartsHtml;
+
+    DashboardTemplate := TTemplateRegistry.Instance.GetTemplate(DashboardTemplatePath);
 
     Result := Sempare.Template.Template.Eval(Context, DashboardTemplate);
   except
     on E: Exception do begin
-      HandleTemplateError(E.Message);
+      HandleTemplateError(
+          Format('%s / %s / %s', [DashboardTemplatePath, MonitoringTemplatePath, ChartsTemplatePath]),
+          E.Message
+      );
+
       raise;
     end;
   end;

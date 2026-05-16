@@ -161,11 +161,12 @@
     </aside>
 
     <!-- CENTRAL SCENE -->
-    <section class="glass-card space-scene mission-visualizer">
+    <section class="glass-card space-scene mission-visualizer cinematic-visualizer">
+
       <div class="scene-toolbar">
         <span class="scene-badge">
           <i class="fa-solid fa-crosshairs"></i>
-          Mission visualizer
+          Mission risk visualizer
         </span>
 
         <div class="toolbar-actions">
@@ -185,68 +186,67 @@
         </div>
       </div>
 
-      <div class="orbit-line"></div>
-      <div class="planet-mini"></div>
-      <div class="main-asteroid"></div>
-      <div class="target-ring"></div>
+      <div class="cinematic-stars"></div>
+      <div class="cinematic-sun"></div>
+      <div class="cinematic-earth"></div>
 
-      <div class="visualizer-overlay">
-        <div class="visualizer-title">
+      <div class="cinematic-asteroid" id="mainAsteroidVisual">
+        <span class="crater crater-a"></span>
+        <span class="crater crater-b"></span>
+        <span class="crater crater-c"></span>
+        <span class="crater crater-d"></span>
+      </div>
+
+      <div class="tech-line line-risk"></div>
+      <div class="tech-line line-distance"></div>
+      <div class="tech-line line-size"></div>
+
+      <div class="scene-tech-label label-risk">
+        <span>Risk profile</span>
+        <strong id="visualRiskProfile">Waiting</strong>
+      </div>
+
+      <div class="scene-tech-label label-distance">
+        <span>Distance class</span>
+        <strong id="visualDistanceClass">--</strong>
+      </div>
+
+      <div class="scene-tech-label label-size">
+        <span>Size class</span>
+        <strong id="visualSizeClass">--</strong>
+      </div>
+
+      <div class="visualizer-bottom-panel">
+        <div>
           <span class="risk-badge risk-safe" id="visualRisk">
-            <i class="fa-solid fa-hand-pointer"></i>
-            Waiting for selection
+            <i class="fa-solid fa-shield-halved"></i>
+            Waiting for analysis
           </span>
 
-          <h3 id="visualName">Select an asteroid</h3>
+          <h3 id="visualName">Mission risk assessment</h3>
 
           <p id="visualDescription">
-            Click <strong>Details</strong> on an asteroid card to load its NASA JPL data,
-            close approach values and orbital information.
+            Select an asteroid from the list to generate a mission-style risk profile.
           </p>
         </div>
 
-        <div class="visualizer-stats">
-          <div>
-            <span>Closest approach</span>
-            <strong id="visualDistance">-- km</strong>
-          </div>
-
-          <div>
-            <span>Velocity</span>
-            <strong id="visualVelocity">-- km/h</strong>
-          </div>
-
-          <div>
-            <span>Estimated size</span>
-            <strong id="visualDiameter">-- m</strong>
-          </div>
+        <div class="mission-energy">
+          <span>Speed class</span>
+          <strong id="visualVelocityClass">--</strong>
+          <small id="visualVelocity">-- km/h</small>
         </div>
       </div>
 
-      <div class="scene-note note-diameter">
-        Estimated size
-        <small>diameter range</small>
-      </div>
-
-      <div class="scene-note note-composition">
-        NASA NeoWs
-        <small>Distance<br>Velocity<br>Risk flag</small>
-      </div>
-
-      <div class="scene-note note-distance">
-        Close approach
-        <small>miss distance</small>
-      </div>
     </section>
 
     <!-- ACTIVE OBJECT + MISSION STATUS -->
     <aside class="right-stack">
 
-      <section class="glass-card active-threat-card" id="active-threat-panel">
+      <section class="glass-card active-threat-card selected-object-card" id="active-threat-panel">
         <div class="section-title">
           <div>
             <h3>Selected object</h3>
-            <small>Quick overview</small>
+            <small>Current mission target</small>
           </div>
 
           <span class="risk-badge risk-safe" id="activeRisk">
@@ -255,31 +255,22 @@
           </span>
         </div>
 
-        <div class="threat-visual"></div>
-
-        <div class="neo-table mb-3">
-
-          <div class="neo-row">
-            <span>Object</span>
-            <span id="activeObject">--</span>
+        <div class="selected-object-compact">
+          <div class="selected-object-icon">
+            <i class="fa-solid fa-meteor"></i>
           </div>
 
-          <div class="neo-row">
-            <span>Distance</span>
-            <span id="activeDistance">-- km</span>
+          <div>
+            <span class="selected-label">Object</span>
+            <strong id="activeObject">No object selected</strong>
+            <small id="activeObjectId">Select from asteroid list</small>
           </div>
-
-          <div class="neo-row">
-            <span>Velocity</span>
-            <span id="activeVelocity">-- km/h</span>
-          </div>
-
         </div>
 
-        <button id="activeDetailsButton" class="btn btn-nasa w-100" type="button" disabled hx-get=""
-          hx-target="#asteroid-detail" hx-swap="innerHTML" hx-indicator="#globalLoader">
-          Select an asteroid
-        </button>
+        <div class="selected-object-note">
+          <i class="fa-solid fa-circle-info"></i>
+          Full orbital and close approach data is shown in the detail panel below.
+        </div>
       </section>
 
       <section class="glass-card mission-status-card">
@@ -404,7 +395,8 @@
                 <button class="btn btn-sm btn-nasa" type="button" data-id="<% Asteroid.Id %>"
                   data-name="<% Asteroid.Name %>" data-distance="<% Asteroid.MinDistanceKmText %>"
                   data-velocity="<% Asteroid.RelativeVelocityText %>" data-diameter="<% Asteroid.DiameterText %>"
-                  data-risk-class="<% Asteroid.HazardousCssClass %>" data-risk-label="<% Asteroid.HazardousLabel %>"
+                  data-size-class="<% Asteroid.SizeClass %>" data-risk-class="<% Asteroid.HazardousCssClass %>"
+                  data-risk-label="<% Asteroid.HazardousLabel %>"
                   onclick="window.NEOWatchSelection.updateFromButton(this)" hx-get="/asteroids/<% Asteroid.Id %>"
                   hx-target="#asteroid-detail" hx-swap="innerHTML" hx-indicator="#globalLoader">
                   Details
@@ -480,19 +472,6 @@
 
   </div>
 
-  <script type="application/json" id="asteroidChartData">
-[
-  <% for Asteroid in asteroids %>
-    {
-      "name": "<% Asteroid.Name %>",
-      "distance": <% Asteroid.MinDistanceKm %>,
-      "diameter": <% Asteroid.DiameterAverageKm %>,
-      "velocity": <% Asteroid.RelativeVelocityKmH %>,
-      "hazardous": <% Asteroid.HazardousJsonValue %>
-    },
-  <% end %>
-  {}
-]
-  </script>
+  <script type="application/json" id="asteroidChartData"><% chartDataJson %></script>
 
 </div>

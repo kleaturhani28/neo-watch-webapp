@@ -98,7 +98,7 @@ begin
     StartDateText := FormatDateTime('yyyy-mm-dd', CurrentStartDate);
     EndDateText := FormatDateTime('yyyy-mm-dd', CurrentEndDate);
 
-    CacheKey := Format('neowatch.webapp.synchroplan::feed::%s::%s', [StartDateText, EndDateText]);
+    CacheKey := Format('neowatch.webapp::feed::%s::%s', [StartDateText, EndDateText]);
 
     if not FNasaCache.TryGet(CacheKey, ResponseJson) then begin
       ResponseJson := FGetFeedNasaNeoWsCommandApi.Execute(StartDateText, EndDateText);

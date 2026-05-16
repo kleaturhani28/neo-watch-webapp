@@ -10,9 +10,7 @@ uses
   Sempare.Template,
   Sempare.Template.Context,
   NEOWatch.WebApp.Presentation.View.Main.Intf,
-  NEOWatch.WebApp.Presentation.Model.DTO.SMonitoring,
-  JOSE.Types.JSON,
-  NEOWatch.WebApp.Presentation.Model.DTO.SAsteroidCard;
+  NEOWatch.WebApp.Presentation.Model.DTO.SMonitoring;
 
 type
 
@@ -37,33 +35,25 @@ function TViewMainSempare.BuildAsteroidChartDataJson(const Monitoring: TSMonitor
 var
   JsonArray: TJSONArray;
   JsonObject: TJSONObject;
-  Asteroid: TSAsteroidCardDTO;
-  DiameterAverageKm: Double;
+  Asteroid: TSMonitoringAsteroidDTO;
 begin
   JsonArray := TJSONArray.Create;
   try
-    if Assigned(Monitoring) and Assigned(Monitoring.Asteroids) then begin
-      for Asteroid in Monitoring.Asteroids do begin
-        if not Assigned(Asteroid) then
-          Continue;
+    for Asteroid in Monitoring.Asteroids do
+    begin
+      JsonObject := TJSONObject.Create;
 
-        DiameterAverageKm :=
-            ((Double(Asteroid.EstimatedDiameterMinMeters) + Double(Asteroid.EstimatedDiameterMaxMeters)) / 2) / 1000;
+      JsonObject.AddPair('name', Asteroid.Name);
+      JsonObject.AddPair('distance', TJSONNumber.Create(Asteroid.MinDistanceKm));
+      JsonObject.AddPair('diameter', TJSONNumber.Create(Asteroid.DiameterAverageKm));
+      JsonObject.AddPair('velocity', TJSONNumber.Create(Asteroid.RelativeVelocityKmH));
 
-        JsonObject := TJSONObject.Create;
+      if Asteroid.IsPotentiallyHazardous then
+        JsonObject.AddPair('hazardous', TJSONTrue.Create)
+      else
+        JsonObject.AddPair('hazardous', TJSONFalse.Create);
 
-        JsonObject.AddPair('name', Asteroid.Name);
-        JsonObject.AddPair('distance', TJSONNumber.Create(Double(Asteroid.MinDistanceKm)));
-        JsonObject.AddPair('diameter', TJSONNumber.Create(DiameterAverageKm));
-        JsonObject.AddPair('velocity', TJSONNumber.Create(Double(Asteroid.RelativeVelocityKmH)));
-
-        if Asteroid.IsPotentiallyHazardous then
-          JsonObject.AddPair('hazardous', TJSONTrue.Create)
-        else
-          JsonObject.AddPair('hazardous', TJSONFalse.Create);
-
-        JsonArray.AddElement(JsonObject);
-      end;
+      JsonArray.AddElement(JsonObject);
     end;
 
     Result := JsonArray.ToJSON;

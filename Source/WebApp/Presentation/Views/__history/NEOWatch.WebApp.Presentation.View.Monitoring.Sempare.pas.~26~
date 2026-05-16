@@ -9,9 +9,7 @@ uses
   NEOWatch.WebApp.Presentation.Model.DTO.SMonitoring,
   System.IOUtils,
   Sempare.Template,
-  System.SysUtils,
-  JOSE.Types.JSON,
-  NEOWatch.WebApp.Presentation.Model.DTO.SAsteroidCard;
+  System.SysUtils;
 
 type
 
@@ -95,7 +93,7 @@ begin
     LContext.Variables['summary'] := Monitoring.Summary;
     LContext.Variables['asteroids'] := Monitoring.Asteroids;
     LContext.Variables['selectedasteroid'] := Monitoring.SelectedAsteroid;
-    LContext.Variables['chartDataJson'] := BuildAsteroidChartDataJson(Monitoring);
+    Context.Variables['chartDataJson'] := BuildAsteroidChartDataJson(Monitoring);
 
     LTemplate := TTemplateRegistry.Instance.GetTemplate(TPath.Combine(TemplateFileNameMonitoring));
 

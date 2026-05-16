@@ -52,7 +52,7 @@ begin
   if Id.Trim.IsEmpty then
     raise Exception.Create('Asteroid id is required.');
 
-  CacheKey := Format('neowatch.webapp.synchroplan::asteroid::%s', [Id]);
+  CacheKey := Format('neowatch.webapp::asteroid::%s', [Id]);
 
   if not FNasaCache.TryGet(CacheKey, ResponseJson) then begin
     ResponseJson := FGetAsteroidByIdNasaNeoWsCommandApi.Execute(Id);

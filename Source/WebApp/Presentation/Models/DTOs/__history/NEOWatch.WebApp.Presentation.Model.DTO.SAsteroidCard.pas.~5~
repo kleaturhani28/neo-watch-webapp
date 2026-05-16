@@ -1,9 +1,9 @@
-unit NEOWatch.WebApp.Presentation.Model.DTO.WSAsteroidCard;
+unit NEOWatch.WebApp.Presentation.Model.DTO.SAsteroidCard;
 
 interface
 
 type
-  TWSAsteroidCardDTO = class
+  TSAsteroidCardDTO = class
   private
     FId: string;
     FName: string;
@@ -42,6 +42,7 @@ type
     function GetHazardousCssClass: string;
     function GetAsteroidCardCssClass: string;
     function GetNasaJplUrl: string;
+    function GetSizeClass: string;
 
     procedure SetId(const Value: string);
     procedure SetName(const Value: string);
@@ -59,6 +60,7 @@ type
     procedure SetHazardousCssClass(const Value: string);
     procedure SetAsteroidCardCssClass(const Value: string);
     procedure SetNasaJplUrl(const Value: string);
+    procedure SetSizeClass(const Value: string);
 
   published
     property Id: string read GetId write SetId;
@@ -86,164 +88,164 @@ type
 
 implementation
 
-{ TWSAsteroidCardDTO }
+{ TSAsteroidCardDTO }
 
-function TWSAsteroidCardDTO.GetAsteroidCardCssClass: string;
+function TSAsteroidCardDTO.GetAsteroidCardCssClass: string;
 begin
   Result := FAsteroidCardCssClass;
 end;
 
-function TWSAsteroidCardDTO.GetCloseApproachDate: TDateTime;
+function TSAsteroidCardDTO.GetCloseApproachDate: TDateTime;
 begin
   Result := FCloseApproachDate;
 end;
 
-function TWSAsteroidCardDTO.GetCloseApproachDateText: string;
+function TSAsteroidCardDTO.GetCloseApproachDateText: string;
 begin
   Result := FCloseApproachDateText;
 end;
 
-function TWSAsteroidCardDTO.GetDiameterText: string;
+function TSAsteroidCardDTO.GetDiameterText: string;
 begin
   Result := FDiameterText;
 end;
 
-function TWSAsteroidCardDTO.GetEstimatedDiameterMaxMeters: Extended;
+function TSAsteroidCardDTO.GetEstimatedDiameterMaxMeters: Extended;
 begin
   Result := FEstimatedDiameterMaxMeters;
 end;
 
-function TWSAsteroidCardDTO.GetEstimatedDiameterMinMeters: Extended;
+function TSAsteroidCardDTO.GetEstimatedDiameterMinMeters: Extended;
 begin
   Result := FEstimatedDiameterMinMeters;
 end;
 
-function TWSAsteroidCardDTO.GetHazardousCssClass: string;
+function TSAsteroidCardDTO.GetHazardousCssClass: string;
 begin
   Result := FHazardousCssClass;
 end;
 
-function TWSAsteroidCardDTO.GetHazardousLabel: string;
+function TSAsteroidCardDTO.GetHazardousLabel: string;
 begin
   Result := FHazardousLabel;
 end;
 
-function TWSAsteroidCardDTO.GetId: string;
+function TSAsteroidCardDTO.GetId: string;
 begin
   Result := FId;
 end;
 
-function TWSAsteroidCardDTO.GetIsPotentiallyHazardous: Boolean;
+function TSAsteroidCardDTO.GetIsPotentiallyHazardous: Boolean;
 begin
   Result := FIsPotentiallyHazardous;
 end;
 
-function TWSAsteroidCardDTO.GetMinDistanceKm: Extended;
+function TSAsteroidCardDTO.GetMinDistanceKm: Extended;
 begin
   Result := FMinDistanceKm;
 end;
 
-function TWSAsteroidCardDTO.GetMinDistanceKmText: string;
+function TSAsteroidCardDTO.GetMinDistanceKmText: string;
 begin
   Result := FMinDistanceKmText;
 end;
 
-function TWSAsteroidCardDTO.GetName: string;
+function TSAsteroidCardDTO.GetName: string;
 begin
   Result := FName;
 end;
 
-function TWSAsteroidCardDTO.GetNasaJplUrl: string;
+function TSAsteroidCardDTO.GetNasaJplUrl: string;
 begin
   Result := FNasaJplUrl;
 end;
 
-function TWSAsteroidCardDTO.GetRelativeVelocityKmH: Extended;
+function TSAsteroidCardDTO.GetRelativeVelocityKmH: Extended;
 begin
   Result := FRelativeVelocityKmH;
 end;
 
-function TWSAsteroidCardDTO.GetRelativeVelocityText: string;
+function TSAsteroidCardDTO.GetRelativeVelocityText: string;
 begin
   Result := FRelativeVelocityText;
 end;
 
-procedure TWSAsteroidCardDTO.SetAsteroidCardCssClass(const Value: string);
+procedure TSAsteroidCardDTO.SetAsteroidCardCssClass(const Value: string);
 begin
   FAsteroidCardCssClass := Value;
 end;
 
-procedure TWSAsteroidCardDTO.SetCloseApproachDate(const Value: TDateTime);
+procedure TSAsteroidCardDTO.SetCloseApproachDate(const Value: TDateTime);
 begin
   FCloseApproachDate := Value;
 end;
 
-procedure TWSAsteroidCardDTO.SetCloseApproachDateText(const Value: string);
+procedure TSAsteroidCardDTO.SetCloseApproachDateText(const Value: string);
 begin
   FCloseApproachDateText := Value;
 end;
 
-procedure TWSAsteroidCardDTO.SetDiameterText(const Value: string);
+procedure TSAsteroidCardDTO.SetDiameterText(const Value: string);
 begin
   FDiameterText := Value;
 end;
 
-procedure TWSAsteroidCardDTO.SetEstimatedDiameterMaxMeters(const Value: Extended);
+procedure TSAsteroidCardDTO.SetEstimatedDiameterMaxMeters(const Value: Extended);
 begin
   FEstimatedDiameterMaxMeters := Value;
 end;
 
-procedure TWSAsteroidCardDTO.SetEstimatedDiameterMinMeters(const Value: Extended);
+procedure TSAsteroidCardDTO.SetEstimatedDiameterMinMeters(const Value: Extended);
 begin
   FEstimatedDiameterMinMeters := Value;
 end;
 
-procedure TWSAsteroidCardDTO.SetHazardousCssClass(const Value: string);
+procedure TSAsteroidCardDTO.SetHazardousCssClass(const Value: string);
 begin
   FHazardousCssClass := Value;
 end;
 
-procedure TWSAsteroidCardDTO.SetHazardousLabel(const Value: string);
+procedure TSAsteroidCardDTO.SetHazardousLabel(const Value: string);
 begin
   FHazardousLabel := Value;
 end;
 
-procedure TWSAsteroidCardDTO.SetId(const Value: string);
+procedure TSAsteroidCardDTO.SetId(const Value: string);
 begin
   FId := Value;
 end;
 
-procedure TWSAsteroidCardDTO.SetIsPotentiallyHazardous(const Value: Boolean);
+procedure TSAsteroidCardDTO.SetIsPotentiallyHazardous(const Value: Boolean);
 begin
   FIsPotentiallyHazardous := Value;
 end;
 
-procedure TWSAsteroidCardDTO.SetMinDistanceKm(const Value: Extended);
+procedure TSAsteroidCardDTO.SetMinDistanceKm(const Value: Extended);
 begin
   FMinDistanceKm := Value;
 end;
 
-procedure TWSAsteroidCardDTO.SetMinDistanceKmText(const Value: string);
+procedure TSAsteroidCardDTO.SetMinDistanceKmText(const Value: string);
 begin
   FMinDistanceKmText := Value;
 end;
 
-procedure TWSAsteroidCardDTO.SetName(const Value: string);
+procedure TSAsteroidCardDTO.SetName(const Value: string);
 begin
   FName := Value;
 end;
 
-procedure TWSAsteroidCardDTO.SetNasaJplUrl(const Value: string);
+procedure TSAsteroidCardDTO.SetNasaJplUrl(const Value: string);
 begin
   FNasaJplUrl := Value;
 end;
 
-procedure TWSAsteroidCardDTO.SetRelativeVelocityKmH(const Value: Extended);
+procedure TSAsteroidCardDTO.SetRelativeVelocityKmH(const Value: Extended);
 begin
   FRelativeVelocityKmH := Value;
 end;
 
-procedure TWSAsteroidCardDTO.SetRelativeVelocityText(const Value: string);
+procedure TSAsteroidCardDTO.SetRelativeVelocityText(const Value: string);
 begin
   FRelativeVelocityText := Value;
 end;
