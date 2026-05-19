@@ -1,0 +1,83 @@
+unit NEOWatch.WebApp.Persistence.NasaCache.Redis;
+
+interface
+
+uses
+  System.SysUtils,
+  Fido.Utilities,
+  NEOWatch.WebApp.Domain.NasaCache.Intf,
+  Fido.KVStore.Intf,
+  Spring.Logging;
+
+type
+  TNasaRedisCache = class(TInterfacedObject, INasaCache)
+  private
+    FKVStore: IKVStore;
+    FLogger: ILogger;
+  public
+    constructor Create(const KVStore: IKVStore; const Logger: ILogger);
+
+    function TryGet(const Key: string; out Value: string): Boolean;
+
+    procedure SetValue(const Key: string; const Value: string; const TtlSeconds: Integer);
+  end;
+
+implementation
+
+constructor TNasaRedisCache.Create(const KVStore: IKVStore; const Logger: ILogger);
+begin
+  inherited Create;
+
+  FKVStore := Utilities.CheckNotNullAndSet(KVStore, 'KVStore');
+  FLogger := Utilities.CheckNotNullAndSet(Logger, 'Logger');
+end;
+
+function TNasaRedisCache.TryGet(const Key: string; out Value: string): Boolean;
+var
+  CacheValue: string;
+begin
+  Value := '';
+  Result := False;
+
+  if Key.Trim.IsEmpty then
+    Exit;
+
+  FLogger.Info('NASA CACHE GET START: %s', [Key]);
+
+  CacheValue := FKVStore.Get(Key, 1000).Value;
+
+  FLogger.Info('NASA CACHE GET VALUE LENGTH: %s -> %d', [Key, Length(CacheValue)]);
+
+  if CacheValue.Trim.IsEmpty then begin
+    FLogger.Info('NASA CACHE MISS: %s', [Key]);
+    Exit;
+  end;
+
+  Value := CacheValue;
+  Result := True;
+
+  FLogger.Info('NASA CACHE HIT: %s', [Key]);
+end;
+
+procedure TNasaRedisCache.SetValue(const Key: string; const Value: string; const TtlSeconds: Integer);
+var
+  CheckValue: string;
+begin
+  if Key.Trim.IsEmpty then
+    Exit;
+
+  if Value.Trim.IsEmpty then begin
+    FLogger.Warn('NASA CACHE SET SKIPPED. Empty value for key: %s', [Key]);
+    Exit;
+  end;
+
+  FLogger.Info('NASA CACHE SET START: %s. Value length: %d', [Key, Length(Value)]);
+
+  FKVStore.Put(Key, Value, 1000).Value;
+
+  CheckValue := FKVStore.Get(Key, 1000).Value;
+
+  FLogger.Info('NASA CACHE SET CHECK: %s. Read back length: %d', [Key, Length(CheckValue)]);
+end;
+
+end.

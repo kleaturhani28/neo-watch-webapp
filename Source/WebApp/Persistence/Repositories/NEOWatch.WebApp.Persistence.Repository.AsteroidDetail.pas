@@ -12,39 +12,53 @@ uses
   NEOWatch.WebApp.Domain.AsteroidDetailRepository.Intf,
   NEOWatch.WebApp.Persistence.Gateway.NasaApi.Intf,
   JOSE.Types.JSON,
-  System.SysUtils;
+  System.SysUtils,
+  NEOWatch.WebApp.Domain.NasaCache.Intf;
 
 type
 
   TAsteroidDetailRepository = class(TInterfacedObject, IAsteroidDetailRepository)
   private
     FGetAsteroidByIdNasaNeoWsCommandApi: IGetAsteroidByIdNasaNeoWsCommandApi;
+    FNasaCache: INasaCache;
   public
     function GetById(const Id: string): IAsteroidDetail;
 
-    constructor Create(const GetAsteroidByIdNasaNeoWsCommandApi: IGetAsteroidByIdNasaNeoWsCommandApi);
+    constructor Create(
+        const GetAsteroidByIdNasaNeoWsCommandApi: IGetAsteroidByIdNasaNeoWsCommandApi;
+        const NasaCache: INasaCache
+    );
   end;
 
 implementation
 
 constructor TAsteroidDetailRepository.Create(
-    const GetAsteroidByIdNasaNeoWsCommandApi: IGetAsteroidByIdNasaNeoWsCommandApi
+    const GetAsteroidByIdNasaNeoWsCommandApi: IGetAsteroidByIdNasaNeoWsCommandApi;
+    const NasaCache: INasaCache
 );
 begin
   inherited Create;
   FGetAsteroidByIdNasaNeoWsCommandApi :=
       Utilities.CheckNotNullAndSet(GetAsteroidByIdNasaNeoWsCommandApi, 'GetAsteroidByIdNasaNeoWsCommandApi');
+  FNasaCache := Utilities.CheckNotNullAndSet(NasaCache, 'NasaCache');
 end;
 
 function TAsteroidDetailRepository.GetById(const Id: string): IAsteroidDetail;
 var
   ResponseJson: string;
   Root: TJSONObject;
+  CacheKey: string;
 begin
   if Id.Trim.IsEmpty then
     raise Exception.Create('Asteroid id is required.');
 
-  ResponseJson := FGetAsteroidByIdNasaNeoWsCommandApi.Execute(Id);
+  CacheKey := Format('neowatch.webapp::asteroid::%s', [Id]);
+
+  if not FNasaCache.TryGet(CacheKey, ResponseJson) then begin
+    ResponseJson := FGetAsteroidByIdNasaNeoWsCommandApi.Execute(Id);
+
+    FNasaCache.SetValue(CacheKey, ResponseJson, 86400);
+  end;
 
   Root := TJSONObject.ParseJSONValue(ResponseJson) as TJSONObject;
   try

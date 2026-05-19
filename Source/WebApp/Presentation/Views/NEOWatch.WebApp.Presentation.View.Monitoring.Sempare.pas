@@ -9,7 +9,9 @@ uses
   NEOWatch.WebApp.Presentation.Model.DTO.SMonitoring,
   System.IOUtils,
   Sempare.Template,
-  System.SysUtils;
+  System.SysUtils,
+  JOSE.Types.JSON,
+  NEOWatch.WebApp.Presentation.Model.DTO.SAsteroidCard;
 
 type
 
@@ -20,6 +22,7 @@ type
   private
     FLogger: ILogger;
     procedure HandleTemplateError(const AMessage: string);
+    function BuildAsteroidChartDataJson(const Monitoring: TSMonitoringDTO): string;
   public
     constructor Create(const Logger: ILogger);
     function Render(const Monitoring: TSMonitoringDTO): string;
@@ -38,6 +41,45 @@ begin
   FLogger.Error('Error parsing Sempare template "%s": %s', [TPath.Combine(TemplateFileNameMonitoring), AMessage]);
 end;
 
+function TViewMonitoringSempare.BuildAsteroidChartDataJson(const Monitoring: TSMonitoringDTO): string;
+var
+  JsonArray: TJSONArray;
+  JsonObject: TJSONObject;
+  Asteroid: TSAsteroidCardDTO;
+  DiameterAverageKm: Double;
+begin
+  JsonArray := TJSONArray.Create;
+  try
+    if Assigned(Monitoring) and Assigned(Monitoring.Asteroids) then begin
+      for Asteroid in Monitoring.Asteroids do begin
+        if not Assigned(Asteroid) then
+          Continue;
+
+        DiameterAverageKm :=
+            ((Double(Asteroid.EstimatedDiameterMinMeters) + Double(Asteroid.EstimatedDiameterMaxMeters)) / 2) / 1000;
+
+        JsonObject := TJSONObject.Create;
+
+        JsonObject.AddPair('name', Asteroid.Name);
+        JsonObject.AddPair('distance', TJSONNumber.Create(Double(Asteroid.MinDistanceKm)));
+        JsonObject.AddPair('diameter', TJSONNumber.Create(DiameterAverageKm));
+        JsonObject.AddPair('velocity', TJSONNumber.Create(Double(Asteroid.RelativeVelocityKmH)));
+
+        if Asteroid.IsPotentiallyHazardous then
+          JsonObject.AddPair('hazardous', TJSONTrue.Create)
+        else
+          JsonObject.AddPair('hazardous', TJSONFalse.Create);
+
+        JsonArray.AddElement(JsonObject);
+      end;
+    end;
+
+    Result := JsonArray.ToJSON;
+  finally
+    JsonArray.Free;
+  end;
+end;
+
 function TViewMonitoringSempare.Render(const Monitoring: TSMonitoringDTO): string;
 var
   LTemplate: ITemplate;
@@ -53,6 +95,7 @@ begin
     LContext.Variables['summary'] := Monitoring.Summary;
     LContext.Variables['asteroids'] := Monitoring.Asteroids;
     LContext.Variables['selectedasteroid'] := Monitoring.SelectedAsteroid;
+    LContext.Variables['chartDataJson'] := BuildAsteroidChartDataJson(Monitoring);
 
     LTemplate := TTemplateRegistry.Instance.GetTemplate(TPath.Combine(TemplateFileNameMonitoring));
 

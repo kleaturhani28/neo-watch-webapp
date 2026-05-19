@@ -79,20 +79,30 @@ procedure TAsteroidsController.GetAsteroidDetail(Req: THorseRequest; Res: THorse
 var
   View: IViewAsteroidDetail;
   Model: IModelAsteroidDetail;
-  AsteroidDetailDTO: TSAsteroidDetailDTO;
   AsteroidId: string;
 begin
   View := FAsteroidDetailViewFactory();
   Model := FAsteroidDetailModelFactory();
 
-  AsteroidDetailDTO := nil;
   AsteroidId := Req.Params['id'];
 
   try
     Res.Send(View.Render(Model.GetById(AsteroidId)));
-
-  finally
-    AsteroidDetailDTO.Free;
+  except
+    on E: Exception do begin
+      Res
+          .Status(500)
+          .Send(
+              '<div class="detail-empty">'
+                  + '<div>'
+                  + '<i class="fa-solid fa-triangle-exclamation fa-2x mb-3 text-warning"></i>'
+                  + '<h4>Unable to load asteroid details</h4>'
+                  + '<p class="mb-0">'
+                  + E.Message
+                  + '</p>'
+                  + '</div>'
+                  + '</div>');
+    end;
   end;
 end;
 
@@ -101,34 +111,53 @@ var
   View: IViewMonitoring;
   Model: IModelMonitoring;
   FiltersDTO: TSAsteroidFiltersDTO;
+  StartDateParam: string;
+  EndDateParam: string;
   MonitoringDTO: TSMonitoringDTO;
 begin
   View := FMonitoringViewFactory();
   Model := FMonitoringModelFactory();
 
   FiltersDTO := TSAsteroidFiltersDTO.Create;
-  MonitoringDTO := nil;
-
   try
-    FiltersDTO.StartDate := Req.Query['startDate'];
-    FiltersDTO.EndDate := Req.Query['endDate'];
-    FiltersDTO.Hazardous := Req.Query['hazardous'];
-    FiltersDTO.SortBy := Req.Query['sortBy'];
-    FiltersDTO.SortDirection := Req.Query['sortDirection'];
+    try
+      StartDateParam := Req.Query['startDate'].Trim;
+      EndDateParam := Req.Query['endDate'].Trim;
 
-    if FiltersDTO.Hazardous.Trim.IsEmpty then
-      FiltersDTO.Hazardous := 'all';
+      FiltersDTO.StartDate := StartDateParam;
+      FiltersDTO.EndDate := EndDateParam;
+      FiltersDTO.Hazardous := Req.Query['hazardous'];
+      FiltersDTO.SortBy := Req.Query['sortBy'];
+      FiltersDTO.SortDirection := Req.Query['sortDirection'];
 
-    if FiltersDTO.SortBy.Trim.IsEmpty then
-      FiltersDTO.SortBy := 'distance';
+      if FiltersDTO.Hazardous.Trim.IsEmpty then
+        FiltersDTO.Hazardous := 'all';
 
-    if FiltersDTO.SortDirection.Trim.IsEmpty then
-      FiltersDTO.SortDirection := 'asc';
+      if FiltersDTO.SortBy.Trim.IsEmpty then
+        FiltersDTO.SortBy := 'distance';
 
-    Res.Send(View.Render(Model.GetListByFilters(FiltersDTO)));
+      if FiltersDTO.SortDirection.Trim.IsEmpty then
+        FiltersDTO.SortDirection := 'asc';
 
+      if StartDateParam.IsEmpty and EndDateParam.IsEmpty then
+        Res.Send(View.Render(Model.GetDefaultList))
+      else
+        Res.Send(View.Render(Model.GetListByFilters(FiltersDTO)));
+
+    except
+      on E: Exception do begin
+        MonitoringDTO := TSMonitoringDTO.Create;
+        try
+          MonitoringDTO.HasError := True;
+          MonitoringDTO.ErrorMessage := E.Message;
+
+          Res.Status(500).Send(View.Render(MonitoringDTO));
+        finally
+          MonitoringDTO.Free;
+        end;
+      end;
+    end;
   finally
-    MonitoringDTO.Free;
     FiltersDTO.Free;
   end;
 end;

@@ -1,0 +1,257 @@
+unit NEOWatch.WebApp.Persistence.Repository.AsteroidDetail;
+
+interface
+
+uses
+  Fido.Utilities,
+  Fido.Mappers,
+  NEOWatch.WebApp.Domain.Entity.AsteroidDetail.Intf,
+  NEOWatch.WebApp.Domain.Entity.AsteroidDetail,
+  NEOWatch.WebApp.Domain.Entity.CloseApproach.Intf,
+  NEOWatch.WebApp.Domain.Entity.CloseApproach,
+  NEOWatch.WebApp.Domain.AsteroidDetailRepository.Intf,
+  NEOWatch.WebApp.Persistence.Gateway.NasaApi.Intf,
+  JOSE.Types.JSON,
+  System.SysUtils,
+  NEOWatch.WebApp.Domain.NasaCache.Intf;
+
+type
+
+  TAsteroidDetailRepository = class(TInterfacedObject, IAsteroidDetailRepository)
+  private
+    FGetAsteroidByIdNasaNeoWsCommandApi: IGetAsteroidByIdNasaNeoWsCommandApi;
+    FNasaCache: INasaCache;
+  public
+    function GetById(const Id: string): IAsteroidDetail;
+
+    constructor Create(
+        const GetAsteroidByIdNasaNeoWsCommandApi: IGetAsteroidByIdNasaNeoWsCommandApi;
+        const NasaCache: INasaCache
+    );
+  end;
+
+implementation
+
+constructor TAsteroidDetailRepository.Create(
+    const GetAsteroidByIdNasaNeoWsCommandApi: IGetAsteroidByIdNasaNeoWsCommandApi;
+    const NasaCache: INasaCache
+);
+begin
+  inherited Create;
+  FGetAsteroidByIdNasaNeoWsCommandApi :=
+      Utilities.CheckNotNullAndSet(GetAsteroidByIdNasaNeoWsCommandApi, 'GetAsteroidByIdNasaNeoWsCommandApi');
+  FNasaCache := Utilities.CheckNotNullAndSet(NasaCache, 'NasaCache');
+end;
+
+function TAsteroidDetailRepository.GetById(const Id: string): IAsteroidDetail;
+var
+  ResponseJson: string;
+  Root: TJSONObject;
+  CacheKey: string;
+begin
+  if Id.Trim.IsEmpty then
+    raise Exception.Create('Asteroid id is required.');
+
+  ResponseJson := FGetAsteroidByIdNasaNeoWsCommandApi.Execute(Id);
+
+  Root := TJSONObject.ParseJSONValue(ResponseJson) as TJSONObject;
+  try
+    if not Assigned(Root) then
+      raise Exception.Create('Invalid NASA asteroid detail JSON.');
+
+    Result := nil;
+
+    Mappers.Map<TJSONObject, IAsteroidDetail>(Root, Result);
+  finally
+    Root.Free;
+  end;
+end;
+
+initialization
+  Mappers.RegisterMapper<TJSONObject, ICloseApproach>(
+      procedure(const Source: TJSONObject; var Destination: ICloseApproach)
+      var
+        CloseApproach: ICloseApproach;
+        Value: TJSONValue;
+        RelativeVelocityJson: TJSONObject;
+        MissDistanceJson: TJSONObject;
+        DoubleValue: Double;
+        Int64Value: Int64;
+        ApproachDate: TDateTime;
+        FormatSettings: TFormatSettings;
+      begin
+        CloseApproach := TCloseApproach.Create;
+
+        FormatSettings := TFormatSettings.Create;
+        FormatSettings.DateSeparator := '-';
+        FormatSettings.ShortDateFormat := 'yyyy-mm-dd';
+
+        Value := Source.GetValue('close_approach_date');
+        if Assigned(Value) then begin
+          CloseApproach.SetCloseApproachDateText(Value.Value);
+
+          if TryStrToDate(Value.Value, ApproachDate, FormatSettings) then
+            CloseApproach.SetCloseApproachDate(ApproachDate);
+        end;
+
+        Value := Source.GetValue('epoch_date_close_approach');
+        if Assigned(Value) then begin
+          Int64Value := 0;
+          if TryStrToInt64(Value.Value, Int64Value) then
+            CloseApproach.SetEpochDateCloseApproach(Int64Value);
+        end;
+
+        Value := Source.GetValue('orbiting_body');
+        if Assigned(Value) then
+          CloseApproach.SetOrbitingBody(Value.Value);
+
+        Value := Source.GetValue('relative_velocity');
+        if Value is TJSONObject then begin
+          RelativeVelocityJson := TJSONObject(Value);
+
+          Value := RelativeVelocityJson.GetValue('kilometers_per_hour');
+          if Assigned(Value) then begin
+            DoubleValue := 0;
+            if TryStrToFloat(Value.Value, DoubleValue, TFormatSettings.Invariant) then
+              CloseApproach.SetRelativeVelocityKmH(DoubleValue);
+          end;
+        end;
+
+        Value := Source.GetValue('miss_distance');
+        if Value is TJSONObject then begin
+          MissDistanceJson := TJSONObject(Value);
+
+          Value := MissDistanceJson.GetValue('kilometers');
+          if Assigned(Value) then begin
+            DoubleValue := 0;
+            if TryStrToFloat(Value.Value, DoubleValue, TFormatSettings.Invariant) then
+              CloseApproach.SetMissDistanceKm(DoubleValue);
+          end;
+        end;
+
+        Destination := CloseApproach;
+      end
+  );
+
+  Mappers.RegisterMapper<TJSONObject, IAsteroidDetail>(
+      procedure(const Source: TJSONObject; var Destination: IAsteroidDetail)
+      var
+        AsteroidDetail: IAsteroidDetail;
+
+        Value: TJSONValue;
+
+        EstimatedDiameterJson: TJSONObject;
+        KilometersJson: TJSONObject;
+
+        OrbitalDataJson: TJSONObject;
+        OrbitClassJson: TJSONObject;
+
+        CloseApproachArray: TJSONArray;
+        CloseApproachJson: TJSONObject;
+        CloseApproach: ICloseApproach;
+
+        Index: Integer;
+        DoubleValue: Double;
+      begin
+        AsteroidDetail := TAsteroidDetail.Create;
+
+        Value := Source.GetValue('id');
+        if Assigned(Value) then
+          AsteroidDetail.SetId(Value.Value);
+
+        Value := Source.GetValue('name');
+        if Assigned(Value) then
+          AsteroidDetail.SetName(Value.Value);
+
+        Value := Source.GetValue('nasa_jpl_url');
+        if Assigned(Value) then
+          AsteroidDetail.SetNasaJplUrl(Value.Value);
+
+        Value := Source.GetValue('absolute_magnitude_h');
+        if Assigned(Value) then begin
+          DoubleValue := 0;
+          if TryStrToFloat(Value.Value, DoubleValue, TFormatSettings.Invariant) then
+            AsteroidDetail.SetAbsoluteMagnitude(DoubleValue);
+        end;
+
+        Value := Source.GetValue('is_potentially_hazardous_asteroid');
+        if Assigned(Value) then
+          AsteroidDetail.SetIsPotentiallyHazardous(SameText(Value.Value, 'true'));
+
+        Value := Source.GetValue('is_sentry_object');
+        if Assigned(Value) then
+          AsteroidDetail.SetIsSentryObject(SameText(Value.Value, 'true'));
+
+        Value := Source.GetValue('estimated_diameter');
+        if Value is TJSONObject then begin
+          EstimatedDiameterJson := TJSONObject(Value);
+
+          Value := EstimatedDiameterJson.GetValue('kilometers');
+          if Value is TJSONObject then begin
+            KilometersJson := TJSONObject(Value);
+
+            Value := KilometersJson.GetValue('estimated_diameter_min');
+            if Assigned(Value) then begin
+              DoubleValue := 0;
+              if TryStrToFloat(Value.Value, DoubleValue, TFormatSettings.Invariant) then
+                AsteroidDetail.SetDiameterMinKm(DoubleValue);
+            end;
+
+            Value := KilometersJson.GetValue('estimated_diameter_max');
+            if Assigned(Value) then begin
+              DoubleValue := 0;
+              if TryStrToFloat(Value.Value, DoubleValue, TFormatSettings.Invariant) then
+                AsteroidDetail.SetDiameterMaxKm(DoubleValue);
+            end;
+          end;
+        end;
+
+        Value := Source.GetValue('orbital_data');
+        if Value is TJSONObject then begin
+          OrbitalDataJson := TJSONObject(Value);
+
+          Value := OrbitalDataJson.GetValue('first_observation_date');
+          if Assigned(Value) then
+            AsteroidDetail.SetFirstObservationDate(Value.Value);
+
+          Value := OrbitalDataJson.GetValue('last_observation_date');
+          if Assigned(Value) then
+            AsteroidDetail.SetLastObservationDate(Value.Value);
+
+          Value := OrbitalDataJson.GetValue('orbit_class');
+          if Value is TJSONObject then begin
+            OrbitClassJson := TJSONObject(Value);
+
+            Value := OrbitClassJson.GetValue('orbit_class_type');
+            if Assigned(Value) then
+              AsteroidDetail.SetOrbitClassType(Value.Value);
+
+            Value := OrbitClassJson.GetValue('orbit_class_description');
+            if Assigned(Value) then
+              AsteroidDetail.SetOrbitClassDescription(Value.Value);
+          end;
+        end;
+
+        Value := Source.GetValue('close_approach_data');
+        if Value is TJSONArray then begin
+          CloseApproachArray := TJSONArray(Value);
+
+          for Index := 0 to CloseApproachArray.Count - 1 do begin
+            if not (CloseApproachArray.Items[Index] is TJSONObject) then
+              Continue;
+
+            CloseApproachJson := TJSONObject(CloseApproachArray.Items[Index]);
+
+            CloseApproach := nil;
+
+            Mappers.Map<TJSONObject, ICloseApproach>(CloseApproachJson, CloseApproach);
+
+            AsteroidDetail.AddCloseApproach(CloseApproach);
+          end;
+        end;
+
+        Destination := AsteroidDetail;
+      end
+  );
+
+end.

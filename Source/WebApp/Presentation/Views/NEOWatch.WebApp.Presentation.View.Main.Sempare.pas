@@ -10,17 +10,22 @@ uses
   Sempare.Template,
   Sempare.Template.Context,
   NEOWatch.WebApp.Presentation.View.Main.Intf,
-  NEOWatch.WebApp.Presentation.Model.DTO.SMonitoring;
+  NEOWatch.WebApp.Presentation.Model.DTO.SMonitoring,
+  JOSE.Types.JSON,
+  NEOWatch.WebApp.Presentation.Model.DTO.SAsteroidCard;
 
 type
 
   TViewMainSempare = class(TInterfacedObject, IViewMain)
   private
     const
-      TemplateFileName: array[0..1] of string = ('Partials', 'Dashboard.ejs');
+      DashboardTemplateFileName: array[0..1] of string = ('Partials', 'Dashboard');
+      MonitoringTemplateFileName: array[0..2] of string = ('Partials', 'Monitoring', 'Monitoring');
+      ChartsTemplateFileName: array[0..2] of string = ('Partials', 'Charts', 'charts');
   private
     FLogger: ILogger;
-    procedure HandleTemplateError(const AMessage: string);
+    procedure HandleTemplateError(const TemplateName: string; const AMessage: string);
+    function BuildAsteroidChartDataJson(const Monitoring: TSMonitoringDTO): string;
   public
     constructor Create(const Logger: ILogger);
     function Render(const Monitoring: TSMonitoringDTO): string;
@@ -28,40 +33,107 @@ type
 
 implementation
 
+function TViewMainSempare.BuildAsteroidChartDataJson(const Monitoring: TSMonitoringDTO): string;
+var
+  JsonArray: TJSONArray;
+  JsonObject: TJSONObject;
+  Asteroid: TSAsteroidCardDTO;
+  DiameterAverageKm: Double;
+begin
+  JsonArray := TJSONArray.Create;
+  try
+    if Assigned(Monitoring) and Assigned(Monitoring.Asteroids) then begin
+      for Asteroid in Monitoring.Asteroids do begin
+        if not Assigned(Asteroid) then
+          Continue;
+
+        DiameterAverageKm :=
+            ((Double(Asteroid.EstimatedDiameterMinMeters) + Double(Asteroid.EstimatedDiameterMaxMeters)) / 2) / 1000;
+
+        JsonObject := TJSONObject.Create;
+
+        JsonObject.AddPair('name', Asteroid.Name);
+        JsonObject.AddPair('distance', TJSONNumber.Create(Double(Asteroid.MinDistanceKm)));
+        JsonObject.AddPair('diameter', TJSONNumber.Create(DiameterAverageKm));
+        JsonObject.AddPair('velocity', TJSONNumber.Create(Double(Asteroid.RelativeVelocityKmH)));
+
+        if Asteroid.IsPotentiallyHazardous then
+          JsonObject.AddPair('hazardous', TJSONTrue.Create)
+        else
+          JsonObject.AddPair('hazardous', TJSONFalse.Create);
+
+        JsonArray.AddElement(JsonObject);
+      end;
+    end;
+
+    Result := JsonArray.ToJSON;
+  finally
+    JsonArray.Free;
+  end;
+
+end;
+
 constructor TViewMainSempare.Create(const Logger: ILogger);
 begin
   inherited Create;
   FLogger := Utilities.CheckNotNullAndSet(Logger, 'Logger');
 end;
 
-procedure TViewMainSempare.HandleTemplateError(const AMessage: string);
+procedure TViewMainSempare.HandleTemplateError(const TemplateName: string; const AMessage: string);
 begin
-  FLogger.Error('Error parsing Sempare template "%s": %s', [TPath.Combine(TemplateFileName), AMessage]);
+  FLogger.Error('Error parsing Sempare template "%s": %s', [TemplateName, AMessage]);
 end;
 
 function TViewMainSempare.Render(const Monitoring: TSMonitoringDTO): string;
 var
-  LTemplate: ITemplate;
-  LContext: ITemplateContext;
+  DashboardTemplate: ITemplate;
+  MonitoringTemplate: ITemplate;
+  ChartsTemplate: ITemplate;
+  Context: ITemplateContext;
+  MonitoringHtml: string;
+  ChartsHtml: string;
+  DashboardTemplatePath: string;
+  MonitoringTemplatePath: string;
+  ChartsTemplatePath: string;
 begin
-
   Result := '';
 
+  DashboardTemplatePath := TPath.Combine(DashboardTemplateFileName);
+  MonitoringTemplatePath := TPath.Combine(MonitoringTemplateFileName);
+  ChartsTemplatePath := TPath.Combine(ChartsTemplateFileName);
+
   try
-    LContext := Sempare.Template.Template.Context();
+    Context := Sempare.Template.Template.Context;
 
-    LContext.Variables['monitoring'] := Monitoring;
-    LContext.Variables['filters'] := Monitoring.Filters;
-    LContext.Variables['summary'] := Monitoring.Summary;
-    LContext.Variables['asteroids'] := Monitoring.Asteroids;
-    LContext.Variables['selectedasteroid'] := Monitoring.SelectedAsteroid;
+    Context.Variables['monitoring'] := Monitoring;
+    Context.Variables['filters'] := Monitoring.Filters;
+    Context.Variables['summary'] := Monitoring.Summary;
+    Context.Variables['asteroids'] := Monitoring.Asteroids;
+    Context.Variables['selectedasteroid'] := Monitoring.SelectedAsteroid;
+    Context.Variables['chartDataJson'] := BuildAsteroidChartDataJson(Monitoring);
 
-    LTemplate := TTemplateRegistry.Instance.GetTemplate(TPath.Combine(TemplateFileName));
+    MonitoringTemplate := TTemplateRegistry.Instance.GetTemplate(MonitoringTemplatePath);
 
-    Result := Sempare.Template.Template.Eval(LContext, LTemplate);
+    MonitoringHtml := Sempare.Template.Template.Eval(Context, MonitoringTemplate);
+
+    Context.Variables['monitoringHtml'] := MonitoringHtml;
+
+    ChartsTemplate := TTemplateRegistry.Instance.GetTemplate(ChartsTemplatePath);
+
+    ChartsHtml := Sempare.Template.Template.Eval(Context, ChartsTemplate);
+
+    Context.Variables['chartsHtml'] := ChartsHtml;
+
+    DashboardTemplate := TTemplateRegistry.Instance.GetTemplate(DashboardTemplatePath);
+
+    Result := Sempare.Template.Template.Eval(Context, DashboardTemplate);
   except
     on E: Exception do begin
-      HandleTemplateError(E.Message);
+      HandleTemplateError(
+          Format('%s / %s / %s', [DashboardTemplatePath, MonitoringTemplatePath, ChartsTemplatePath]),
+          E.Message
+      );
+
       raise;
     end;
   end;

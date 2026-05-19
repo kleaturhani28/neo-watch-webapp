@@ -17,33 +17,39 @@ uses
   Fido.Mappers,
   System.DateUtils,
   NEOWatch.WebApp.Domain.Entity.Asteroid,
-  Spring.Comparers;
+  Spring.Comparers,
+  NEOWatch.WebApp.Domain.NasaCache.Intf;
 
 type
 
   TMonitoringRepository = class(TInterfacedObject, IMonitoringRepository)
   private
     FGetFeedNasaNeoWsCommandApi: IGetFeedNasaNeoWsCommandApi;
+    FNasaCache: INasaCache;
   public
     function GetDefaultList: IMonitoring;
     function GetListByFilters(const Filters: IAsteroidFilters): IMonitoring;
 
-    constructor Create(const GetFeedNasaNeoWsCommandApi: IGetFeedNasaNeoWsCommandApi);
+    constructor Create(const GetFeedNasaNeoWsCommandApi: IGetFeedNasaNeoWsCommandApi; const NasaCache: INasaCache);
   end;
 
 implementation
 
-constructor TMonitoringRepository.Create(const GetFeedNasaNeoWsCommandApi: IGetFeedNasaNeoWsCommandApi);
+constructor TMonitoringRepository.Create(
+    const GetFeedNasaNeoWsCommandApi: IGetFeedNasaNeoWsCommandApi;
+    const NasaCache: INasaCache
+);
 begin
   inherited Create;
   FGetFeedNasaNeoWsCommandApi := Utilities.CheckNotNullAndSet(GetFeedNasaNeoWsCommandApi, 'GetFeedNasaNeoWsCommandApi');
+  FNasaCache := Utilities.CheckNotNullAndSet(NasaCache, 'NasaCache');
 end;
 
 function TMonitoringRepository.GetDefaultList: IMonitoring;
 var
   Filters: IAsteroidFilters;
 begin
-  Filters := TAsteroidFilters.Create(Date - 7, Date, nhfAll, nsbDistance, nsdAsc);
+  Filters := TAsteroidFilters.Create(Date, Date, nhfAll, nsbDistance, nsdAsc);
 
   Result := GetListByFilters(Filters);
 end;
@@ -52,6 +58,9 @@ function TMonitoringRepository.GetListByFilters(const Filters: IAsteroidFilters)
 var
   CurrentStartDate: TDate;
   CurrentEndDate: TDate;
+  StartDateText: string;
+  EndDateText: string;
+  CacheKey: string;
   ResponseJson: string;
 
   Root: TJSONObject;
@@ -86,9 +95,16 @@ begin
     if CurrentEndDate > Filters.EndDate then
       CurrentEndDate := Filters.EndDate;
 
-    ResponseJson :=
-        FGetFeedNasaNeoWsCommandApi
-            .Execute(FormatDateTime('yyyy-mm-dd', CurrentStartDate), FormatDateTime('yyyy-mm-dd', CurrentEndDate));
+    StartDateText := FormatDateTime('yyyy-mm-dd', CurrentStartDate);
+    EndDateText := FormatDateTime('yyyy-mm-dd', CurrentEndDate);
+
+    CacheKey := Format('neowatch.webapp::feed::%s::%s', [StartDateText, EndDateText]);
+
+    if not FNasaCache.TryGet(CacheKey, ResponseJson) then begin
+      ResponseJson := FGetFeedNasaNeoWsCommandApi.Execute(StartDateText, EndDateText);
+
+      FNasaCache.SetValue(CacheKey, ResponseJson, 21600);
+    end;
 
     Root := TJSONObject.ParseJSONValue(ResponseJson) as TJSONObject;
     try
@@ -117,6 +133,12 @@ begin
           Asteroid := nil;
 
           Mappers.Map<TJSONObject, IAsteroid>(AsteroidJson, Asteroid);
+
+          if Trunc(Asteroid.CloseApproachDate) < Trunc(Filters.StartDate) then
+            Continue;
+
+          if Trunc(Asteroid.CloseApproachDate) > Trunc(Filters.EndDate) then
+            Continue;
 
           case Filters.HazardousFilter of
             nhfDangerous: begin

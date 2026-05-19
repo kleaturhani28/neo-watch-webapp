@@ -1,0 +1,19 @@
+unit NEOWatch.WebApp.Domain.NasaCache.Intf;
+
+interface
+
+uses
+  Spring;
+
+type
+  INasaCache = interface(IInvokable)
+    ['{7CBE18B0-23B5-4A59-BF8F-81E419C9C542}']
+
+    function TryGet(const Key: string; out Value: string): Boolean;
+
+    procedure SetValue(const Key: string; const Value: string; const TtlSeconds: Integer);
+  end;
+
+implementation
+
+end.
