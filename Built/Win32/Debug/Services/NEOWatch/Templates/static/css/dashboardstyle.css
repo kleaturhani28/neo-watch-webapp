@@ -1,0 +1,1485 @@
+  <style> :root {
+      --nasa-bg: #07090f;
+      --nasa-panel: rgba(15, 18, 28, 0.92);
+      --nasa-panel-soft: rgba(255, 255, 255, 0.055);
+      --nasa-border: rgba(255, 255, 255, 0.11);
+      --nasa-border-strong: rgba(110, 231, 255, 0.35);
+      --nasa-text: #f4f7fb;
+      --nasa-muted: #9ba7b7;
+      --nasa-cyan: #6ee7ff;
+      --nasa-blue: #3b82f6;
+      --nasa-green: #22c55e;
+      --nasa-orange: #f59e0b;
+      --nasa-red: #ef4444;
+      --nasa-purple: #a855f7;
+      --nasa-radius: 18px;
+  }
+
+  html,
+  body {
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      font-size: 14px;
+      line-height: 1.35;
+  }
+
+  body {
+      min-height: 100vh;
+      background:
+          radial-gradient(circle at 75% 10%, rgba(59, 130, 246, 0.22), transparent 24%),
+          radial-gradient(circle at 15% 25%, rgba(110, 231, 255, 0.10), transparent 18%),
+          radial-gradient(circle at 82% 82%, rgba(168, 85, 247, 0.14), transparent 26%),
+          linear-gradient(135deg, #03040a 0%, #080b12 48%, #0e111c 100%);
+      color: var(--nasa-text);
+      overflow-x: hidden;
+  }
+
+  body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+          radial-gradient(circle, rgba(255, 255, 255, .65) 0 1px, transparent 1.5px),
+          radial-gradient(circle, rgba(110, 231, 255, .35) 0 1px, transparent 1.4px);
+      background-size: 120px 120px, 210px 210px;
+      background-position: 30px 40px, 80px 100px;
+      opacity: .28;
+      z-index: -1;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+      letter-spacing: -0.02em;
+  }
+
+  .app-shell {
+      width: min(1560px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 40px;
+  }
+
+  .glass-card {
+      background: var(--nasa-panel);
+      border: 1px solid var(--nasa-border);
+      border-radius: var(--nasa-radius);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .22);
+      backdrop-filter: blur(18px);
+      transition: border-color .18s ease, box-shadow .18s ease;
+  }
+
+  .glass-card:hover {
+      border-color: rgba(110, 231, 255, .18);
+  }
+
+  .dashboard-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 18px;
+  }
+
+  .brand-block {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+  }
+
+  .brand-logo {
+      width: 54px;
+      height: 54px;
+      border-radius: 17px;
+      display: grid;
+      place-items: center;
+      background:
+          radial-gradient(circle at 30% 25%, rgba(255, 255, 255, .65), transparent 18%),
+          linear-gradient(135deg, var(--nasa-blue), var(--nasa-cyan));
+      color: #031018;
+      font-size: 25px;
+      box-shadow: 0 0 35px rgba(110, 231, 255, .24);
+      transform: rotate(-10deg);
+  }
+
+  .brand-title {
+      margin: 0;
+      font-size: clamp(28px, 3.4vw, 44px);
+      font-weight: 850;
+      letter-spacing: -.04em;
+  }
+
+  .brand-subtitle {
+      color: var(--nasa-muted);
+      font-size: 14px;
+      margin-top: 3px;
+  }
+
+  .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--nasa-border);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .055);
+      color: var(--nasa-text);
+      padding: 8px 12px;
+      font-size: 13px;
+      white-space: nowrap;
+  }
+
+  .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--nasa-green);
+      box-shadow: 0 0 14px var(--nasa-green);
+  }
+
+  .btn-ghost {
+      border: 1px solid var(--nasa-border);
+      background: rgba(255, 255, 255, .055);
+      color: var(--nasa-text);
+      border-radius: 12px;
+  }
+
+  .btn-ghost:hover {
+      border-color: rgba(110, 231, 255, .38);
+      color: var(--nasa-cyan);
+      background: rgba(110, 231, 255, .08);
+  }
+
+  .btn-nasa {
+      border: 0;
+      background: linear-gradient(135deg, var(--nasa-blue), var(--nasa-cyan));
+      color: #031018;
+      font-weight: 800;
+      border-radius: 12px;
+      min-height: 40px;
+      box-shadow: 0 0 22px rgba(110, 231, 255, .16);
+  }
+
+  .btn-nasa:hover {
+      filter: brightness(1.05);
+      color: #031018;
+  }
+
+  .nasa-tabs .nav-link {
+      color: var(--nasa-muted);
+      border: 1px solid transparent;
+      border-radius: 999px;
+      padding: 9px 15px;
+  }
+
+  .nasa-tabs .nav-link.active {
+      background: rgba(110, 231, 255, .13);
+      border-color: rgba(110, 231, 255, .28);
+      color: var(--nasa-cyan);
+  }
+
+  .hero-grid {
+      display: grid;
+      grid-template-columns: 300px minmax(420px, 1fr) 320px;
+      gap: 18px;
+      align-items: stretch;
+  }
+
+  .content-grid {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(340px, .8fr);
+      gap: 18px;
+      align-items: start;
+  }
+
+  .filters-card,
+  .space-scene,
+  .active-threat-card,
+  .mission-status-card,
+  .results-card,
+  .charts-card,
+  .detail-card {
+      padding: 18px;
+      min-width: 0;
+  }
+
+  .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+  }
+
+  .section-title h2,
+  .section-title h3 {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 800;
+  }
+
+  .section-title small {
+      color: var(--nasa-muted);
+  }
+
+  .filters .row {
+      --bs-gutter-y: .75rem;
+  }
+
+  .form-label {
+      color: #cbd5e1;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-weight: 750;
+  }
+
+  .form-control,
+  .form-select {
+      min-height: 38px;
+      font-size: 13px;
+      background-color: rgba(255, 255, 255, .06);
+      border-color: rgba(255, 255, 255, .13);
+      color: var(--nasa-text);
+      border-radius: 12px;
+  }
+
+  .form-control:focus,
+  .form-select:focus {
+      background-color: rgba(255, 255, 255, .08);
+      color: var(--nasa-text);
+      border-color: rgba(110, 231, 255, .48);
+      box-shadow: 0 0 0 .25rem rgba(110, 231, 255, .10);
+  }
+
+  .form-select option {
+      background: #111827;
+      color: #fff;
+  }
+
+  .metric-list {
+      display: grid;
+      gap: 12px;
+  }
+
+  .metric-card {
+      padding: 16px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, .055);
+      border: 1px solid rgba(255, 255, 255, .085);
+  }
+
+  .metric-card-primary {
+      border-color: rgba(110, 231, 255, .18);
+  }
+
+  .metric-card-danger {
+      border-color: rgba(239, 68, 68, .20);
+  }
+
+  .metric-card-source {
+      border-color: rgba(34, 197, 94, .18);
+  }
+
+  .metric-label {
+      color: var(--nasa-muted);
+      font-size: 12px;
+      margin-bottom: 8px;
+  }
+
+  .metric-value {
+      font-size: 28px;
+      line-height: 1;
+      font-weight: 850;
+      font-variant-numeric: tabular-nums;
+  }
+
+  .metric-value small {
+      font-size: 13px;
+      color: var(--nasa-muted);
+      font-weight: 500;
+  }
+
+  .metric-trend {
+      font-size: 12px;
+      margin-top: 8px;
+  }
+
+  .trend-good {
+      color: var(--nasa-green);
+  }
+
+  .trend-warn {
+      color: var(--nasa-orange);
+  }
+
+  .trend-danger {
+      color: var(--nasa-red);
+  }
+
+  .space-scene {
+      position: relative;
+      min-height: 390px;
+      overflow: hidden;
+      background:
+          radial-gradient(circle at 60% 28%, rgba(255, 255, 255, .18), transparent 16%),
+          radial-gradient(circle at 24% 70%, rgba(110, 231, 255, .09), transparent 22%),
+          rgba(255, 255, 255, .035);
+  }
+
+  .scene-toolbar {
+      position: relative;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+  }
+
+  .scene-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(110, 231, 255, .28);
+      background: rgba(110, 231, 255, .09);
+      color: var(--nasa-cyan);
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-size: 12px;
+      white-space: nowrap;
+  }
+
+  .toolbar-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+  }
+
+  .space-scene .toolbar-actions {
+      max-width: 58%;
+  }
+
+  .space-scene .toolbar-actions .btn {
+      white-space: nowrap;
+  }
+
+  .risk-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .02em;
+  }
+
+  .risk-danger {
+      background: rgba(239, 68, 68, .20);
+      color: #fecaca;
+      border: 1px solid rgba(239, 68, 68, .55);
+      box-shadow: 0 0 18px rgba(239, 68, 68, .12);
+  }
+
+  .risk-safe {
+      background: rgba(34, 197, 94, .18);
+      color: #bbf7d0;
+      border: 1px solid rgba(34, 197, 94, .45);
+  }
+
+  /* =========================================================
+       Cinematic mission visualizer
+       ========================================================= */
+
+  .mission-visualizer {
+      isolation: isolate;
+  }
+
+  .cinematic-visualizer {
+      position: relative;
+      min-height: 560px;
+      overflow: hidden;
+      background:
+          radial-gradient(circle at 70% 18%, rgba(255, 255, 255, .20), transparent 10%),
+          radial-gradient(circle at 28% 45%, rgba(110, 231, 255, .12), transparent 26%),
+          radial-gradient(circle at 80% 85%, rgba(168, 85, 247, .13), transparent 28%),
+          linear-gradient(135deg, #03060b 0%, #111827 52%, #07111f 100%);
+  }
+
+  .cinematic-stars {
+      position: absolute;
+      inset: 0;
+      opacity: .48;
+      background-image:
+          radial-gradient(circle, rgba(255, 255, 255, .75) 0 1px, transparent 1.5px),
+          radial-gradient(circle, rgba(110, 231, 255, .55) 0 1px, transparent 1.4px);
+      background-size: 110px 110px, 180px 180px;
+      background-position: 20px 40px, 90px 80px;
+      z-index: 1;
+  }
+
+  .cinematic-sun {
+      position: absolute;
+      right: 18%;
+      top: 4%;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, .95), rgba(255, 255, 255, .32) 28%, transparent 68%);
+      filter: blur(1px);
+      box-shadow: 0 0 95px rgba(255, 255, 255, .45);
+      opacity: .76;
+      z-index: 2;
+  }
+
+  .cinematic-earth {
+      position: absolute;
+      left: -35px;
+      bottom: -45px;
+      width: 170px;
+      height: 170px;
+      border-radius: 50%;
+      background:
+          radial-gradient(circle at 60% 30%, rgba(255, 255, 255, .55), transparent 9%),
+          radial-gradient(circle at 35% 45%, rgba(110, 231, 255, .22), transparent 22%),
+          linear-gradient(135deg, #d1d5db, #334155 45%, #020617);
+      box-shadow:
+          inset -30px -25px 55px rgba(0, 0, 0, .82),
+          0 0 55px rgba(110, 231, 255, .12);
+      opacity: .72;
+      z-index: 2;
+  }
+
+  .cinematic-asteroid {
+      position: absolute;
+      left: 50%;
+      top: 43%;
+      width: min(760px, 84%);
+      height: 255px;
+      transform: translate(-50%, -50%) rotate(-17deg);
+      clip-path: polygon(2% 57%,
+              10% 35%,
+              28% 16%,
+              48% 5%,
+              76% 8%,
+              96% 27%,
+              91% 50%,
+              73% 71%,
+              47% 91%,
+              20% 86%,
+              6% 71%);
+      background:
+          radial-gradient(circle at 23% 48%, rgba(255, 255, 255, .80), transparent 7%),
+          radial-gradient(circle at 44% 53%, rgba(0, 0, 0, .78), transparent 8%),
+          radial-gradient(circle at 67% 37%, rgba(0, 0, 0, .72), transparent 9%),
+          radial-gradient(circle at 72% 64%, rgba(255, 255, 255, .22), transparent 9%),
+          radial-gradient(circle at 38% 76%, rgba(0, 0, 0, .65), transparent 9%),
+          linear-gradient(135deg, #050505 0%, #202426 23%, #e5e7eb 47%, #555d60 64%, #090909 100%);
+      box-shadow:
+          inset -120px -42px 120px rgba(0, 0, 0, .92),
+          inset 65px 25px 95px rgba(255, 255, 255, .28),
+          0 36px 120px rgba(255, 255, 255, .18);
+      filter: grayscale(.75) contrast(1.22);
+      z-index: 3;
+  }
+
+  .cinematic-asteroid::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+          linear-gradient(100deg, transparent 0 34%, rgba(255, 255, 255, .20) 42%, transparent 56%),
+          radial-gradient(circle at 54% 48%, rgba(0, 0, 0, .55), transparent 9%),
+          radial-gradient(circle at 75% 25%, rgba(0, 0, 0, .45), transparent 7%);
+      opacity: .55;
+  }
+
+  .cinematic-asteroid .crater {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle at 38% 35%, rgba(255, 255, 255, .22), rgba(0, 0, 0, .72) 62%);
+      box-shadow: inset 3px 3px 9px rgba(255, 255, 255, .12);
+  }
+
+  .crater-a {
+      width: 44px;
+      height: 44px;
+      left: 37%;
+      top: 48%;
+  }
+
+  .crater-b {
+      width: 58px;
+      height: 58px;
+      left: 63%;
+      top: 30%;
+  }
+
+  .crater-c {
+      width: 38px;
+      height: 38px;
+      left: 27%;
+      top: 58%;
+  }
+
+  .crater-d {
+      width: 52px;
+      height: 52px;
+      left: 47%;
+      top: 72%;
+  }
+
+  .scene-tech-label {
+      position: absolute;
+      z-index: 8;
+      padding: 10px 12px;
+      border-radius: 13px;
+      background: rgba(3, 7, 18, .52);
+      border: 1px solid rgba(255, 255, 255, .12);
+      backdrop-filter: blur(10px);
+      min-width: 132px;
+  }
+
+  .scene-tech-label span {
+      display: block;
+      color: var(--nasa-muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-weight: 800;
+  }
+
+  .scene-tech-label strong {
+      display: block;
+      color: #fff;
+      font-size: 13px;
+      margin-top: 4px;
+  }
+
+  .label-risk {
+      left: 7%;
+      top: 47%;
+  }
+
+  .label-distance {
+      right: 8%;
+      bottom: 29%;
+  }
+
+  .label-size {
+      top: 18%;
+      left: 42%;
+  }
+
+  .tech-line {
+      position: absolute;
+      z-index: 7;
+      height: 1px;
+      background: rgba(255, 255, 255, .34);
+      transform-origin: left center;
+  }
+
+  .line-risk {
+      width: 150px;
+      left: 18%;
+      top: 52%;
+      transform: rotate(-8deg);
+  }
+
+  .line-distance {
+      width: 130px;
+      right: 15%;
+      bottom: 38%;
+      transform: rotate(-18deg);
+  }
+
+  .line-size {
+      width: 120px;
+      left: 48%;
+      top: 29%;
+      transform: rotate(32deg);
+  }
+
+  .visualizer-bottom-panel {
+      position: absolute;
+      left: 24px;
+      right: 24px;
+      bottom: 18px;
+      z-index: 9;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 260px;
+      gap: 14px;
+      align-items: stretch;
+  }
+
+  .visualizer-bottom-panel>div {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(3, 7, 18, .62);
+      border: 1px solid rgba(255, 255, 255, .12);
+      backdrop-filter: blur(12px);
+  }
+
+  .visualizer-bottom-panel h3 {
+      margin: 10px 0 6px;
+      font-size: 22px;
+      font-weight: 900;
+  }
+
+  .visualizer-bottom-panel p {
+      margin: 0;
+      color: var(--nasa-muted);
+      font-size: 13px;
+      line-height: 1.45;
+  }
+
+  .mission-energy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+  }
+
+  .mission-energy span {
+      color: var(--nasa-muted);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-size: 11px;
+      font-weight: 800;
+  }
+
+  .mission-energy strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 22px;
+      color: var(--nasa-cyan);
+      font-weight: 900;
+  }
+
+  .mission-energy small {
+      display: block;
+      margin-top: 5px;
+      color: var(--nasa-muted);
+  }
+
+  /* =========================================================
+       Selected object compact
+       ========================================================= */
+
+  .selected-object-card {
+      min-height: auto;
+  }
+
+  .selected-object-compact {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      align-items: center;
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, .055);
+      border: 1px solid rgba(255, 255, 255, .08);
+      margin-bottom: 14px;
+  }
+
+  .selected-object-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 15px;
+      display: grid;
+      place-items: center;
+      background:
+          radial-gradient(circle at 35% 30%, rgba(255, 255, 255, .75), transparent 12%),
+          linear-gradient(135deg, #d1d5db, #374151);
+      color: #111827;
+      transform: rotate(-12deg);
+  }
+
+  .selected-label {
+      display: block;
+      color: var(--nasa-muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-weight: 800;
+  }
+
+  .selected-object-compact strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 900;
+      color: var(--nasa-text);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+  }
+
+  .selected-object-compact small {
+      color: var(--nasa-muted);
+  }
+
+  .selected-object-actions {
+      margin-bottom: 12px;
+  }
+
+  .selected-object-note {
+      display: flex;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--nasa-muted);
+      line-height: 1.45;
+  }
+
+  .right-stack {
+      display: grid;
+      gap: 18px;
+  }
+
+  .mission-status-box {
+      display: grid;
+      gap: 10px;
+  }
+
+  .mission-status-box div {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 11px 12px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, .055);
+  }
+
+  .mission-status-box span {
+      color: var(--nasa-muted);
+  }
+
+  .mission-status-box strong {
+      color: var(--nasa-cyan);
+  }
+
+  .asteroid-list {
+      display: grid;
+      gap: 12px;
+  }
+
+  .asteroid-card {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 16px;
+      align-items: center;
+      padding: 17px 18px;
+      border-radius: 18px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, .075), rgba(255, 255, 255, .035));
+      border: 1px solid rgba(255, 255, 255, .11);
+      transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease;
+  }
+
+  .asteroid-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(110, 231, 255, .35);
+      background: linear-gradient(90deg, rgba(110, 231, 255, .10), rgba(255, 255, 255, .045));
+  }
+
+  .asteroid-card.selected {
+      border-color: rgba(110, 231, 255, .65);
+      box-shadow:
+          0 0 0 1px rgba(110, 231, 255, .18),
+          0 18px 48px rgba(110, 231, 255, .08);
+  }
+
+  .asteroid-card.dangerous {
+      border-color: rgba(239, 68, 68, .45);
+      background: linear-gradient(90deg, rgba(239, 68, 68, .14), rgba(255, 255, 255, .045));
+  }
+
+  .asteroid-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background:
+          radial-gradient(circle at 35% 30%, rgba(255, 255, 255, .75), transparent 12%),
+          linear-gradient(135deg, #d1d5db, #374151);
+      color: #111827;
+      filter: grayscale(.6);
+      transform: rotate(-12deg);
+  }
+
+  .asteroid-title {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      min-width: 0;
+      margin-bottom: 5px;
+  }
+
+  .asteroid-title h4 {
+      margin: 0;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 18px;
+      font-weight: 850;
+  }
+
+  .asteroid-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      min-width: 0;
+      color: var(--nasa-muted);
+      font-size: 12px;
+  }
+
+  .asteroid-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(120px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+  }
+
+  .asteroid-meta-item {
+      min-width: 0;
+      padding: 9px 10px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, .045);
+      border: 1px solid rgba(255, 255, 255, .06);
+  }
+
+  .asteroid-meta-label {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--nasa-muted);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-weight: 800;
+  }
+
+  .asteroid-meta-item strong {
+      display: block;
+      color: #e5e7eb;
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-variant-numeric: tabular-nums;
+  }
+
+  @media (max-width: 1200px) {
+      .asteroid-meta-grid {
+          grid-template-columns: repeat(2, minmax(120px, 1fr));
+      }
+  }
+
+  @media (max-width: 650px) {
+      .asteroid-meta-grid {
+          grid-template-columns: 1fr;
+      }
+  }
+
+  .detail-empty {
+      min-height: 280px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: var(--nasa-muted);
+      border-radius: 16px;
+      border: 1px dashed rgba(255, 255, 255, .15);
+      background: rgba(255, 255, 255, .035);
+      padding: 24px;
+  }
+
+  .detail-panel {
+      width: 100%;
+  }
+
+  .detail-panel h4 {
+      color: #fff;
+      font-size: 20px;
+      font-weight: 850;
+  }
+
+  .detail-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 14px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(110, 231, 255, .10);
+      border: 1px solid rgba(110, 231, 255, .25);
+      color: var(--nasa-cyan);
+      font-size: 12px;
+      font-weight: 750;
+  }
+
+  .detail-section-title {
+      margin: 0 0 10px;
+      color: #e5e7eb;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-weight: 850;
+  }
+
+  .detail-kv {
+      display: grid;
+      gap: 8px;
+  }
+
+  .detail-kv div {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, .055);
+      border: 1px solid rgba(255, 255, 255, .06);
+      font-size: 13px;
+  }
+
+  .detail-kv span:first-child {
+      color: var(--nasa-muted);
+  }
+
+  .detail-kv strong {
+      text-align: right;
+      color: #e5e7eb;
+  }
+
+  .close-approach-list {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+  }
+
+  .close-approach-item {
+      display: grid;
+      gap: 3px;
+      padding: 10px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, .055);
+      border: 1px solid rgba(255, 255, 255, .06);
+  }
+
+  .close-approach-item strong {
+      color: #e5e7eb;
+      font-size: 13px;
+  }
+
+  .close-approach-item span {
+      color: var(--nasa-muted);
+      font-size: 12px;
+  }
+
+  .detail-loading {
+      margin-top: 12px;
+      color: var(--nasa-cyan);
+      font-size: 13px;
+  }
+
+  .loader-overlay {
+      position: fixed;
+      left: 50%;
+      bottom: 28px;
+      transform: translateX(-50%);
+      z-index: 2000;
+      padding: 11px 18px;
+      border-radius: 999px;
+      background: rgba(3, 7, 18, .92);
+      border: 1px solid var(--nasa-border-strong);
+      color: var(--nasa-cyan);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, .32);
+      display: none;
+  }
+
+  .loader-overlay.htmx-request {
+      display: block;
+  }
+
+  .toast-target:not(:empty) {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      z-index: 2100;
+      width: min(420px, calc(100% - 48px));
+  }
+
+  /* =========================================================
+       Asteroid list pagination
+       ========================================================= */
+
+  .asteroid-list-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 14px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .04);
+      border: 1px solid rgba(255, 255, 255, .07);
+  }
+
+  .list-counter {
+      display: inline-flex;
+      align-items: center;
+      color: var(--nasa-muted);
+      font-size: 13px;
+  }
+
+  .list-counter strong {
+      color: var(--nasa-text);
+      font-weight: 800;
+  }
+
+  .page-size-control {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+  }
+
+  .page-size-control label {
+      color: var(--nasa-muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-weight: 800;
+  }
+
+  .page-size-control .form-select {
+      width: 82px;
+      min-height: 34px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+  }
+
+  .asteroid-pagination {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, .08);
+  }
+
+  .pagination-pages {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+  }
+
+  .pagination-page-btn {
+      min-width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, .10);
+      background: rgba(255, 255, 255, .055);
+      color: var(--nasa-text);
+      font-size: 13px;
+      font-weight: 750;
+  }
+
+  .pagination-page-btn:hover {
+      border-color: rgba(110, 231, 255, .38);
+      color: var(--nasa-cyan);
+      background: rgba(110, 231, 255, .08);
+  }
+
+  .pagination-page-btn.active {
+      background: linear-gradient(135deg, var(--nasa-blue), var(--nasa-cyan));
+      color: #031018;
+      border-color: transparent;
+  }
+
+  .asteroid-page-item.is-hidden {
+      display: none;
+  }
+
+  /* =========================================================
+       Recharts-like chart cards
+       ========================================================= */
+
+  .charts-dashboard {
+      padding: 22px;
+  }
+
+  .charts-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 22px;
+  }
+
+  .charts-header h2 {
+      margin: 0 0 8px;
+      font-size: 30px;
+      font-weight: 900;
+  }
+
+  .charts-header p {
+      margin: 0;
+      color: var(--nasa-muted);
+      max-width: 760px;
+  }
+
+  .charts-example-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+  }
+
+  .chart-example-card {
+      min-width: 0;
+      overflow: hidden;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, .035);
+      border: 1px solid rgba(255, 255, 255, .13);
+      box-shadow: 0 18px 50px rgba(0, 0, 0, .22);
+  }
+
+  .chart-example-body {
+      height: 260px;
+      padding: 14px;
+      background:
+          radial-gradient(circle at 50% 0%, rgba(110, 231, 255, .08), transparent 28%),
+          rgba(0, 0, 0, .18);
+      border-bottom: 1px solid rgba(255, 255, 255, .10);
+  }
+
+  .chart-example-body canvas {
+      width: 100% !important;
+      height: 100% !important;
+  }
+
+  .chart-example-footer {
+      min-height: 72px;
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+  }
+
+  .chart-example-footer h3 {
+      margin: 0 0 4px;
+      font-size: 16px;
+      font-weight: 900;
+  }
+
+  .chart-example-footer small {
+      color: var(--nasa-muted);
+  }
+
+  .chart-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      padding: 7px 10px;
+      background: rgba(110, 231, 255, .10);
+      border: 1px solid rgba(110, 231, 255, .24);
+      color: var(--nasa-cyan);
+      font-size: 11px;
+      font-weight: 850;
+      white-space: nowrap;
+  }
+
+  .chart-badge.warning {
+      background: rgba(245, 158, 11, .12);
+      border-color: rgba(245, 158, 11, .28);
+      color: #fbbf24;
+  }
+
+  @media (max-width: 1450px) {
+      .hero-grid {
+          grid-template-columns: 300px minmax(0, 1fr);
+      }
+
+      .right-stack {
+          grid-column: 1 / -1;
+          grid-template-columns: 1fr 1fr;
+      }
+
+      .content-grid {
+          grid-template-columns: 1fr;
+      }
+
+      .space-scene .toolbar-actions {
+          max-width: 48%;
+      }
+
+      .space-scene .toolbar-actions .btn {
+          font-size: 12px;
+          padding: 6px 9px;
+      }
+  }
+
+  @media (max-width: 1250px) {
+      .charts-example-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+  }
+
+  @media (max-width: 1200px) {
+      .cinematic-visualizer {
+          min-height: 620px;
+      }
+
+      .visualizer-bottom-panel {
+          grid-template-columns: 1fr;
+      }
+
+      .cinematic-asteroid {
+          width: 88%;
+          height: 225px;
+      }
+  }
+
+  @media (max-width: 900px) {
+      body {
+          padding: 14px;
+      }
+
+      .dashboard-header,
+      .nav {
+          flex-wrap: wrap;
+      }
+
+      .hero-grid,
+      .right-stack,
+      .content-grid {
+          grid-template-columns: 1fr;
+      }
+
+      .space-scene .toolbar-actions {
+          max-width: 100%;
+          justify-content: flex-start;
+      }
+
+      .asteroid-card {
+          grid-template-columns: auto 1fr;
+      }
+
+      .asteroid-card .btn {
+          grid-column: 1 / -1;
+      }
+  }
+
+  @media (max-width: 800px) {
+
+      .scene-tech-label,
+      .tech-line {
+          display: none;
+      }
+
+      .cinematic-visualizer {
+          min-height: 560px;
+      }
+
+      .cinematic-asteroid {
+          width: 96%;
+          height: 190px;
+      }
+  }
+
+  @media (max-width: 780px) {
+      .charts-header {
+          flex-direction: column;
+      }
+
+      .charts-example-grid {
+          grid-template-columns: 1fr;
+      }
+  }
+
+  @media (max-width: 700px) {
+
+      .asteroid-list-toolbar,
+      .asteroid-pagination {
+          align-items: stretch;
+          flex-direction: column;
+      }
+
+      .pagination-pages {
+          order: -1;
+      }
+
+      .page-size-control {
+          justify-content: space-between;
+      }
+  }
+
+  /* =========================================================
+   Dynamic asteroid shapes
+   ========================================================= */
+
+  .cinematic-asteroid {
+      transition:
+          width .35s ease,
+          height .35s ease,
+          transform .35s ease,
+          filter .35s ease,
+          box-shadow .35s ease,
+          clip-path .35s ease,
+          background .35s ease;
+  }
+
+  /* Risk visual style */
+
+  .asteroid-shape-safe {
+      box-shadow:
+          inset -120px -42px 120px rgba(0, 0, 0, .92),
+          inset 65px 25px 95px rgba(255, 255, 255, .28),
+          0 36px 120px rgba(110, 231, 255, .14);
+  }
+
+  .asteroid-shape-dangerous {
+      box-shadow:
+          inset -130px -48px 130px rgba(0, 0, 0, .94),
+          inset 70px 25px 95px rgba(255, 255, 255, .24),
+          0 0 55px rgba(239, 68, 68, .28),
+          0 40px 130px rgba(239, 68, 68, .18);
+      filter: grayscale(.55) contrast(1.35) saturate(1.2);
+  }
+
+  /* Size classes */
+
+  .asteroid-size-small {
+      width: min(540px, 68%);
+      height: 190px;
+  }
+
+  .asteroid-size-medium {
+      width: min(680px, 78%);
+      height: 235px;
+  }
+
+  .asteroid-size-large {
+      width: min(820px, 88%);
+      height: 285px;
+  }
+
+  /* Speed classes change the inclination */
+
+  .asteroid-speed-low {
+      transform: translate(-50%, -50%) rotate(-10deg);
+  }
+
+  .asteroid-speed-medium {
+      transform: translate(-50%, -50%) rotate(-18deg);
+  }
+
+  .asteroid-speed-high {
+      transform: translate(-50%, -50%) rotate(-28deg);
+  }
+
+  /* Distance classes change the visual intensity */
+
+  .asteroid-distance-close {
+      opacity: 1;
+      filter: grayscale(.55) contrast(1.4);
+  }
+
+  .asteroid-distance-medium {
+      opacity: .94;
+  }
+
+  .asteroid-distance-long {
+      opacity: .82;
+      filter: grayscale(.85) contrast(1.05);
+  }
+
+  /* Different silhouettes */
+
+  .asteroid-form-a {
+      clip-path: polygon(2% 57%,
+              10% 35%,
+              28% 16%,
+              48% 5%,
+              76% 8%,
+              96% 27%,
+              91% 50%,
+              73% 71%,
+              47% 91%,
+              20% 86%,
+              6% 71%);
+  }
+
+  .asteroid-form-b {
+      clip-path: polygon(4% 48%,
+              16% 20%,
+              38% 8%,
+              67% 13%,
+              93% 34%,
+              88% 64%,
+              62% 86%,
+              28% 92%,
+              8% 73%);
+  }
+
+  .asteroid-form-c {
+      clip-path: polygon(6% 63%,
+              18% 28%,
+              43% 5%,
+              74% 12%,
+              98% 44%,
+              82% 78%,
+              48% 95%,
+              15% 84%);
+  }
+
+  .asteroid-form-d {
+      clip-path: polygon(3% 42%,
+              22% 18%,
+              52% 4%,
+              86% 18%,
+              97% 52%,
+              73% 84%,
+              36% 92%,
+              9% 70%);
+  }
+
+  /* Craters change depending on selected classes */
+
+  .asteroid-shape-dangerous .crater-a,
+  .asteroid-shape-dangerous .crater-b,
+  .asteroid-shape-dangerous .crater-c,
+  .asteroid-shape-dangerous .crater-d {
+      background: radial-gradient(circle at 38% 35%, rgba(255, 120, 120, .25), rgba(0, 0, 0, .82) 62%);
+  }
+
+  .asteroid-size-large .crater-a {
+      width: 56px;
+      height: 56px;
+  }
+
+  .asteroid-size-large .crater-b {
+      width: 72px;
+      height: 72px;
+  }
+
+  .asteroid-size-small .crater-a {
+      width: 32px;
+      height: 32px;
+  }
+
+  .asteroid-size-small .crater-b {
+      width: 42px;
+      height: 42px;
+  }
+
+  </style>

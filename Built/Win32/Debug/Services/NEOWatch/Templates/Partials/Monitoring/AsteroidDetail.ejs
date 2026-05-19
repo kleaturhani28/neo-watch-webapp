@@ -1,0 +1,154 @@
+<div class="detail-panel w-100 text-start">
+
+  <div class="detail-chip">
+    <i class="fa-solid fa-satellite"></i>
+    NASA JPL orbital data
+  </div>
+
+  <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+    <div>
+      <h4 class="mb-1">
+        <% asteroiddetail.Name %>
+      </h4>
+      <div class="text-secondary small">Object ID: <% asteroiddetail.Id %>
+      </div>
+    </div>
+
+    <span class="<% asteroiddetail.HazardousCssClass %>">
+      <i class="fa-solid fa-circle"></i>
+      <% asteroiddetail.HazardousLabel %>
+    </span>
+  </div>
+
+  <div class="mb-3">
+    <h6 class="detail-section-title">Overview</h6>
+
+    <div class="detail-kv">
+      <div>
+        <span>Minimum distance</span>
+        <strong>
+          <% asteroiddetail.MinDistanceKmText %>
+        </strong>
+      </div>
+
+      <div>
+        <span>Estimated diameter</span>
+        <strong>
+          <% asteroiddetail.DiameterText %>
+        </strong>
+      </div>
+
+      <div>
+        <span>Relative velocity</span>
+        <strong>
+          <% asteroiddetail.RelativeVelocityText %>
+        </strong>
+      </div>
+
+      <div>
+        <span>Close approach</span>
+        <strong>
+          <% asteroiddetail.CloseApproachDateText %>
+        </strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <h6 class="detail-section-title">Orbital data</h6>
+
+    <div class="detail-kv">
+      <div>
+        <span>Orbit class</span>
+        <strong>
+          <% asteroiddetail.OrbitClassText %>
+        </strong>
+      </div>
+
+      <div>
+        <span>Orbit ID</span>
+        <strong>
+          <% asteroiddetail.OrbitId %>
+        </strong>
+      </div>
+
+      <div>
+        <span>Orbit determination</span>
+        <strong>
+          <% asteroiddetail.OrbitDeterminationDateText %>
+        </strong>
+      </div>
+
+      <div>
+        <span>First observation</span>
+        <strong>
+          <% asteroiddetail.FirstObservationDateText %>
+        </strong>
+      </div>
+
+      <div>
+        <span>Last observation</span>
+        <strong>
+          <% asteroiddetail.LastObservationDateText %>
+        </strong>
+      </div>
+
+      <div>
+        <span>Data arc</span>
+        <strong>
+          <% asteroiddetail.DataArcInDaysText %>
+        </strong>
+      </div>
+
+      <div>
+        <span>Observations used</span>
+        <strong>
+          <% asteroiddetail.ObservationsUsedText %>
+        </strong>
+      </div>
+
+      <div>
+        <span>Magnitude</span>
+        <strong>
+          <% asteroiddetail.AbsoluteMagnitudeText %>
+        </strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <h6 class="detail-section-title">Historical close approaches</h6>
+
+    <% if asteroiddetail.CloseApproaches.Count> 0 %>
+      <ul class="close-approach-list">
+        <% for Approach in asteroiddetail.CloseApproaches %>
+          <li class="close-approach-item">
+            <strong>
+              <% Approach.CloseApproachDateText %>
+            </strong>
+            <span>
+              <% Approach.MissDistanceKmText %>
+            </span>
+            <span>
+              <% Approach.RelativeVelocityText %>
+            </span>
+          </li>
+          <% end %>
+      </ul>
+      <% else %>
+        <div class="detail-empty">
+          <div>
+            <i class="fa-solid fa-circle-info fa-2x mb-3 text-info"></i>
+            <h4>No historical approaches</h4>
+            <p class="mb-0">NASA did not return historical close approach data for this object.</p>
+          </div>
+        </div>
+        <% end %>
+  </div>
+
+  <a class="btn btn-sm btn-ghost w-100" href="<% asteroiddetail.NasaJplUrl %>" target="_blank">
+    <i class="fa-solid fa-arrow-up-right-from-square me-1"></i>
+    Open NASA JPL page
+  </a>
+
+</div>

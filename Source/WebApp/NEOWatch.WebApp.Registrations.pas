@@ -293,13 +293,6 @@ begin
   TTemplateRegistry.Instance.LoadStrategy := [tlsLoadFile];
   TTemplateRegistry.Instance.AutomaticRefresh := True;
 
-  // {$IF defined(DEBUG)}
-  //  TTemplateRegistry.Instance.AutomaticRefresh := True;
-  //  TTemplateRegistry.Instance.RefreshIntervalS := 2;
-  // {$ELSE}
-  //  TTemplateRegistry.Instance.AutomaticRefresh := False;
-  // {$ENDIF}
-
   TTemplateRegistry.Instance.ExceptionLogger :=
       procedure(const E: Exception)
       begin
@@ -309,9 +302,6 @@ begin
 
   // Build the container
   Container.Build;
-
-  //  // Register environment
-  //  EnvironmentRegister.Register('TEST', 'TEST', 'Test');
 end;
 
 class procedure NEOWatchRegistrations.RegisterCommandLine(const Container: TContainer);

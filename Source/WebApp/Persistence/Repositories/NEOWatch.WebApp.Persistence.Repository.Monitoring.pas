@@ -49,7 +49,7 @@ function TMonitoringRepository.GetDefaultList: IMonitoring;
 var
   Filters: IAsteroidFilters;
 begin
-  Filters := TAsteroidFilters.Create(Date - 7, Date, nhfAll, nsbDistance, nsdAsc);
+  Filters := TAsteroidFilters.Create(Date, Date, nhfAll, nsbDistance, nsdAsc);
 
   Result := GetListByFilters(Filters);
 end;
@@ -133,6 +133,12 @@ begin
           Asteroid := nil;
 
           Mappers.Map<TJSONObject, IAsteroid>(AsteroidJson, Asteroid);
+
+          if Trunc(Asteroid.CloseApproachDate) < Trunc(Filters.StartDate) then
+            Continue;
+
+          if Trunc(Asteroid.CloseApproachDate) > Trunc(Filters.EndDate) then
+            Continue;
 
           case Filters.HazardousFilter of
             nhfDangerous: begin
