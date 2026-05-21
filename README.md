@@ -8,32 +8,9 @@ This project was developed for the **NASA NEO Dashboard Challenge**.
 
 ---
 
-## Live Demo
-
-Coming soon.
-
-The project currently runs locally through the Delphi Horse backend.
-
----
-
-## Screenshots
-
-Coming soon.
-
-Recommended screenshots to add before final submission:
-
-```text
-docs/screenshots/dashboard-monitoring.png
-docs/screenshots/charts.png
-docs/screenshots/asteroid-detail.png
-docs/screenshots/cache-hit-log.png
-```
-
----
-
 ## Overview
 
-This project is not only a NASA NeoWs dashboard, but also a demonstration of how **Delphi** can be used to build a modern full-stack web application with:
+This project is not only a NASA NEO Dashboard, but also a demonstration of how **Delphi** can be used to build a modern full-stack web application with:
 
 - server-side rendering;
 - backend proxying;
@@ -109,18 +86,13 @@ All NASA requests go through the Delphi backend, which validates requests, manag
 
 ### External API
 
-- NASA NeoWs API
+- NASA API
 
 ---
 
 ## About the Stack Choice
 
-The suggested stack for the challenge was Python FastAPI and Next.js.
-
-This implementation uses **Delphi + Horse** instead.
-
-The challenge allows alternative technologies as long as the project remains solid, complete and easy to explain. This project follows that idea by using Delphi as a strongly typed backend platform while still providing a modern, dynamic and interactive web dashboard.
-
+This implementation uses **Delphi + Horse**. The challenge allows alternative technologies as long as the project remains solid, complete and easy to explain. This project follows that idea by using Delphi as a strongly typed backend platform while still providing a modern, dynamic and interactive web dashboard.
 The backend exposes equivalent HTTP endpoints through Horse.
 
 ---
@@ -347,7 +319,7 @@ This reduces API usage, improves performance and helps avoid unnecessary NASA re
 
 ## Date Range Chunking
 
-NASA NeoWs supports a maximum range of 7 days per request.
+NASA supports a maximum range of 7 days per request.
 
 To support larger user-selected ranges, the backend automatically splits the range into smaller chunks.
 
@@ -566,8 +538,8 @@ This keeps the main dashboard template clean and easier to maintain.
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
-cd YOUR_REPOSITORY
+git clone https://github.com/kleaturhani28/neo-watch-webapp
+cd neo-watch-webapp
 ```
 
 ---
@@ -834,25 +806,6 @@ Pending:
 - live demo URL;
 - final screenshots;
 - final deployment notes.
-
----
-
-## Future Improvements
-
-Possible future improvements:
-
-- Docker support;
-- public deployment;
-- authentication;
-- favorites/watchlist for asteroids;
-- advanced risk scoring;
-- historical trend comparison;
-- export results to CSV;
-- automated tests;
-- CI/CD pipeline;
-- improved mobile layout;
-- WebSocket live updates;
-- deployment with HTTPS and custom domain.
 
 ---
 
