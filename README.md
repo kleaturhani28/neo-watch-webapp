@@ -8,6 +8,34 @@ This project was developed for the **NASA NEO Dashboard Challenge**.
 
 ---
 
+## Live Demo
+
+https://swirl-engraved-afterlife.ngrok-free.dev
+
+The dashboard is publicly accessible through an ngrok HTTPS endpoint.
+
+> Note: the demo is available while the Delphi backend and the ngrok tunnel are running.
+
+---
+
+## Screenshots
+
+### Monitoring dashboard
+
+![Monitoring dashboard](Docs/screenshots/dashboard-monitoring.png)
+
+### Charts
+
+![Charts](Docs/screenshots/charts.png)
+
+### Asteroid detail
+
+![Asteroid detail](Docs/screenshots/asteroid-detail.png)
+
+### Backend cache hit logs
+
+![Backend cache hit logs](Docs/screenshots/cache-hit-log.png)
+
 ## Overview
 
 This project is not only a NASA NEO Dashboard, but also a demonstration of how **Delphi** can be used to build a modern full-stack web application with:
@@ -688,50 +716,66 @@ GET /asteroids/2141495
 
 ## Deployment
 
-Deployment is not completed yet.
+The application is currently exposed online through **ngrok** for the challenge delivery.
 
-The application currently runs locally using the Delphi Horse backend.
-
-Recommended production structure:
+Public dashboard:
 
 ```text
-NEOWatch.WebApp.exe
-Templates/
-  Partials/
-  static/
-    css/
-      dashboardstyle.css
-    js/
-      dashboard.js
-    favicon.ico
+https://swirl-engraved-afterlife.ngrok-free.dev
 ```
 
-The application requires:
 
-- compiled Delphi executable;
-- `Templates` folder;
-- `static` folder;
-- Redis/Memurai cache;
-- NASA API key configured outside the frontend.
+The application is a Delphi Horse full-stack web application.
 
-The backend exposes the application on port `9000`.
+The Delphi backend serves both:
 
-For production, the Delphi backend can be placed behind a reverse proxy such as:
+- the server-rendered frontend pages;
+- the backend API routes used by the dashboard.
 
-- Nginx;
-- Apache;
-- IIS.
-
-Recommended production flow:
+The backend runs on port 9000, while ngrok forwards the public HTTPS URL to the Delphi Horse backend.
 
 ```text
-User
-  -> HTTPS reverse proxy
-    -> Delphi Horse backend on port 9000
-      -> Redis/Memurai cache
-      -> NASA NeoWs API
+Public browser
+  -> https://swirl-engraved-afterlife.ngrok-free.dev
+    -> ngrok HTTPS tunnel
+      -> Delphi Horse backend on port 9000
+        -> Redis/Memurai cache
+        -> NASA NeoWs API
 ```
 
+The NASA API key is configured only on the backend side and is never exposed in frontend JavaScript.
+
+For the challenge delivery, this setup provides a public URL that can be opened from any browser without login.
+
+Note: the ngrok endpoint requires both the Delphi backend process and the ngrok tunnel process to remain active.
+
+---
+
+## Why ngrok was used for the public demo
+
+The challenge requires the dashboard to be reachable online from any browser without login.
+
+This project is implemented as a **Delphi Horse full-stack web application**, where the same backend serves both:
+
+- the server-rendered frontend;
+- the backend API endpoints used by the dashboard.
+
+Because the application is currently built as a Windows Delphi executable, deploying it to typical Linux-based platforms such as Railway, Render or Fly.io would require additional infrastructure work, such as Linux compilation or Windows container hosting.
+
+For the challenge delivery, **ngrok** was selected as a practical solution to expose the working Delphi backend through a public HTTPS URL.
+
+This allows the project to provide:
+
+- a public demo URL;
+- HTTPS access;
+- no login required for visitors;
+- backend proxy behavior preserved;
+- NASA API key kept only on the backend side;
+- no NASA API key exposed in frontend JavaScript.
+
+This setup was chosen to make the project publicly testable while keeping the original Delphi architecture intact.
+
+A future production deployment could use a Windows VPS, a custom domain and an HTTPS reverse proxy for permanent hosting.
 ---
 
 ## Environment Variables / Configuration
@@ -775,37 +819,6 @@ This project includes the main requirements expected from a strong NASA NeoWs da
 - MVC-style presentation layer;
 - static asset separation;
 - ready for deployment behind a reverse proxy.
-
----
-
-## Current Status
-
-Completed:
-
-- backend proxy;
-- NASA feed integration;
-- NASA asteroid detail integration;
-- Redis/Memurai cache;
-- cache hit/miss logging;
-- 7-day chunking;
-- filtering;
-- sorting;
-- asteroid list;
-- pagination;
-- asteroid detail view;
-- chart data generation;
-- Chart.js integration;
-- mission risk visualizer;
-- SweetAlert2 date validation;
-- static CSS and JS separation;
-- README documentation.
-
-Pending:
-
-- public deployment;
-- live demo URL;
-- final screenshots;
-- final deployment notes.
 
 ---
 
