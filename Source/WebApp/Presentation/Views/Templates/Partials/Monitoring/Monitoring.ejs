@@ -182,10 +182,15 @@
           <div class="scene-toolbar">
             <span class="scene-badge">
               <i class="fa-solid fa-crosshairs"></i>
-              Mission risk visualizer
+              Mission radar
             </span>
 
-            <div class="toolbar-actions">
+            <div class="toolbar-actions d-flex flex-wrap gap-2">
+
+              <button class="btn btn-sm btn-ghost" type="button" onclick="window.NEOWatchSelection.showRadarMap()">
+                <i class="fa-solid fa-map-location-dot me-1"></i>
+                Radar map
+              </button>
               <button class="btn btn-sm btn-ghost" type="button" hx-get="/asteroids" hx-include="#asteroidFilters"
                 hx-target="#monitoringContainer" hx-swap="outerHTML" hx-indicator="#globalLoader">
                 <i class="fa-solid fa-arrows-rotate me-1"></i>
@@ -193,45 +198,105 @@
               </button>
 
               <button class="btn btn-sm btn-ghost" type="button" onclick="
-                    document.getElementById('hazardous').value = 'dangerous';
-                    htmx.trigger(document.getElementById('asteroidFilters'), 'submit');
-                  ">
+            document.getElementById('hazardous').value = 'dangerous';
+            htmx.trigger(document.getElementById('asteroidFilters'), 'submit');
+          ">
                 <i class="fa-solid fa-triangle-exclamation me-1"></i>
                 Risk objects
               </button>
             </div>
           </div>
 
-          <div class="cinematic-stars"></div>
+          <div class="cinematic-stars central-radar-map">
+
+            <div class="mini-solar-risk-map central-map">
+              <div class="mini-solar-header">
+                <div>
+                  <span>Near-Earth radar</span>
+                  <strong>Filtered objects map</strong>
+                </div>
+
+                <small id="miniSolarSummary">Waiting for data</small>
+              </div>
+
+              <div class="mini-solar-stage central-map-stage">
+                <div class="mini-solar-orbit orbit-1"></div>
+                <div class="mini-solar-orbit orbit-2"></div>
+                <div class="mini-solar-orbit orbit-3"></div>
+
+                <div class="mini-solar-earth">
+                  <i class="fa-solid fa-earth-europe"></i>
+                </div>
+
+                <div id="miniAsteroidMapMarkers"></div>
+              </div>
+
+              <div class="mini-solar-legend">
+                <span>
+                  <i class="fa-solid fa-circle text-success"></i>
+                  Safe
+                </span>
+
+                <span>
+                  <i class="fa-solid fa-circle text-danger"></i>
+                  Potentially hazardous
+                </span>
+
+                <span>
+                  <i class="fa-solid fa-up-right-and-down-left-from-center text-info"></i>
+                  Size = diameter
+                </span>
+              </div>
+            </div>
+
+          </div>
+
           <div class="cinematic-sun"></div>
-          <div class="cinematic-earth"></div>
 
-          <div class="cinematic-asteroid" id="mainAsteroidVisual">
-            <span class="crater crater-a"></span>
-            <span class="crater crater-b"></span>
-            <span class="crater crater-c"></span>
-            <span class="crater crater-d"></span>
+
+          <!-- FOCUS VIEW -->
+          <div class="asteroid-focus-view d-none" id="asteroidFocusView">
+            <div class="cinematic-earth"></div>
+
+            <div class="cinematic-asteroid asteroid-3d" id="mainAsteroidVisual">
+              <div class="asteroid-core">
+                <span class="asteroid-face face-front"></span>
+                <span class="asteroid-face face-back"></span>
+                <span class="asteroid-face face-left"></span>
+                <span class="asteroid-face face-right"></span>
+                <span class="asteroid-face face-top"></span>
+                <span class="asteroid-face face-bottom"></span>
+
+                <span class="crater crater-a"></span>
+                <span class="crater crater-b"></span>
+                <span class="crater crater-c"></span>
+                <span class="crater crater-d"></span>
+                <span class="crater crater-e"></span>
+                <span class="crater crater-f"></span>
+              </div>
+            </div>
+
+            <div class="tech-line line-risk"></div>
+            <div class="tech-line line-distance"></div>
+            <div class="tech-line line-size"></div>
+
+            <div class="scene-tech-label label-risk">
+              <span>Risk profile</span>
+              <strong id="visualRiskProfile">Waiting</strong>
+            </div>
+
+            <div class="scene-tech-label label-distance">
+              <span>Distance class</span>
+              <strong id="visualDistanceClass">--</strong>
+            </div>
+
+            <div class="scene-tech-label label-size">
+              <span>Size class</span>
+              <strong id="visualSizeClass">--</strong>
+            </div>
           </div>
 
-          <div class="tech-line line-risk"></div>
-          <div class="tech-line line-distance"></div>
-          <div class="tech-line line-size"></div>
-
-          <div class="scene-tech-label label-risk">
-            <span>Risk profile</span>
-            <strong id="visualRiskProfile">Waiting</strong>
-          </div>
-
-          <div class="scene-tech-label label-distance">
-            <span>Distance class</span>
-            <strong id="visualDistanceClass">--</strong>
-          </div>
-
-          <div class="scene-tech-label label-size">
-            <span>Size class</span>
-            <strong id="visualSizeClass">--</strong>
-          </div>
-
+          <!-- BOTTOM PANEL -->
           <div class="visualizer-bottom-panel">
             <div>
               <span class="risk-badge risk-safe" id="visualRisk">
@@ -239,11 +304,28 @@
                 Waiting for analysis
               </span>
 
-              <h3 id="visualName">Mission risk assessment</h3>
+              <h3 id="visualName">Mission radar overview</h3>
 
               <p id="visualDescription">
-                Select an asteroid from the list to generate a mission-style risk profile.
+                The radar map places filtered near-Earth objects around Earth using close approach distance, estimated
+                size and risk profile.
               </p>
+
+
+              <div class="visualizer-data-row mt-3">
+                <div>
+                  <span>Objects</span>
+                  <strong id="visualObjectCount">--</strong>
+                </div>
+                <div>
+                  <span>Hazardous</span>
+                  <strong id="visualHazardCount">--</strong>
+                </div>
+                <div>
+                  <span>Closest</span>
+                  <strong id="visualClosestDistance">--</strong>
+                </div>
+              </div>
             </div>
 
             <div class="mission-energy">

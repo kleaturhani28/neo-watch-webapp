@@ -304,44 +304,48 @@ window.NEOWatchSelection = (function () {
     }
 
     function updateMainAsteroidVisual(button) {
-        const asteroid = document.getElementById('mainAsteroidVisual');
+    const radarMap = document.querySelector('.central-radar-map');
+    const focusView = document.getElementById('asteroidFocusView');
+    const asteroid = document.getElementById('mainAsteroidVisual');
 
-        if (!asteroid) {
-            return;
-        }
-
-        const id = button.dataset.id || '';
-        const hazardousText = String(button.dataset.hazardous || '').toLowerCase();
-        const hazardous =
-            hazardousText === 'true' ||
-            hazardousText === '1' ||
-            hazardousText === 'yes' ||
-            hazardousText === 'sì';
-
-        const riskClass = hazardous ? 'asteroid-shape-dangerous' : 'asteroid-shape-safe';
-        const sizeClass = getAsteroidSizeClassFromKm(button.dataset.diameterMin, button.dataset.diameterMax);
-        const speedClass = getAsteroidSpeedClassFromKmH(button.dataset.velocityValue);
-        const distanceClass = getAsteroidDistanceClassFromKm(button.dataset.distanceValue);
-        const formClass = getAsteroidFormClass(id);
-
-        asteroid.className =
-            'cinematic-asteroid ' +
-            riskClass + ' ' +
-            sizeClass + ' ' +
-            speedClass + ' ' +
-            distanceClass + ' ' +
-            formClass;
-
-        console.log('ASTEROID VISUAL UPDATED', {
-            id: id,
-            hazardous: hazardous,
-            distanceValue: button.dataset.distanceValue,
-            velocityValue: button.dataset.velocityValue,
-            diameterMin: button.dataset.diameterMin,
-            diameterMax: button.dataset.diameterMax,
-            className: asteroid.className
-        });
+    if (radarMap) {
+        radarMap.classList.add('d-none');
+        radarMap.style.display = 'none';
     }
+
+    if (focusView) {
+        focusView.classList.remove('d-none');
+        focusView.classList.add('is-visible');
+        focusView.style.display = 'block';
+    }
+
+    if (!asteroid) {
+        return;
+    }
+
+    const id = button.dataset.id || '';
+    const hazardousText = String(button.dataset.hazardous || '').toLowerCase();
+
+    const hazardous =
+        hazardousText === 'true' ||
+        hazardousText === '1' ||
+        hazardousText === 'yes' ||
+        hazardousText === 'sì';
+
+    const riskClass = hazardous ? 'asteroid-shape-dangerous' : 'asteroid-shape-safe';
+    const sizeClass = getAsteroidSizeClassFromKm(button.dataset.diameterMin, button.dataset.diameterMax);
+    const speedClass = getAsteroidSpeedClassFromKmH(button.dataset.velocityValue);
+    const distanceClass = getAsteroidDistanceClassFromKm(button.dataset.distanceValue);
+    const formClass = getAsteroidFormClass(id);
+
+    asteroid.className =
+        'cinematic-asteroid asteroid-3d ' +
+        riskClass + ' ' +
+        sizeClass + ' ' +
+        speedClass + ' ' +
+        distanceClass + ' ' +
+        formClass;
+}
 
     function updateFromButton(button) {
         const id = button.dataset.id || '';
@@ -374,12 +378,75 @@ window.NEOWatchSelection = (function () {
         updateMainAsteroidVisual(button);
     }
 
+    function updatePanelOnly(button) {
+        const id = button.dataset.id || '';
+        const name = button.dataset.name || '--';
+        const riskClass = button.dataset.riskClass || 'risk-badge risk-safe';
+        const riskLabel = button.dataset.riskLabel || 'Unknown';
+        const distance = button.dataset.distance || '-- km';
+        const velocity = button.dataset.velocity || '-- km/h';
+        const sizeClass = button.dataset.sizeClass || '--';
+
+        selectCard(button);
+
+        setRiskBadge('activeRisk', riskClass, riskLabel);
+        setText('activeObject', name);
+        setText('activeObjectId', 'NASA object ID: ' + id);
+
+        setRiskBadge('visualRisk', riskClass, riskLabel);
+        setText('visualName', name);
+        setText(
+            'visualDescription',
+            'Selected from asteroid list. Full close approach and orbital data is shown in the Asteroid details panel.'
+        );
+
+        setText('visualRiskProfile', getRiskProfile(riskLabel));
+        setText('visualDistanceClass', getDistanceClass(distance));
+        setText('visualVelocityClass', getVelocityClass(velocity));
+        setText('visualSizeClass', sizeClass);
+        setText('visualVelocity', velocity);
+
+        const focusView = document.getElementById('asteroidFocusView');
+
+        if (focusView) {
+            focusView.classList.add('d-none');
+            focusView.classList.remove('is-visible');
+        }
+    }
+
+    function showRadarMap() {
+    const radarMap = document.querySelector('.central-radar-map');
+    const focusView = document.getElementById('asteroidFocusView');
+
+    if (radarMap) {
+        radarMap.classList.remove('d-none');
+        radarMap.style.display = 'block';
+    }
+
+    if (focusView) {
+        focusView.classList.add('d-none');
+        focusView.classList.remove('is-visible');
+        focusView.style.display = 'none';
+    }
+
+    window.NEOWatchCurrentAsteroidId = null;
+
+    if (window.NEOWatchMiniSolarMap) {
+        window.NEOWatchMiniSolarMap.init();
+    }
+}
+
     return {
-        updateFromButton: updateFromButton
+        updateFromButton: updateFromButton,
+        updatePanelOnly: updatePanelOnly,
+        showRadarMap: showRadarMap
     };
+
 })();
 
 window.NEOWatchFilterValidation = (function () {
+    let initialized = false;
+
     function parseDateInput(value) {
         if (!value) {
             return null;
@@ -510,6 +577,11 @@ window.NEOWatchFilterValidation = (function () {
     }
 
     function initialize() {
+        if (initialized) {
+            return;
+        }
+
+        initialized = true;
         document.body.addEventListener('submit', handleSubmit, true);
     }
 
@@ -915,4 +987,291 @@ document.body.addEventListener('htmx:beforeRequest', function (event) {
     }
 
     window.NEOWatchCurrentAsteroidId = asteroidId;
+});
+
+
+window.NEOWatchMiniSolarMap = {
+    asteroids: [],
+
+    init: function () {
+        this.asteroids = this.getAsteroids();
+        this.render();
+    },
+
+    getAsteroids: function () {
+        const fromJson = this.getAsteroidsFromJson();
+
+        if (fromJson.length > 0) {
+            return fromJson;
+        }
+
+        return this.getAsteroidsFromCards();
+    },
+
+    getAsteroidsFromJson: function () {
+        const source =
+            document.getElementById('asteroidMapData') ||
+            document.getElementById('asteroidChartData');
+
+        if (!source) {
+            return [];
+        }
+
+        try {
+            const data = JSON.parse(source.textContent || '[]');
+
+            if (!Array.isArray(data)) {
+                return [];
+            }
+
+            return data.map((item, index) => {
+                const id = item.id || item.Id || item.neoReferenceId || item.NeoReferenceId || item.NasaId || '';
+
+                return {
+                    id: id,
+                    name: item.name || item.Name || item.DisplayName || `Asteroid ${index + 1}`,
+                    distance: Number(item.distance || item.Distance || item.distanceKm || item.DistanceKm || item.missDistanceKm || item.MissDistanceKm || 0),
+                    diameter: Number(item.diameter || item.Diameter || item.diameterKm || item.DiameterKm || item.estimatedDiameterKm || item.EstimatedDiameterKm || 0),
+                    velocity: Number(item.velocity || item.Velocity || item.velocityKmh || item.VelocityKmh || item.relativeVelocityKmh || item.RelativeVelocityKmh || 0),
+                    hazardous:
+                        item.hazardous === true ||
+                        item.Hazardous === true ||
+                        item.isHazardous === true ||
+                        item.IsHazardous === true,
+                    detailUrl: id ? `/asteroids/${id}` : ''
+                };
+            });
+        } catch (error) {
+            console.warn('Invalid asteroid map data:', error);
+            return [];
+        }
+    },
+
+    getAsteroidsFromCards: function () {
+        const cards = Array.from(document.querySelectorAll('.asteroid-card'));
+
+        return cards.map((card, index) => {
+            const title =
+                card.querySelector('h4')?.textContent?.trim() ||
+                card.querySelector('.asteroid-title')?.textContent?.trim() ||
+                `Asteroid ${index + 1}`;
+
+            const detailElement =
+                card.querySelector('[hx-get*="/asteroids/"]') ||
+                card.querySelector('a[href*="/asteroids/"]');
+
+            const detailUrl =
+                detailElement?.getAttribute('hx-get') ||
+                detailElement?.getAttribute('href') ||
+                '';
+
+            const text = card.textContent || '';
+
+            const hazardous =
+                card.classList.contains('dangerous') ||
+                text.toLowerCase().includes('dangerous') ||
+                text.toLowerCase().includes('hazardous');
+
+            const button = card.querySelector('[data-distance-value], [data-velocity-value], [data-diameter-min]');
+            const distance = button ? Number(button.dataset.distanceValue || 0) : 0;
+            const velocity = button ? Number(button.dataset.velocityValue || 0) : 0;
+            const diameterMin = button ? Number(button.dataset.diameterMin || 0) : 0;
+            const diameterMax = button ? Number(button.dataset.diameterMax || 0) : 0;
+            const diameter = diameterMin || diameterMax ? (diameterMin + diameterMax) / 2 : 0;
+
+            return {
+                id: detailUrl.split('/asteroids/')[1] || '',
+                name: title,
+                distance: distance,
+                diameter: diameter,
+                velocity: velocity,
+                hazardous: hazardous,
+                detailUrl: detailUrl
+            };
+        });
+    },
+
+    render: function () {
+        const container = document.getElementById('miniAsteroidMapMarkers');
+        const summary = document.getElementById('miniSolarSummary');
+        const objectCount = document.getElementById('visualObjectCount');
+        const hazardCount = document.getElementById('visualHazardCount');
+        const closestDistance = document.getElementById('visualClosestDistance');
+
+        if (!container) {
+            return;
+        }
+
+        container.innerHTML = '';
+
+        const asteroids = this.asteroids || [];
+        const hazardousCount = asteroids.filter(a => a.hazardous).length;
+        const distances = asteroids.map(a => Number(a.distance || 0)).filter(x => x > 0);
+        const closest = distances.length ? Math.min.apply(null, distances) : 0;
+
+        if (summary) {
+            summary.textContent = `${asteroids.length} objects / ${hazardousCount} risky`;
+        }
+
+        if (objectCount) {
+            objectCount.textContent = asteroids.length ? String(asteroids.length) : '--';
+        }
+
+        if (hazardCount) {
+            hazardCount.textContent = asteroids.length ? String(hazardousCount) : '--';
+        }
+
+        if (closestDistance) {
+            closestDistance.textContent = closest ? this.formatKm(closest) : '--';
+        }
+
+        this.hideFocusView();
+
+        if (!asteroids.length) {
+            return;
+        }
+
+        const total = asteroids.length;
+
+        asteroids.forEach((asteroid, index) => {
+            const angle = ((index / total) * Math.PI * 2) - Math.PI / 2;
+            const radius = this.getRadius(index, total, asteroid);
+            const x = 50 + Math.cos(angle) * radius;
+            const y = 50 + Math.sin(angle) * radius;
+            const size = this.getMarkerSize(asteroid);
+
+            const marker = document.createElement('button');
+            marker.type = 'button';
+            marker.className = `mini-asteroid-marker ${asteroid.hazardous ? 'dangerous' : 'safe'}`;
+            marker.style.left = `${x}%`;
+            marker.style.top = `${y}%`;
+            marker.style.width = `${size}px`;
+            marker.style.height = `${size}px`;
+            marker.title = asteroid.name;
+            marker.setAttribute('aria-label', asteroid.name);
+
+            marker.innerHTML = `
+    <span>${index + 1}</span>
+    <div class="mini-marker-tooltip">
+        <strong>${this.escapeHtml(asteroid.name)}</strong>
+        <span>Risk: ${asteroid.hazardous ? 'Potentially hazardous' : 'Safe'}</span>
+        <span>${asteroid.distance ? 'Distance: ' + this.formatKm(asteroid.distance) : 'Distance: available in details'}</span>
+        <span>${asteroid.velocity ? 'Velocity: ' + this.formatKmh(asteroid.velocity) : 'Velocity: available in details'}</span>
+        <span>Click Details in the asteroid list to open the full panel.</span>
+    </div>
+`;
+
+            if (y < 22) {
+                marker.classList.add('tooltip-bottom');
+            }
+
+            if (x < 18) {
+                marker.classList.add('tooltip-right');
+            }
+
+            if (x > 82) {
+                marker.classList.add('tooltip-left');
+            }
+
+            marker.addEventListener('click', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                this.selectAsteroid(marker, asteroid);
+            });
+
+            container.appendChild(marker);
+        });
+    },
+
+    selectAsteroid: function (marker, asteroid) {
+        document.querySelectorAll('.mini-asteroid-marker.selected').forEach(function (item) {
+            item.classList.remove('selected');
+        });
+
+        marker.classList.add('selected');
+        this.hideFocusView();
+    },
+
+    hideFocusView: function () {
+        const focusView = document.getElementById('asteroidFocusView');
+
+        if (focusView) {
+            focusView.classList.add('d-none');
+            focusView.classList.remove('is-visible');
+        }
+    },
+
+    getRadius: function (index, total, asteroid) {
+        if (asteroid.distance > 0) {
+            return asteroid.distance > 50000000 ? 42 : asteroid.distance > 25000000 ? 34 : 25;
+        }
+
+        if (total <= 1) {
+            return 33;
+        }
+
+        const layer = index % 3;
+
+        if (layer === 0) return 24;
+        if (layer === 1) return 34;
+
+        return 42;
+    },
+
+    getMarkerSize: function (asteroid) {
+        if (asteroid.diameter >= 1) return 34;
+        if (asteroid.diameter >= 0.3) return 30;
+        if (asteroid.diameter >= 0.1) return 26;
+
+        return 24;
+    },
+
+    formatKm: function (value) {
+        return `${Math.round(value).toLocaleString('it-IT')} km`;
+    },
+
+    formatKmh: function (value) {
+        return `${Math.round(value).toLocaleString('it-IT')} km/h`;
+    },
+
+    escapeHtml: function (value) {
+        return String(value || '')
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#039;');
+    }
+};
+
+document.addEventListener('DOMContentLoaded', function () {
+    if (window.NEOWatchPagination) {
+        window.NEOWatchPagination.initialize();
+    }
+
+    if (window.NEOWatchFilterValidation) {
+        window.NEOWatchFilterValidation.initialize();
+    }
+
+    if (window.NEOWatchMiniSolarMap) {
+        window.NEOWatchMiniSolarMap.init();
+    }
+});
+
+document.body.addEventListener('htmx:afterSwap', function (event) {
+    if (event.detail && event.detail.target && event.detail.target.id === 'monitoringContainer') {
+        if (window.NEOWatchPagination) {
+            window.NEOWatchPagination.initialize();
+        }
+
+        if (window.NEOWatchMiniSolarMap) {
+            window.NEOWatchMiniSolarMap.init();
+        }
+
+        setTimeout(function () {
+            if (window.NEOWatchCharts) {
+                window.NEOWatchCharts.render();
+            }
+        }, 150);
+    }
 });
