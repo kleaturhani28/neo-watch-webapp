@@ -22,7 +22,10 @@ The dashboard is publicly accessible through an ngrok HTTPS endpoint.
 
 ### Monitoring dashboard
 
+![Monitoring dashboard](Docs/screenshots/radar-map.png)
+
 ![Monitoring dashboard](Docs/screenshots/dashboard-monitoring.png)
+
 
 ### Charts
 
