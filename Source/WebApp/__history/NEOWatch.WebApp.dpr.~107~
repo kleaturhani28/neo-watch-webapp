@@ -7,7 +7,7 @@ program NEOWatch.WebApp;
 uses
   System.SysUtils,
   Horse,
-  Horse.ServerStatic in '..\Shared\Horse.ServerStatic.pas',
+  // Horse.ServerStatic in '..\Shared\Horse.ServerStatic.pas',
   Horse.HandleException,
   Horse.Jhonson,
   Spring,
@@ -134,24 +134,70 @@ begin
 
     Container.Build;
 
-    Container.Resolve<IMainController>.RegisterRoutes;
-    Container.Resolve<IAsteroidsController>.RegisterRoutes;
+{$IF defined(DEBUG) and not defined(LINUX)}
+    TemplatesPath :=
+        TPath.GetFullPath(
+            TPath.Combine(['..', '..', '..', '..', '..', 'Source', 'WebApp', 'Presentation', 'Views', 'Templates'])
+        );
+{$ELSE}
+    TemplatesPath := TPath.GetFullPath('Templates');
+{$ENDIF}
+
+    StaticPath := TPath.Combine(TemplatesPath, 'static');
 
     THorse
         .Use(Jhonson)
         .Use(HandleException)
-{$IF defined(DEBUG) and not defined(LINUX)}
-        .Use(
-            ServerStatic(
-                TPath.Combine(['..', '..', '..', '..', 'Source', 'WebApp', 'Presentation', 'Views', 'Templates']),
-                False
-            ))
-{$ELSE}
-        .Use(ServerStatic('Templates', False))
-{$ENDIF}
+        .Use(ServerStatic(TemplatesPath, False))
         .Use(NEOWatch.WebApp.Presentation.Service.Session.Utils.Utils.Session.SimpleSession(Container));
 
-    StaticPath := TPath.Combine(TemplatesPath, 'static');
+    THorse.Get(
+        '/static/css/:filename',
+        procedure(Req: THorseRequest; Res: THorseResponse; Next: TProc)
+        var
+          FileName: string;
+          FilePath: string;
+        begin
+          FileName := Req.Params['filename'];
+          FilePath := TPath.Combine([StaticPath, 'css', FileName]);
+
+          if not TFile.Exists(FilePath) then begin
+            Res.Status(404).Send('CSS file not found: ' + FileName);
+            Exit;
+          end;
+
+          Res.RawWebResponse.ContentType := 'text/css; charset=utf-8';
+          Res.Send(TFile.ReadAllText(FilePath, TEncoding.UTF8));
+        end
+    );
+
+    THorse.Get(
+        '/static/js/:filename',
+        procedure(Req: THorseRequest; Res: THorseResponse; Next: TProc)
+        var
+          FileName: string;
+          FilePath: string;
+        begin
+          FileName := Req.Params['filename'];
+          FilePath := TPath.Combine([StaticPath, 'js', FileName]);
+
+          if not TFile.Exists(FilePath) then begin
+            Res.Status(404).Send('JS file not found: ' + FileName);
+            Exit;
+          end;
+
+          Res.RawWebResponse.ContentType := 'application/javascript; charset=utf-8';
+          Res.Send(TFile.ReadAllText(FilePath, TEncoding.UTF8));
+        end
+    );
+
+    THorse.Get(
+        '/favicon.ico',
+        procedure(Req: THorseRequest; Res: THorseResponse; Next: TProc) begin Res.Status(204).Send(''); end
+    );
+
+    Container.Resolve<IMainController>.RegisterRoutes;
+    Container.Resolve<IAsteroidsController>.RegisterRoutes;
 
     THorse.Listen(
         9000,
